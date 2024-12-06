@@ -1,0 +1,109 @@
+<%- include('./_layouts/header') %>
+
+
+<form action="/admin/create-blog" class="" method="POST" enctype="multipart/form-data">
+    <!-- Title -->
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" id="title" class="form-control" name="title" placeholder="Enter blog title" required>
+    </div>
+
+    <!-- Category -->
+    <div class="form-group">
+        <label for="category">Category</label>
+        <select id="category" class="form-control" name="category">
+            <option value="">Select category</option>
+            <option value="technology">Technology</option>
+            <option value="programming">Programming</option>
+            <option value="web-development">Web Development</option>
+            <!-- Add more options as needed -->
+        </select>
+    </div>
+
+    <!-- Tags -->
+    <div class="form-group">
+        <label for="tags">Tags</label>
+        <input type="text" id="tags" class="form-control" name="tags" placeholder="Enter tags, separated by commas">
+    </div>
+
+    <!-- Featured Image -->
+    <div class="form-group">
+        <label for="image">Thumbnail Image</label>
+        <input type="file" class="form-control" id="image" name="image" accept="image/*">
+    </div>
+
+    <!-- Content WYSIWYG Editor -->
+    <div class="form-group">
+        <label for="content">Content</label>
+        <textarea id="content" name="content" rows="10" required></textarea>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="form-actions">
+        <button type="button" class="btn-draft">Save as Draft</button>
+        <button type="button" class="btn-preview">Preview</button>
+        <button type="submit" class="btn-publish">Publish</button>
+    </div>
+</form>
+
+
+
+<script src="https://cdn.tiny.cloud/1/wz6upinpprryclrsrruprdr6wyrcdymnv8lx75xu8t7q5qa9/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+
+<script>
+    document.querySelector('.btn-preview').addEventListener('click', function() {
+        const title = document.getElementById('title').value;
+        const content = tinymce.get('content').getContent(); // Replace 'content' with your editor's actual ID if different
+
+        if (title && content) {
+            document.getElementById('previewContainer').innerHTML = `
+                <h2>Preview:</h2>
+                <h3>${title}</h3>
+                <div>${content}</div>
+            `;
+            alert(`Preview:\n\nTitle: ${title}\n\nContent:\n${content}`);
+        } else {
+            alert("Please enter both title and content to preview.");
+        }
+    });
+
+
+    tinymce.init({
+        selector: '#content', // Target your content textarea
+        plugins: 'image link media lists code',
+        toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image media | code',
+        height: 400,
+        image_title: true,
+        automatic_uploads: true,
+        file_picker_types: 'image',
+        file_picker_callback: function (cb, value, meta) {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+            
+            input.onchange = function () {
+                const file = this.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function () {
+                    const id = 'blobid' + new Date().getTime();
+                    const blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                    const base64 = reader.result.split(',')[1];
+                    const blobInfo = blobCache.create(id, file, base64);
+                    blobCache.add(blobInfo);
+
+                    // Provide the image URL to the callback and set the image title as the file name
+                    cb(blobInfo.blobUri(), { title: file.name });
+                };
+
+                reader.readAsDataURL(file);
+            };
+
+            input.click();
+        },
+        content_style: "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }", // Optional: set content style for better readability
+    });
+
+</script>
+
+<%- include('./_layouts/footer') %>

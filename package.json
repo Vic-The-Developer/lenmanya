@@ -1,0 +1,29 @@
+{
+  "name": "lenmanya-adventures",
+  "version": "1.0.0",
+  "description": "Travel booking website",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Victech & Ruth",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "connect-flash": "^0.1.1",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "express-validator": "^7.2.0",
+    "fs": "^0.0.1-security",
+    "mongoose": "^8.8.4",
+    "multer": "^1.4.5-lts.1",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "path": "^0.12.7",
+    "rand-token": "^1.0.1",
+    "uuid": "^11.0.3"
+  }
+}
