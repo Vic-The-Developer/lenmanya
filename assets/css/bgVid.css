@@ -1,0 +1,90 @@
+/* Container Styles */
+.cinema1 {
+    position: relative;
+    height: 390px; /* Set height to 370px */
+    overflow: hidden;
+}
+
+.cinema1 video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    object-fit: cover; /* Cover the container fully */
+    width: 100%;
+    height: 100%;
+    z-index: -2; /* Behind the overlay and content */
+}
+
+/* Dark Overlay */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay with transparency */
+    z-index: -1; /* Behind text, above video */
+}
+
+/* Content Styles */
+.vidCont {
+    position: relative;
+    z-index: 1; /* Above overlay */
+    text-align: center;
+    height: 100%; /* Ensures vertical centering */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff; /* White text for contrast */
+    padding: 0 20px; /* Adds padding for smaller screens */
+}
+
+.p1 {
+    font-size: 1.8rem; /* Adjust font size */
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.p2 {
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+
+/*About Us pictorial*/
+.gallery-section .gallery-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+}
+.gallery-section .gallery-item img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s ease-in-out;
+}
+.gallery-section .gallery-item:hover img {
+    transform: scale(1.1);
+}
+.gallery-section .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.gallery-section .gallery-item:hover .overlay {
+    opacity: 1;
+}
+.gallery-section .overlay .text {
+    color: white;
+    font-size: 20px;
+    text-transform: uppercase;
+    font-weight: bold;
+}

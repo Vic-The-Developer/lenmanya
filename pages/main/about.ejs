@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>TRAVELER - Free Travel Website Template</title>
+    <title>Lenmanya Adventures | Top rated Tours and Travel Company in Kenya</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
@@ -24,6 +24,7 @@
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/bgVid.css" rel="stylesheet">
 </head>
 
 <body>
@@ -68,7 +69,8 @@
         <div class="container-lg position-relative p-0 px-lg-3" style="z-index: 9;">
             <nav class="navbar navbar-expand-lg bg-light navbar-light shadow-lg py-3 py-lg-0 pl-3 pl-lg-5">
                 <a href="" class="navbar-brand">
-                    <h1 class="m-0 text-primary"><span class="text-dark">TRAVEL</span>ER</h1>
+                    <!-- <h1 class="m-0 text-primary"><span class="text-dark">LENMA</span>NYA</h1> -->
+                     <img src="/img/logo-nobg.png" alt="logo" width="200px">
                 </a>
                 <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                     <span class="navbar-toggler-icon"></span>
@@ -101,7 +103,7 @@
     <div class="container-fluid page-header">
         <div class="container">
             <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 400px">
-                <h3 class="display-4 text-white text-uppercase">About</h3>
+                <h3 class="display-4 text-white text-uppercase">About Us</h3>
                 <div class="d-inline-flex text-white">
                     <p class="m-0 text-uppercase"><a class="text-white" href="/">Home</a></p>
                     <i class="fa fa-angle-double-right pt-1 px-3"></i>
@@ -122,36 +124,29 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="mb-3 mb-md-0">
-                                    <select class="custom-select px-4" style="height: 47px;">
-                                        <option selected>Destination</option>
-                                        <option value="1">Destination 1</option>
-                                        <option value="2">Destination 1</option>
-                                        <option value="3">Destination 1</option>
-                                    </select>
+                                    <label for="fname">Full Name*</label>
+                                    <input type="text" name="fname" class="form-control" id="fname" placeholder="Enter Name" required>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="mb-3 mb-md-0">
-                                    <div class="date" id="date1" data-target-input="nearest">
-                                        <input type="text" class="form-control p-4 datetimepicker-input" placeholder="Depart Date" data-target="#date1" data-toggle="datetimepicker"/>
+                                    <label for="destination">Destination*</label>
+                                    <input type="text" name="destination" id="destination" placeholder="Destination" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3 mb-md-0">
+                                    <div class="date" id="date1" onfocus="disablePastDates()" data-target-input="nearest">
+                                        <label for="date1">Date of Travel*</label>
+                                        <input type="text" id="date1" class="form-control p-4 datetimepicker-input" placeholder="Enter Date" data-target="#date1" data-toggle="datetimepicker" required/>
                                     </div>
                                 </div>
                             </div>
+                            
                             <div class="col-md-3">
                                 <div class="mb-3 mb-md-0">
-                                    <div class="date" id="date2" data-target-input="nearest">
-                                        <input type="text" class="form-control p-4 datetimepicker-input" placeholder="Return Date" data-target="#date2" data-toggle="datetimepicker"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="mb-3 mb-md-0">
-                                    <select class="custom-select px-4" style="height: 47px;">
-                                        <option selected>Duration</option>
-                                        <option value="1">Duration 1</option>
-                                        <option value="2">Duration 1</option>
-                                        <option value="3">Duration 1</option>
-                                    </select>
+                                    <label for="whatsapp">WhatsApp Number*</label>
+                                    <input type="text" class="form-control" name="whatsapp" id="whatsapp" placeholder="Enter Number" required>
                                 </div>
                             </div>
                         </div>
@@ -179,7 +174,9 @@
                     <div class="about-text bg-white p-4 p-lg-5 my-lg-5">
                         <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">About Us</h6>
                         <h1 class="mb-3">We Provide Best Tour Packages In Your Budget</h1>
-                        <p>Dolores lorem lorem ipsum sit et ipsum. Sadip sea amet diam dolore sed et. Sit rebum labore sit sit ut vero no sit. Et elitr stet dolor sed sit et sed ipsum et kasd ut. Erat duo eos et erat sed diam duo</p>
+                        <p>
+                            Lenmanya Adventures is your trusted partner in creating exceptional travel experiences across Kenya and beyond. Based in the heart of East Africa, we specialize in curating unforgettable journeys, from thrilling Kenyan safaris in iconic destinations like the Maasai Mara and Amboseli to serene beach getaways along the pristine coastlines of Zanzibar and beyond. Lenmanya Adventures is here to make your dream trip a reality.
+                        </p>
                         <div class="row mb-4">
                             <div class="col-6">
                                 <img class="img-fluid" src="/img/about-1.jpg" alt="">
@@ -188,7 +185,7 @@
                                 <img class="img-fluid" src="/img/about-2.jpg" alt="">
                             </div>
                         </div>
-                        <a href="" class="btn btn-primary mt-1">Book Now</a>
+                        <a href="/package" class="btn btn-primary mt-1">Book Now</a>
                     </div>
                 </div>
             </div>
@@ -196,48 +193,87 @@
     </div>
     <!-- About End -->
 
+    <!--Company details Start-->
+    <!-- Mission Section -->
+    <section class="mission py-5">
+        <div class="container">
+            <h2 class="text-center mb-4 text-primary">Our Mission</h2>
+            <p class="text-justify">At <strong>Lenmanya Adventures</strong>, our mission is to provide people and companies an experienced vacational retreat. We are committed to delivering unique, customized experiences that connect travelers with <strong>Kenya’s natural wonders</strong>, <strong>rich cultures</strong>, and <strong>stunning landscapes</strong>. We believe in sustainable tourism that supports local communities and promotes responsible travel practices while offering unparalleled customer service.</p>
+        </div>
+    </section>
 
-    <!-- Feature Start -->
-    <div class="container-fluid pb-5">
-        <div class="container pb-5">
+    <!-- Vision Section -->
+    <section class="vision py-5">
+        <div class="container">
+            <h2 class="text-center mb-4 text-primary">Our Vision</h2>
+            <p class="text-justify">Our vision is to provide a unique style of adventure across the globe that is environmental friendly and efficient. Additionally, we aim to become a leading travel agency in East Africa, renowned for our dedication to delivering high-quality, sustainable travel experiences. Providing every traveler with an authentic and transformative journey, offering not just tours, but opportunities to explore, connect, and immerse themselves in the heart of <strong>Kenya’s heritage</strong> and <strong>natural beauty</strong> is our main goal. Through innovative travel solutions and a commitment to excellence, we aspire to be the go-to brand for adventure seekers worldwide.</p>
+        </div>
+    </section>
+    <!--Company details End-->
+
+    <!--Pictorial start-->
+    <section class="gallery-section py-5">
+        <div class="container">
+            <h2 class="text-center mb-4 text-primary">Our Adventure Highlights</h2>
             <div class="row">
-                <div class="col-md-4">
-                    <div class="d-flex mb-4 mb-lg-0">
-                        <div class="d-flex flex-shrink-0 align-items-center justify-content-center bg-primary mr-3" style="height: 100px; width: 100px;">
-                            <i class="fa fa-2x fa-money-check-alt text-white"></i>
-                        </div>
-                        <div class="d-flex flex-column">
-                            <h5 class="">Competitive Pricing</h5>
-                            <p class="m-0">Magna sit magna dolor duo dolor labore rebum amet elitr est diam sea</p>
+                <!-- Gallery Image 1 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="gallery-item">
+                        <img src="path-to-your-image-1.jpg" alt="Kenya Safari" class="img-fluid rounded">
+                        <div class="overlay">
+                            <div class="text">Safari Adventure</div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="d-flex mb-4 mb-lg-0">
-                        <div class="d-flex flex-shrink-0 align-items-center justify-content-center bg-primary mr-3" style="height: 100px; width: 100px;">
-                            <i class="fa fa-2x fa-award text-white"></i>
-                        </div>
-                        <div class="d-flex flex-column">
-                            <h5 class="">Best Services</h5>
-                            <p class="m-0">Magna sit magna dolor duo dolor labore rebum amet elitr est diam sea</p>
+                <!-- Gallery Image 2 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="gallery-item">
+                        <img src="path-to-your-image-2.jpg" alt="Beach Getaway" class="img-fluid rounded">
+                        <div class="overlay">
+                            <div class="text">Tropical Escapes</div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="d-flex mb-4 mb-lg-0">
-                        <div class="d-flex flex-shrink-0 align-items-center justify-content-center bg-primary mr-3" style="height: 100px; width: 100px;">
-                            <i class="fa fa-2x fa-globe text-white"></i>
+                <!-- Gallery Image 3 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="gallery-item">
+                        <img src="path-to-your-image-3.jpg" alt="Mountain Trekking" class="img-fluid rounded">
+                        <div class="overlay">
+                            <div class="text">Mountain Treks</div>
                         </div>
-                        <div class="d-flex flex-column">
-                            <h5 class="">Worldwide Coverage</h5>
-                            <p class="m-0">Magna sit magna dolor duo dolor labore rebum amet elitr est diam sea</p>
+                    </div>
+                </div>
+                <!-- Gallery Image 4 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="gallery-item">
+                        <img src="path-to-your-image-4.jpg" alt="Cultural Experience" class="img-fluid rounded">
+                        <div class="overlay">
+                            <div class="text">Cultural Journeys</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Gallery Image 5 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="gallery-item">
+                        <img src="path-to-your-image-5.jpg" alt="Luxury Stay" class="img-fluid rounded">
+                        <div class="overlay">
+                            <div class="text">Luxury Stays</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Gallery Image 6 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="gallery-item">
+                        <img src="path-to-your-image-6.jpg" alt="Group Adventure" class="img-fluid rounded">
+                        <div class="overlay">
+                            <div class="text">Group Adventures</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Feature End -->
+    </section>
+    <!--Pictorial End-->
 
 
     <!-- Registration Start -->
@@ -246,41 +282,45 @@
             <div class="row align-items-center">
                 <div class="col-lg-7 mb-5 mb-lg-0">
                     <div class="mb-4">
-                        <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">Mega Offer</h6>
-                        <h1 class="text-white"><span class="text-primary">30% OFF</span> For Honeymoon</h1>
+                        <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">New Year Special</h6>
+                        <h1 class="text-white"><span class="text-primary">15% OFF</span> on All Group Packages</h1>
                     </div>
-                    <p class="text-white">Invidunt lorem justo sanctus clita. Erat lorem labore ea, justo dolor lorem ipsum ut sed eos,
-                        ipsum et dolor kasd sit ea justo. Erat justo sed sed diam. Ea et erat ut sed diam sea ipsum est
-                        dolor</p>
+                    <p class="text-white">
+                        Start the new year with unforgettable adventures! Enjoy massive savings on our curated group tours to stunning destinations across East Africa and beyond. Perfect for families, friends, or corporate retreats.
+                    </p>
                     <ul class="list-inline text-white m-0">
-                        <li class="py-2"><i class="fa fa-check text-primary mr-3"></i>Labore eos amet dolor amet diam</li>
-                        <li class="py-2"><i class="fa fa-check text-primary mr-3"></i>Etsea et sit dolor amet ipsum</li>
-                        <li class="py-2"><i class="fa fa-check text-primary mr-3"></i>Diam dolor diam elitripsum vero.</li>
+                        <li class="py-2">
+                            <i class="fa fa-check text-primary mr-3"></i>Explore top-rated local and international destinations
+                        </li>
+                        <li class="py-2">
+                            <i class="fa fa-check text-primary mr-3"></i>Exclusive discounts for groups of 4 or more
+                        </li>
+                        <li class="py-2">
+                            <i class="fa fa-check text-primary mr-3"></i>Customized itineraries tailored to your needs
+                        </li>
                     </ul>
-                </div>
+                </div>                
                 <div class="col-lg-5">
                     <div class="card border-0">
                         <div class="card-header bg-primary text-center p-4">
                             <h1 class="text-white m-0">Sign Up Now</h1>
                         </div>
                         <div class="card-body rounded-bottom bg-white p-5">
-                            <form>
+                            <form action="" method="post" enctype="application/x-www-form-urlencoded">
                                 <div class="form-group">
-                                    <input type="text" class="form-control p-4" placeholder="Your name" required="required" />
+                                    <input type="text" class="form-control p-4" name="fname" id="fname" placeholder="Your name" required="required" />
                                 </div>
                                 <div class="form-group">
-                                    <input type="email" class="form-control p-4" placeholder="Your email" required="required" />
+                                    <input type="email" class="form-control p-4" name="email" id="email" placeholder="Your email" required="required" />
                                 </div>
                                 <div class="form-group">
-                                    <select class="custom-select px-4" style="height: 47px;">
-                                        <option selected>Select a destination</option>
-                                        <option value="1">destination 1</option>
-                                        <option value="2">destination 1</option>
-                                        <option value="3">destination 1</option>
-                                    </select>
+                                    <input type="text" class="form-control p-4" name="whatsapp" id="whatsapp" placeholder="WhatsApp Number" required />
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control p-4" name="destination" id="destination" placeholder="Enter Destination" />
                                 </div>
                                 <div>
-                                    <button class="btn btn-primary btn-block py-3" type="submit">Sign Up Now</button>
+                                    <button class="btn btn-primary btn-block py-3" type="submit">Inquire Now</button>
                                 </div>
                             </form>
                         </div>
@@ -291,158 +331,58 @@
     </div>
     <!-- Registration End -->
 
-
-    <!-- Team Start -->
-    <div class="container-fluid py-5">
-        <div class="container pt-5 pb-3">
-            <div class="text-center mb-3 pb-3">
-                <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">Guides</h6>
-                <h1>Our Travel Guides</h1>
-            </div>
+        <!-- Feature Start -->
+    <div class="container-fluid pb-5">
+        <div class="container pb-5">
             <div class="row">
-                <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-                    <div class="team-item bg-white mb-4">
-                        <div class="team-img position-relative overflow-hidden">
-                            <img class="img-fluid w-100" src="/img/team-1.jpg" alt="">
-                            <div class="team-social">
-                                <a class="btn btn-outline-primary btn-square" href=""><i class="fab fa-twitter"></i></a>
-                                <a class="btn btn-outline-primary btn-square" href=""><i class="fab fa-facebook-f"></i></a>
-                                <a class="btn btn-outline-primary btn-square" href=""><i class="fab fa-instagram"></i></a>
-                                <a class="btn btn-outline-primary btn-square" href=""><i class="fab fa-linkedin-in"></i></a>
-                            </div>
+                <div class="col-md-4">
+                    <div class="d-flex mb-4 mb-lg-0">
+                        <div class="d-flex flex-shrink-0 align-items-center justify-content-center bg-primary mr-3" style="height: 100px; width: 100px;">
+                            <i class="fa fa-2x fa-money-check-alt text-white"></i>
                         </div>
-                        <div class="text-center py-4">
-                            <h5 class="text-truncate">Guide Name</h5>
-                            <p class="m-0">Designation</p>
+                        <div class="d-flex flex-column">
+                            <h5 class="">Competitive Pricing</h5>
+                            <p class="m-0">
+                                With our Competitive prices, we ensure you receive top-quality accommodations, and expert local guides.
+                            </p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-                    <div class="team-item bg-white mb-4">
-                        <div class="team-img position-relative overflow-hidden">
-                            <img class="img-fluid w-100" src="/img/team-2.jpg" alt="">
-                            <div class="team-social">
-                                <a class="btn btn-outline-primary btn-square" href=""><i class="fab fa-twitter"></i></a>
-                                <a class="btn btn-outline-primary btn-square" href=""><i class="fab fa-facebook-f"></i></a>
-                                <a class="btn btn-outline-primary btn-square" href=""><i class="fab fa-instagram"></i></a>
-                                <a class="btn btn-outline-primary btn-square" href=""><i class="fab fa-linkedin-in"></i></a>
-                            </div>
+                <div class="col-md-4">
+                    <div class="d-flex mb-4 mb-lg-0">
+                        <div class="d-flex flex-shrink-0 align-items-center justify-content-center bg-primary mr-3" style="height: 100px; width: 100px;">
+                            <i class="fa fa-2x fa-award text-white"></i>
                         </div>
-                        <div class="text-center py-4">
-                            <h5 class="text-truncate">Guide Name</h5>
-                            <p class="m-0">Designation</p>
+                        <div class="d-flex flex-column">
+                            <h5 class="">Best Services</h5>
+                            <p class="m-0">
+                                Our Friendly team is committed to helping you discover the world's beauty with ease and comfort.
+                            </p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-                    <div class="team-item bg-white mb-4">
-                        <div class="team-img position-relative overflow-hidden">
-                            <img class="img-fluid w-100" src="/img/team-3.jpg" alt="">
-                            <div class="team-social">
-                                <a class="btn btn-outline-primary btn-square" href=""><i class="fab fa-twitter"></i></a>
-                                <a class="btn btn-outline-primary btn-square" href=""><i class="fab fa-facebook-f"></i></a>
-                                <a class="btn btn-outline-primary btn-square" href=""><i class="fab fa-instagram"></i></a>
-                                <a class="btn btn-outline-primary btn-square" href=""><i class="fab fa-linkedin-in"></i></a>
-                            </div>
+                <div class="col-md-4">
+                    <div class="d-flex mb-4 mb-lg-0">
+                        <div class="d-flex flex-shrink-0 align-items-center justify-content-center bg-primary mr-3" style="height: 100px; width: 100px;">
+                            <i class="fa fa-2x fa-globe text-white"></i>
                         </div>
-                        <div class="text-center py-4">
-                            <h5 class="text-truncate">Guide Name</h5>
-                            <p class="m-0">Designation</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-                    <div class="team-item bg-white mb-4">
-                        <div class="team-img position-relative overflow-hidden">
-                            <img class="img-fluid w-100" src="/img/team-4.jpg" alt="">
-                            <div class="team-social">
-                                <a class="btn btn-outline-primary btn-square" href=""><i class="fab fa-twitter"></i></a>
-                                <a class="btn btn-outline-primary btn-square" href=""><i class="fab fa-facebook-f"></i></a>
-                                <a class="btn btn-outline-primary btn-square" href=""><i class="fab fa-instagram"></i></a>
-                                <a class="btn btn-outline-primary btn-square" href=""><i class="fab fa-linkedin-in"></i></a>
-                            </div>
-                        </div>
-                        <div class="text-center py-4">
-                            <h5 class="text-truncate">Guide Name</h5>
-                            <p class="m-0">Designation</p>
+                        <div class="d-flex flex-column">
+                            <h5 class="">Worldwide Coverage</h5>
+                            <p class="m-0">
+                                Lenmanya Adventures helps actualize your curiosity for unique cultural encounters and natural wonders.
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Team End -->
-
+    <!-- Feature End -->
 
     <!-- Footer Start -->
-    <div class="container-fluid bg-dark text-white-50 py-5 px-sm-3 px-lg-5" style="margin-top: 90px;">
-        <div class="row pt-5">
-            <div class="col-lg-3 col-md-6 mb-5">
-                <a href="" class="navbar-brand">
-                    <h1 class="text-primary"><span class="text-white">TRAVEL</span>ER</h1>
-                </a>
-                <p>Sed ipsum clita tempor ipsum ipsum amet sit ipsum lorem amet labore rebum lorem ipsum dolor. No sed vero lorem dolor dolor</p>
-                <h6 class="text-white text-uppercase mt-4 mb-3" style="letter-spacing: 5px;">Follow Us</h6>
-                <div class="d-flex justify-content-start">
-                    <a class="btn btn-outline-primary btn-square mr-2" href="#"><i class="fab fa-twitter"></i></a>
-                    <a class="btn btn-outline-primary btn-square mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a class="btn btn-outline-primary btn-square mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
-                    <a class="btn btn-outline-primary btn-square" href="#"><i class="fab fa-instagram"></i></a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 mb-5">
-                <h5 class="text-white text-uppercase mb-4" style="letter-spacing: 5px;">Our Services</h5>
-                <div class="d-flex flex-column justify-content-start">
-                    <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>About</a>
-                    <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Destination</a>
-                    <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Services</a>
-                    <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Packages</a>
-                    <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Guides</a>
-                    <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Testimonial</a>
-                    <a class="text-white-50" href="#"><i class="fa fa-angle-right mr-2"></i>Blog</a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 mb-5">
-                <h5 class="text-white text-uppercase mb-4" style="letter-spacing: 5px;">Usefull Links</h5>
-                <div class="d-flex flex-column justify-content-start">
-                    <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>About</a>
-                    <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Destination</a>
-                    <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Services</a>
-                    <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Packages</a>
-                    <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Guides</a>
-                    <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Testimonial</a>
-                    <a class="text-white-50" href="#"><i class="fa fa-angle-right mr-2"></i>Blog</a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 mb-5">
-                <h5 class="text-white text-uppercase mb-4" style="letter-spacing: 5px;">Contact Us</h5>
-                <p><i class="fa fa-map-marker-alt mr-2"></i>123 Street, New York, USA</p>
-                <p><i class="fa fa-phone-alt mr-2"></i>+012 345 67890</p>
-                <p><i class="fa fa-envelope mr-2"></i>info@example.com</p>
-                <h6 class="text-white text-uppercase mt-4 mb-3" style="letter-spacing: 5px;">Newsletter</h6>
-                <div class="w-100">
-                    <div class="input-group">
-                        <input type="text" class="form-control border-light" style="padding: 25px;" placeholder="Your Email">
-                        <div class="input-group-append">
-                            <button class="btn btn-primary px-3">Sign Up</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container-fluid bg-dark text-white border-top py-4 px-sm-3 px-md-5" style="border-color: rgba(256, 256, 256, .1) !important;">
-        <div class="row">
-            <div class="col-lg-6 text-center text-md-left mb-3 mb-md-0">
-                <p class="m-0 text-white-50">Copyright &copy; <a href="#">Domain</a>. All Rights Reserved.</a>
-                </p>
-            </div>
-            <div class="col-lg-6 text-center text-md-right">
-                <p class="m-0 text-white-50">Designed by <a href="https://htmlcodex.com">HTML Codex</a>
-                </p>
-            </div>
-        </div>
-    </div>
+    
+    <%- include('./_layouts/footer') %>
+
     <!-- Footer End -->
 
 
