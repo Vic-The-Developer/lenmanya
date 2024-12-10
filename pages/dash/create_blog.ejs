@@ -1,50 +1,80 @@
 <%- include('./_layouts/header') %>
 
 
-<form action="/admin/create-blog" class="" method="POST" enctype="multipart/form-data">
-    <!-- Title -->
-    <div class="form-group">
-        <label for="title">Title</label>
-        <input type="text" id="title" class="form-control" name="title" placeholder="Enter blog title" required>
+<div class="container mt-5">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary">Create Blog Post</h2>
+        <a href="/admin/manage-blogs" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back to Manage Blogs</a>
     </div>
 
-    <!-- Category -->
-    <div class="form-group">
-        <label for="category">Category</label>
-        <select id="category" class="form-control" name="category">
-            <option value="">Select category</option>
-            <option value="technology">Technology</option>
-            <option value="programming">Programming</option>
-            <option value="web-development">Web Development</option>
-            <!-- Add more options as needed -->
-        </select>
-    </div>
+    <!-- Blog Form -->
+    <form action="" method="" enctype="multipart/form-data">
+        <!-- Blog Title Row -->
+        <div class="form-row">
+            <label for="title">Blog Title</label>
+            <input type="text" id="bTitle" name="bTitle" class="form-control" placeholder="Enter blog title" required>
+        </div>
 
-    <!-- Tags -->
-    <div class="form-group">
-        <label for="tags">Tags</label>
-        <input type="text" id="tags" class="form-control" name="tags" placeholder="Enter tags, separated by commas">
-    </div>
+        <!-- Category Row -->
+        <div class="form-row">
+            <label for="category">Category</label>
+            <select id="category"  class="form-control" name="category" required>
+                <option value="">-- Select Category --</option>
+                <option value="Travel Tips">Travel Tips</option>
+                <option value="Destinations">Destinations</option>
+                <option value="Special Offers">Special Offers</option>
+            </select>
+        </div>
 
-    <!-- Featured Image -->
-    <div class="form-group">
-        <label for="image">Thumbnail Image</label>
-        <input type="file" class="form-control" id="image" name="image" accept="image/*">
-    </div>
+        <!-- Featured Image Row -->
+        <div class="form-row">
+            <label for="featuredImage">Featured Image/Thumbnail</label>
+            <input type="file" id="featuredImage" name="featuredImage" class="form-control" accept="image/*">
+        </div>
 
-    <!-- Content WYSIWYG Editor -->
-    <div class="form-group">
-        <label for="content">Content</label>
-        <textarea id="content" name="content" rows="10" required></textarea>
-    </div>
+        <!-- Blog Content Row -->
+        <div class="form-row">
+            <label for="blogContent">Blog Content</label> <br>
+            <textarea id="blogContent" name="blogContent" class="form-control" rows="14"></textarea>
+        </div>
 
-    <!-- Submit Button -->
-    <div class="form-actions">
-        <button type="button" class="btn-draft">Save as Draft</button>
-        <button type="button" class="btn-preview">Preview</button>
-        <button type="submit" class="btn-publish">Publish</button>
-    </div>
-</form>
+        <!-- SEO Metadata Section -->
+        <h5 class="mb-3 mt-4">SEO Metadata</h5>
+        <div class="form-row">
+            <label for="metaTitle">Meta Title</label>
+            <input type="text" id="metaTitle" name="metaTitle" class="form-control" placeholder="Enter meta title" required>
+        </div>
+        <div class="form-row">
+            <label for="metaDescription">Meta Description</label>
+            <input type="text" id="metaDescription" name="metaDescription" class="form-control" placeholder="Enter meta description" required>
+        </div>
+        <div class="form-row">
+            <label for="keywords">Keywords</label>
+            <input type="text" id="keywords" name="keywords" class="form-control" placeholder="E.g., Travel, Safari, Offers">
+        </div>
+
+        <!-- Blog Status -->
+        <div class="form-row">
+            <label class="form-label mb-2">Status:</label>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="status" id="draft" value="Draft" checked>
+                <label class="form-check-label" for="draft">Draft</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="status" id="published" value="Published">
+                <label class="form-check-label" for="published">Publish</label>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Save Blog</button>
+            <button type="button" class="btn btn-primary"><i class="fa fa-eye"></i> Preview</button>
+            <button type="reset" class="btn btn-warning"><i class="fa fa-eraser"></i> Clear Form</button>
+        </div>
+    </form>
+</div>
 
 
 
@@ -52,8 +82,8 @@
 
 <script>
     document.querySelector('.btn-preview').addEventListener('click', function() {
-        const title = document.getElementById('title').value;
-        const content = tinymce.get('content').getContent(); // Replace 'content' with your editor's actual ID if different
+        const title = document.getElementById('blogContent').value;
+        const content = tinymce.get('blogContent').getContent(); // Replace 'content' with your editor's actual ID if different
 
         if (title && content) {
             document.getElementById('previewContainer').innerHTML = `
@@ -69,7 +99,7 @@
 
 
     tinymce.init({
-        selector: '#content', // Target your content textarea
+        selector: '#blogContent', // Target your content textarea
         plugins: 'image link media lists code',
         toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image media | code',
         height: 400,

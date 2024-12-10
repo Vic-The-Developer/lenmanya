@@ -21,7 +21,7 @@ router.use(flash());
  */
 router.get('/dash', (req, res)=>{
   res.render('dash/dash', {
-    title: "Dashboard Overview | Decode Tech Byte",
+    title: "Dashboard Overview | Lenmanya Adventures",
     currentPath: '/admin/dash'
   })
 })
@@ -30,10 +30,31 @@ router.get('/dash', (req, res)=>{
 /**
  * Manage blogs
  */
+router.get('/manage-Enquiries', (req, res)=>{
+  res.render('dash/manage_enquiries', {
+    title: 'Manage Enquiries | Lenmanya Adventures',
+    currentPath: '/admin/manage-Enquiries'
+  })
+})
+
+/**
+ * Manage blogs
+ */
 router.get('/manage-blogs', (req, res)=>{
   res.render('dash/manage_blog', {
-    title: 'Manage Blogs | Decode Tech Byte',
+    title: 'Manage Blogs | Lenmanya Adventures',
     currentPath: '/admin/manage-blogs'
+  })
+})
+
+
+/**
+ * Account Page
+ */
+router.get('/account', (req, res)=>{
+  res.render('dash/account', {
+    title: 'Account | Lenmanya Adventures',
+    currentPath: '/admin/account'
   })
 })
 
@@ -43,7 +64,7 @@ router.get('/manage-blogs', (req, res)=>{
  */
 router.get('/create-blog', (req, res)=>{
   res.render('dash/create_blog', {
-    title: 'Create Blog Post | Decode Tech Byte',
+    title: 'Create Blog Post | Lenmanya Adventures',
     currentPath: '/admin/create-blog'
   })
 })

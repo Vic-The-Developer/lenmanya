@@ -12,7 +12,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 
     <!-- Favicons -->
-    <link rel="shortcut icon" href="/images/decode tech png.png">
+    <link href="/img/lenmanya fav.png" rel="icon">
 </head>
 
 <body>
@@ -25,7 +25,9 @@
 
     <!-- Dash Navbar Left -->
     <div class="dash-navbar-left nb-visible">
-        <a class="navbar-brand" href="/admin/dash">Decode Tech Byte &copy;</a>
+        <a class="navbar-brand" href="/admin/dash">
+            <img src="/img/logo-nobg.png" alt="Logo" width="250px">
+        </a>
     
         <p class="nb-nav-title">Home</p>
         <ul class="nb-nav">
@@ -33,6 +35,12 @@
                 <a href="/admin/dash">
                     <span class="fa fa-bar-chart nb-link-icon"></span>
                     <span class="nb-link-text">Overview</span>
+                </a>
+            </li>
+            <li class="<%= currentPath === '/admin/manage-Enquiries' ? 'active' : '' %>">
+                <a href="/admin/manage-Enquiries">
+                    <span class="fa fa-envelope nb-link-icon"></span>
+                    <span class="nb-link-text">Enquiries</span>
                 </a>
             </li>
             <li class="<%= currentPath === '/admin/manage-blogs' ? 'active' : '' %>">

@@ -1,0 +1,171 @@
+<%- include('./_layouts/header') %>
+
+<div class="container mt-5">
+    <!-- Page Title -->
+    <div class="mb-4 text-center">
+        <h2 class="text-primary">Manage Client Enquiries</h2>
+        <p>View, manage, and respond to enquiries submitted by clients.</p>
+    </div>
+
+    <!-- Key Metrics Section -->
+    <div class="row mb-4">
+        <!-- Total Enquiries -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card card-metric">
+                <div class="row w-100">
+                    <!-- Left Column -->
+                    <div class="col-4 icon-col">
+                        <i class="fa fa-envelope"></i>
+                    </div>
+                    <!-- Right Column -->
+                    <div class="col-8">
+                        <div class="cardRight">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5>123</h5>
+                                </div>
+                                <div class="col-12">
+                                    <p>Total Enquiries</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Unresolved Enquiries -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card card-metric">
+                <div class="row w-100">
+                    <!-- Left Column -->
+                    <div class="col-4 icon-col">
+                        <i class="fa fa-files-o"></i>
+                    </div>
+                    <!-- Right Column -->
+                    <div class="col-8">
+                        <div class="cardRight">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5>45</h5>
+                                </div>
+                                <div class="col-12">
+                                    <p>Unresolved</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Resolved Enquiries -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card card-metric">
+                <div class="row w-100">
+                    <!-- Left Column -->
+                    <div class="col-4 icon-col">
+                        <i class="fa fa-check-square-o"></i>
+                    </div>
+                    <!-- Right Column -->
+                    <div class="col-8">
+                        <div class="cardRight">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5>67</h5>
+                                </div>
+                                <div class="col-12">
+                                    <p>Resolved</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter and Search Section -->
+    <div class="filter-section mb-4">
+        <form class="row g-3">
+            <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="Search by Name or Subject" id="search">
+            </div>
+            
+            <div class="col-md-3">
+                <select class="form-select" id="status-filter">
+                    <option value="">Filter by Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="resolved">Resolved</option>
+                </select>
+            </div>
+            <div class="col-md-3 text-end">
+                <button type="button" class="btn btn-primary"><i class="fa fa-filter"></i> Filter</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Enquiry Table -->
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-hover table-bordered text-center">
+                <thead class="table-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Subject</th>
+                        <th>Message</th>
+                        <th>Date Submitted</th>
+                        <th>Status</th>
+                        <th>Actions</th> <!-- Actions Header -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Sample Row 1 -->
+                    <tr>
+                        <td>John Doe</td>
+                        <td>john.doe@example.com</td>
+                        <td>+254 700 123 456</td>
+                        <td>Booking Inquiry</td>
+                        <td>Looking for a safari package...</td>
+                        <td>2024-06-28</td>
+                        <td><span class="badge bg-warning text-dark">Pending</span></td>
+                        <td>
+                            <div class="d-flex justify-content-center gap-2">
+                                <button class="btn btn-sm btn-success" title="Mark as Resolved"><i class="fa fa-check"></i></button>
+                                <button class="btn btn-sm btn-info" title="View Details"><i class="fa fa-eye"></i></button>
+                                <button class="btn btn-sm btn-primary" title="Respond"><i class="fa fa-envelope"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Sample Row 2 -->
+                    <tr>
+                        <td>Jane Smith</td>
+                        <td>jane.smith@example.com</td>
+                        <td>+254 711 234 567</td>
+                        <td>Pricing Information</td>
+                        <td>Please send me details on costs...</td>
+                        <td>2024-06-27</td>
+                        <td><span class="badge bg-success">Resolved</span></td>
+                        <td>
+                            <div class="d-flex justify-content-center gap-2">
+                                <button class="btn btn-sm btn-secondary" disabled><i class="fa fa-check"></i></button>
+                                <button class="btn btn-sm btn-info" title="View Details"><i class="fa fa-eye"></i></button>
+                                <button class="btn btn-sm btn-primary" title="Respond"><i class="fa fa-envelope"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+
+    <!-- Export Buttons -->
+    <div class="text-end mt-3">
+        <button class="btn btn-outline-primary"><i class="fa fa-file-excel"></i> Export to Excel</button>
+        <button class="btn btn-outline-danger"><i class="fa fa-file-pdf"></i> Export to PDF</button>
+    </div>
+</div>
+
+
+<%- include('./_layouts/footer') %>

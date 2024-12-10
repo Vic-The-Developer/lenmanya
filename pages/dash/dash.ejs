@@ -1,5 +1,165 @@
 <%- include('./_layouts/header') %>
 
 
+<!-- Main Container -->
+<div class="container-fluid py-4">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary">Admin Dashboard</h2>
+        <button class="btn btn-warning">Create Blog</button>
+    </div>
+
+    <!-- Key Metrics Section -->
+    <div class="row mb-4">
+        <!-- Total Enquiries -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card card-metric">
+                <div class="row w-100">
+                    <!-- Left Column -->
+                    <div class="col-4 icon-col">
+                        <i class="fa fa-envelope"></i>
+                    </div>
+                    <!-- Right Column -->
+                    <div class="col-8">
+                        <div class="cardRight">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5>123</h5>
+                                </div>
+                                <div class="col-12">
+                                    <p>Total Enquiries</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Published Blogs -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card card-metric">
+                <div class="row w-100">
+                    <!-- Left Column -->
+                    <div class="col-4 icon-col">
+                        <i class="fa fa-file-text"></i>
+                    </div>
+                    <!-- Right Column -->
+                    <div class="col-8">
+                        <div class="cardRight">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5>45</h5>
+                                </div>
+                                <div class="col-12">
+                                    <p>Published Blogs</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Draft Blogs -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card card-metric">
+                <div class="row w-100">
+                    <!-- Left Column -->
+                    <div class="col-4 icon-col">
+                        <i class="fa fa-pencil-square-o"></i>
+                    </div>
+                    <!-- Right Column -->
+                    <div class="col-8">
+                        <div class="cardRight">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5>12</h5>
+                                </div>
+                                <div class="col-12">
+                                    <p>Draft Blogs</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Enquiries Section -->
+    <div class="mb-5">
+        <h4 class="section-title">Recent Enquiries</h4>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Message</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>John Doe</td>
+                        <td>john@example.com</td>
+                        <td>Looking for safari packages.</td>
+                        <td>2024-08-01</td>
+                    </tr>
+                    <tr>
+                        <td>Jane Smith</td>
+                        <td>jane@example.com</td>
+                        <td>Do you have beach getaways?</td>
+                        <td>2024-08-03</td>
+                    </tr>
+                    <tr>
+                        <td>Michael Brown</td>
+                        <td>michael@example.com</td>
+                        <td>Interested in team-building offers.</td>
+                        <td>2024-08-05</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="inquiryBtn">
+            <a href="/admin/manage-Enquiries" class="btn btn-success">View More</a>
+        </div>
+    </div>
+
+    <!-- Blog Summary Section -->
+    <div>
+        <h4 class="section-title">Latest Blogs</h4>
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Top 10 Safari Destinations</h5>
+                        <p class="card-text">Explore the best safari locations in East Africa for an unforgettable experience.</p>
+                        <a href="#" class="btn btn-primary btn-sm">View Blog</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Beach Getaways in Kenya</h5>
+                        <p class="card-text">Discover pristine beaches and relaxing coastal experiences along the Indian Ocean.</p>
+                        <a href="#" class="btn btn-primary btn-sm">View Blog</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Corporate Team-Building Ideas</h5>
+                        <p class="card-text">Perfect team-building activities for companies seeking productivity and fun.</p>
+                        <a href="#" class="btn btn-primary btn-sm">View Blog</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <%- include('./_layouts/footer') %>

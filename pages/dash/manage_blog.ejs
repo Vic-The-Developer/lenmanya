@@ -1,4 +1,156 @@
 <%- include('./_layouts/header') %>
 
+<!-- Manage Blogs Page -->
+<div class="container mt-5">
+
+    <!-- Key Metrics Section -->
+    <div class="row mb-4">
+        <!-- Total Enquiries -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card card-metric">
+                <div class="row w-100">
+                    <!-- Left Column -->
+                    <div class="col-4 icon-col">
+                        <i class="fa fa-envelope"></i>
+                    </div>
+                    <!-- Right Column -->
+                    <div class="col-8">
+                        <div class="cardRight">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5>123</h5>
+                                </div>
+                                <div class="col-12">
+                                    <p>Total Blog Posts</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Unresolved Enquiries -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card card-metric">
+                <div class="row w-100">
+                    <!-- Left Column -->
+                    <div class="col-4 icon-col">
+                        <i class="fa fa-pencil-square-o"></i>
+                    </div>
+                    <!-- Right Column -->
+                    <div class="col-8">
+                        <div class="cardRight">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5>45</h5>
+                                </div>
+                                <div class="col-12">
+                                    <p>Draft</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Resolved Enquiries -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card card-metric">
+                <div class="row w-100">
+                    <!-- Left Column -->
+                    <div class="col-4 icon-col">
+                        <i class="fa fa-file-text"></i>
+                    </div>
+                    <!-- Right Column -->
+                    <div class="col-8">
+                        <div class="cardRight">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5>67</h5>
+                                </div>
+                                <div class="col-12">
+                                    <p>Published</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary">Manage Blogs</h2>
+        <!-- Search and Filters -->
+        <div class="d-flex gap-2">
+            <select class="form-select">
+                <option value="">Filter by Category</option>
+                <option value="Travel">Travel</option>
+                <option value="Guides">Guides</option>
+                <option value="News">News</option>
+            </select>
+            <select class="form-select">
+                <option value="">Filter by Status</option>
+                <option value="Published">Published</option>
+                <option value="Draft">Draft</option>
+            </select>
+            <button class="btn btn-primary">Search</button>
+        </div>
+    </div>
+
+
+    <!-- Blog List Table -->
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered text-center align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Blog Title</th>
+                    <th>Category</th>
+                    <th>Date Published</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Blog Row 1 -->
+                <tr>
+                    <td>Top 10 Safari Destinations</td>
+                    <td>Travel</td>
+                    <td>2024-06-27</td>
+                    <td><span class="badge bg-success">Published</span></td>
+                    <td>
+                        <div class="d-flex justify-content-center gap-2">
+                            <button class="btn btn-sm btn-info" title="Edit"><i class="fa fa-edit"></i></button>
+                            <button class="btn btn-sm btn-danger" title="Delete"><i class="fa fa-trash"></i></button>
+                            <a href="#" class="btn btn-sm btn-primary" title="View"><i class="fa fa-eye"></i></a>
+                            <button class="btn btn-sm btn-warning" title="Change Status"><i class="fa fa-toggle-on"></i></button>
+                        </div>
+                    </td>
+                </tr>
+                <!-- Blog Row 2 -->
+                <tr>
+                    <td>A Beginner's Guide to Safari Tours</td>
+                    <td>Guides</td>
+                    <td>2024-06-25</td>
+                    <td><span class="badge bg-warning text-dark">Draft</span></td>
+                    <td>
+                        <div class="d-flex justify-content-center gap-2">
+                            <button class="btn btn-sm btn-info" title="Edit"><i class="fa fa-edit"></i></button>
+                            <button class="btn btn-sm btn-danger" title="Delete"><i class="fa fa-trash"></i></button>
+                            <a href="#" class="btn btn-sm btn-primary" title="View"><i class="fa fa-eye"></i></a>
+                            <button class="btn btn-sm btn-warning" title="Change Status"><i class="fa fa-toggle-off"></i></button>
+                        </div>
+                    </td>
+                </tr>
+                <!-- Add More Rows Here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
 
 <%- include('./_layouts/footer') %>
