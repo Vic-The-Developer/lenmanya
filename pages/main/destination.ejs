@@ -33,9 +33,9 @@
             <div class="row">
                 <div class="col-lg-6 text-center text-lg-left mb-2 mb-lg-0">
                     <div class="d-inline-flex align-items-center">
-                        <p><i class="fa fa-envelope mr-2"></i>info@example.com</p>
+                        <p><i class="fa fa-envelope mr-2"></i>bookings@lenmanyaadventures.com</p>
                         <p class="text-body px-3">|</p>
-                        <p><i class="fa fa-phone-alt mr-2"></i>+012 345 6789</p>
+                        <p><i class="fa fa-phone-alt mr-2"></i>+254 794 983890</p>
                     </div>
                 </div>
                 <div class="col-lg-6 text-center text-lg-right">
@@ -123,36 +123,29 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="mb-3 mb-md-0">
-                                    <select class="custom-select px-4" style="height: 47px;">
-                                        <option selected>Destination</option>
-                                        <option value="1">Destination 1</option>
-                                        <option value="2">Destination 1</option>
-                                        <option value="3">Destination 1</option>
-                                    </select>
+                                    <label for="fname">Full Name*</label>
+                                    <input type="text" name="fname" class="form-control" id="fname" placeholder="Enter Name" required>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="mb-3 mb-md-0">
-                                    <div class="date" id="date1" data-target-input="nearest">
-                                        <input type="text" class="form-control p-4 datetimepicker-input" placeholder="Depart Date" data-target="#date1" data-toggle="datetimepicker"/>
+                                    <label for="destination">Destination*</label>
+                                    <input type="text" name="destination" id="destination" placeholder="Destination" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3 mb-md-0">
+                                    <div class="date" id="date1" onfocus="disablePastDates()" data-target-input="nearest">
+                                        <label for="date1">Date of Travel*</label>
+                                        <input type="text" id="date1" class="form-control p-4 datetimepicker-input" placeholder="Enter Date" data-target="#date1" data-toggle="datetimepicker" required/>
                                     </div>
                                 </div>
                             </div>
+                            
                             <div class="col-md-3">
                                 <div class="mb-3 mb-md-0">
-                                    <div class="date" id="date2" data-target-input="nearest">
-                                        <input type="text" class="form-control p-4 datetimepicker-input" placeholder="Return Date" data-target="#date2" data-toggle="datetimepicker"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="mb-3 mb-md-0">
-                                    <select class="custom-select px-4" style="height: 47px;">
-                                        <option selected>Duration</option>
-                                        <option value="1">Duration 1</option>
-                                        <option value="2">Duration 1</option>
-                                        <option value="3">Duration 1</option>
-                                    </select>
+                                    <label for="whatsapp">WhatsApp Number*</label>
+                                    <input type="text" class="form-control" name="whatsapp" id="whatsapp" placeholder="Enter Number" required>
                                 </div>
                             </div>
                         </div>
@@ -177,55 +170,91 @@
             <div class="row">
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="destination-item position-relative overflow-hidden mb-2">
-                        <img class="img-fluid" src="/img/destination-1.jpg" alt="">
-                        <a class="destination-overlay text-white text-decoration-none" href="">
-                            <h5 class="text-white">United States</h5>
-                            <span>100 Cities</span>
+                        <img class="img-fluid" src="/img/kenya.jpeg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="/contact">
+                            <h5 class="text-white">Kenya</h5>
+                            <span>Local</span>
                         </a>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="destination-item position-relative overflow-hidden mb-2">
-                        <img class="img-fluid" src="/img/destination-2.jpg" alt="">
-                        <a class="destination-overlay text-white text-decoration-none" href="">
-                            <h5 class="text-white">United Kingdom</h5>
-                            <span>100 Cities</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="destination-item position-relative overflow-hidden mb-2">
-                        <img class="img-fluid" src="/img/destination-3.jpg" alt="">
-                        <a class="destination-overlay text-white text-decoration-none" href="">
-                            <h5 class="text-white">Australia</h5>
-                            <span>100 Cities</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="destination-item position-relative overflow-hidden mb-2">
-                        <img class="img-fluid" src="/img/destination-4.jpg" alt="">
-                        <a class="destination-overlay text-white text-decoration-none" href="">
-                            <h5 class="text-white">India</h5>
-                            <span>100 Cities</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="destination-item position-relative overflow-hidden mb-2">
-                        <img class="img-fluid" src="/img/destination-5.jpg" alt="">
-                        <a class="destination-overlay text-white text-decoration-none" href="">
+                        <img class="img-fluid" src="/img/southafrica.jpeg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="/contact">
                             <h5 class="text-white">South Africa</h5>
-                            <span>100 Cities</span>
+                            <span>Regional</span>
                         </a>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="destination-item position-relative overflow-hidden mb-2">
-                        <img class="img-fluid" src="/img/destination-6.jpg" alt="">
-                        <a class="destination-overlay text-white text-decoration-none" href="">
-                            <h5 class="text-white">Indonesia</h5>
-                            <span>100 Cities</span>
+                        <img class="img-fluid" src="/img/zanzibar.jpeg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="/contact">
+                            <h5 class="text-white">Zanzibar</h5>
+                            <span>Regional</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="destination-item position-relative overflow-hidden mb-2">
+                        <img class="img-fluid" src="/img/egypt.jpeg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="/contact">
+                            <h5 class="text-white">Egypt</h5>
+                            <span>Regional</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="destination-item position-relative overflow-hidden mb-2">
+                        <img class="img-fluid" src="/img/mauritius.jpeg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="/contact">
+                            <h5 class="text-white">Mauritius</h5>
+                            <span>Regional</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="destination-item position-relative overflow-hidden mb-2">
+                        <img class="img-fluid" src="/img/maldives.jpeg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="/contact">
+                            <h5 class="text-white">Maldives</h5>
+                            <span>International</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="destination-item position-relative overflow-hidden mb-2">
+                        <img class="img-fluid" src="/img/malaysia.jpg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="/contact">
+                            <h5 class="text-white">Malaysia</h5>
+                            <span>International</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="destination-item position-relative overflow-hidden mb-2">
+                        <img class="img-fluid" src="/img/singapore.jpeg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="/contact">
+                            <h5 class="text-white">Singapore</h5>
+                            <span>International</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="destination-item position-relative overflow-hidden mb-2">
+                        <img class="img-fluid" src="/img/china.jpeg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="/contact">
+                            <h5 class="text-white">China</h5>
+                            <span>International</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="destination-item position-relative overflow-hidden mb-2">
+                        <img class="img-fluid" src="/img/india.jpeg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="/contact">
+                            <h5 class="text-white">India</h5>
+                            <span>International</span>
                         </a>
                     </div>
                 </div>

@@ -33,9 +33,9 @@
             <div class="row">
                 <div class="col-lg-6 text-center text-lg-left mb-2 mb-lg-0">
                     <div class="d-inline-flex align-items-center">
-                        <p><i class="fa fa-envelope mr-2"></i>info@example.com</p>
+                        <p><i class="fa fa-envelope mr-2"></i>bookings@lenmanyaadventures.com</p>
                         <p class="text-body px-3">|</p>
-                        <p><i class="fa fa-phone-alt mr-2"></i>+012 345 6789</p>
+                        <p><i class="fa fa-phone-alt mr-2"></i>+254 794 983890</p>
                     </div>
                 </div>
                 <div class="col-lg-6 text-center text-lg-right">
@@ -85,7 +85,6 @@
                             <div class="dropdown-menu border-0 rounded-0 m-0">
                                 <a href="/blog" class="dropdown-item">Blog Grid</a>
                                 <a href="/destination" class="dropdown-item">Destination</a>
-                                <a href="/guide" class="dropdown-item">Travel Guides</a>
                                 <a href="/testimonial" class="dropdown-item">Testimonial</a>
                             </div>
                         </div>
@@ -123,36 +122,29 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="mb-3 mb-md-0">
-                                    <select class="custom-select px-4" style="height: 47px;">
-                                        <option selected>Destination</option>
-                                        <option value="1">Destination 1</option>
-                                        <option value="2">Destination 1</option>
-                                        <option value="3">Destination 1</option>
-                                    </select>
+                                    <label for="fname">Full Name*</label>
+                                    <input type="text" name="fname" class="form-control" id="fname" placeholder="Enter Name" required>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="mb-3 mb-md-0">
-                                    <div class="date" id="date1" data-target-input="nearest">
-                                        <input type="text" class="form-control p-4 datetimepicker-input" placeholder="Depart Date" data-target="#date1" data-toggle="datetimepicker"/>
+                                    <label for="destination">Destination*</label>
+                                    <input type="text" name="destination" id="destination" placeholder="Destination" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3 mb-md-0">
+                                    <div class="date" id="date1" onfocus="disablePastDates()" data-target-input="nearest">
+                                        <label for="date1">Date of Travel*</label>
+                                        <input type="text" id="date1" class="form-control p-4 datetimepicker-input" placeholder="Enter Date" data-target="#date1" data-toggle="datetimepicker" required/>
                                     </div>
                                 </div>
                             </div>
+                            
                             <div class="col-md-3">
                                 <div class="mb-3 mb-md-0">
-                                    <div class="date" id="date2" data-target-input="nearest">
-                                        <input type="text" class="form-control p-4 datetimepicker-input" placeholder="Return Date" data-target="#date2" data-toggle="datetimepicker"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="mb-3 mb-md-0">
-                                    <select class="custom-select px-4" style="height: 47px;">
-                                        <option selected>Duration</option>
-                                        <option value="1">Duration 1</option>
-                                        <option value="2">Duration 1</option>
-                                        <option value="3">Duration 1</option>
-                                    </select>
+                                    <label for="whatsapp">WhatsApp Number*</label>
+                                    <input type="text" class="form-control" name="whatsapp" id="whatsapp" placeholder="Enter Number" required>
                                 </div>
                             </div>
                         </div>
@@ -172,23 +164,23 @@
         <div class="container pt-5 pb-3">
             <div class="text-center mb-3 pb-3">
                 <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">Packages</h6>
-                <h1>Pefect Tour Packages</h1>
+                <h1>Perfect Tour Packages</h1>
             </div>
             <div class="row">
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="package-item bg-white mb-2">
-                        <img class="img-fluid" src="/img/package-1.jpg" alt="">
+                        <img class="img-fluid" src="/img/kenya.jpeg" alt="maasai mara">
                         <div class="p-4">
                             <div class="d-flex justify-content-between mb-3">
-                                <small class="m-0"><i class="fa fa-map-marker-alt text-primary mr-2"></i>Thailand</small>
-                                <small class="m-0"><i class="fa fa-calendar-alt text-primary mr-2"></i>3 days</small>
-                                <small class="m-0"><i class="fa fa-user text-primary mr-2"></i>2 Person</small>
+                                <small class="m-0"><i class="fa fa-map-marker-alt text-primary mr-2"></i>Maasai Mara</small>
+                                <small class="m-0"><i class="fa fa-calendar-alt text-primary mr-2"></i>3 days/2 nights</small>
+                                <small class="m-0"><i class="fa fa-user text-primary mr-2"></i></small>
                             </div>
-                            <a class="h5 text-decoration-none" href="">Discover amazing places of the world with us</a>
+                            <a class="h5 text-decoration-none" href="/contact">Explore Masai Mara safari packages with thrilling wildlife adventures, luxury lodges, and the iconic Great Migration experience. Book your dream safari!</a>
                             <div class="border-top mt-4 pt-4">
                                 <div class="d-flex justify-content-between">
-                                    <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i>4.5 <small>(250)</small></h6>
-                                    <h5 class="m-0">$350</h5>
+                                    <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i>4.4 <small>(87)</small></h6>
+                                    <h5 class="m-0">$648</h5>
                                 </div>
                             </div>
                         </div>
@@ -196,18 +188,18 @@
                 </div>
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="package-item bg-white mb-2">
-                        <img class="img-fluid" src="/img/package-2.jpg" alt="">
+                        <img class="img-fluid" src="/img/zanzibar.jpeg" alt="">
                         <div class="p-4">
                             <div class="d-flex justify-content-between mb-3">
-                                <small class="m-0"><i class="fa fa-map-marker-alt text-primary mr-2"></i>Thailand</small>
-                                <small class="m-0"><i class="fa fa-calendar-alt text-primary mr-2"></i>3 days</small>
-                                <small class="m-0"><i class="fa fa-user text-primary mr-2"></i>2 Person</small>
+                                <small class="m-0"><i class="fa fa-map-marker-alt text-primary mr-2"></i>Zanzibar</small>
+                                <small class="m-0"><i class="fa fa-calendar-alt text-primary mr-2"></i>5 days/4 nights</small>
+                                <small class="m-0"><i class="fa fa-user text-primary mr-2"></i></small>
                             </div>
-                            <a class="h5 text-decoration-none" href="">Discover amazing places of the world with us</a>
+                            <a class="h5 text-decoration-none" href="/contact">Book a 5 day tours & Excursions in Zanzibar!</a>
                             <div class="border-top mt-4 pt-4">
                                 <div class="d-flex justify-content-between">
-                                    <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i>4.5 <small>(250)</small></h6>
-                                    <h5 class="m-0">$350</h5>
+                                    <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i>5.0 <small>(66)</small></h6>
+                                    <h5 class="m-0">$12,848</h5>
                                 </div>
                             </div>
                         </div>
@@ -215,75 +207,18 @@
                 </div>
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="package-item bg-white mb-2">
-                        <img class="img-fluid" src="/img/package-3.jpg" alt="">
+                        <img class="img-fluid" src="/img/egypt.jpeg" alt="">
                         <div class="p-4">
                             <div class="d-flex justify-content-between mb-3">
-                                <small class="m-0"><i class="fa fa-map-marker-alt text-primary mr-2"></i>Thailand</small>
-                                <small class="m-0"><i class="fa fa-calendar-alt text-primary mr-2"></i>3 days</small>
-                                <small class="m-0"><i class="fa fa-user text-primary mr-2"></i>2 Person</small>
+                                <small class="m-0"><i class="fa fa-map-marker-alt text-primary mr-2"></i>Egypt/Israel</small>
+                                <small class="m-0"><i class="fa fa-calendar-alt text-primary mr-2"></i>12 days/11 nights</small>
+                                <small class="m-0"><i class="fa fa-user text-primary mr-2"></i></small>
                             </div>
-                            <a class="h5 text-decoration-none" href="">Discover amazing places of the world with us</a>
+                            <a class="h5 text-decoration-none" href="/contact">Our Egypt or Israel package tours are designed to provide you with an unforgettable experience.</a>
                             <div class="border-top mt-4 pt-4">
                                 <div class="d-flex justify-content-between">
-                                    <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i>4.5 <small>(250)</small></h6>
-                                    <h5 class="m-0">$350</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="package-item bg-white mb-2">
-                        <img class="img-fluid" src="/img/package-4.jpg" alt="">
-                        <div class="p-4">
-                            <div class="d-flex justify-content-between mb-3">
-                                <small class="m-0"><i class="fa fa-map-marker-alt text-primary mr-2"></i>Thailand</small>
-                                <small class="m-0"><i class="fa fa-calendar-alt text-primary mr-2"></i>3 days</small>
-                                <small class="m-0"><i class="fa fa-user text-primary mr-2"></i>2 Person</small>
-                            </div>
-                            <a class="h5 text-decoration-none" href="">Discover amazing places of the world with us</a>
-                            <div class="border-top mt-4 pt-4">
-                                <div class="d-flex justify-content-between">
-                                    <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i>4.5 <small>(250)</small></h6>
-                                    <h5 class="m-0">$350</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="package-item bg-white mb-2">
-                        <img class="img-fluid" src="/img/package-5.jpg" alt="">
-                        <div class="p-4">
-                            <div class="d-flex justify-content-between mb-3">
-                                <small class="m-0"><i class="fa fa-map-marker-alt text-primary mr-2"></i>Thailand</small>
-                                <small class="m-0"><i class="fa fa-calendar-alt text-primary mr-2"></i>3 days</small>
-                                <small class="m-0"><i class="fa fa-user text-primary mr-2"></i>2 Person</small>
-                            </div>
-                            <a class="h5 text-decoration-none" href="">Discover amazing places of the world with us</a>
-                            <div class="border-top mt-4 pt-4">
-                                <div class="d-flex justify-content-between">
-                                    <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i>4.5 <small>(250)</small></h6>
-                                    <h5 class="m-0">$350</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="package-item bg-white mb-2">
-                        <img class="img-fluid" src="/img/package-6.jpg" alt="">
-                        <div class="p-4">
-                            <div class="d-flex justify-content-between mb-3">
-                                <small class="m-0"><i class="fa fa-map-marker-alt text-primary mr-2"></i>Thailand</small>
-                                <small class="m-0"><i class="fa fa-calendar-alt text-primary mr-2"></i>3 days</small>
-                                <small class="m-0"><i class="fa fa-user text-primary mr-2"></i>2 Person</small>
-                            </div>
-                            <a class="h5 text-decoration-none" href="">Discover amazing places of the world with us</a>
-                            <div class="border-top mt-4 pt-4">
-                                <div class="d-flex justify-content-between">
-                                    <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i>4.5 <small>(250)</small></h6>
-                                    <h5 class="m-0">$350</h5>
+                                    <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i>4.5 <small>(20)</small></h6>
+                                    <h5 class="m-0">$51,900</h5>
                                 </div>
                             </div>
                         </div>
@@ -305,55 +240,91 @@
             <div class="row">
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="destination-item position-relative overflow-hidden mb-2">
-                        <img class="img-fluid" src="/img/destination-1.jpg" alt="">
-                        <a class="destination-overlay text-white text-decoration-none" href="">
-                            <h5 class="text-white">United States</h5>
-                            <span>100 Cities</span>
+                        <img class="img-fluid" src="/img/kenya.jpeg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="/contact">
+                            <h5 class="text-white">Kenya</h5>
+                            <span>Local</span>
                         </a>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="destination-item position-relative overflow-hidden mb-2">
-                        <img class="img-fluid" src="/img/destination-2.jpg" alt="">
-                        <a class="destination-overlay text-white text-decoration-none" href="">
-                            <h5 class="text-white">United Kingdom</h5>
-                            <span>100 Cities</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="destination-item position-relative overflow-hidden mb-2">
-                        <img class="img-fluid" src="/img/destination-3.jpg" alt="">
-                        <a class="destination-overlay text-white text-decoration-none" href="">
-                            <h5 class="text-white">Australia</h5>
-                            <span>100 Cities</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="destination-item position-relative overflow-hidden mb-2">
-                        <img class="img-fluid" src="/img/destination-4.jpg" alt="">
-                        <a class="destination-overlay text-white text-decoration-none" href="">
-                            <h5 class="text-white">India</h5>
-                            <span>100 Cities</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="destination-item position-relative overflow-hidden mb-2">
-                        <img class="img-fluid" src="/img/destination-5.jpg" alt="">
-                        <a class="destination-overlay text-white text-decoration-none" href="">
+                        <img class="img-fluid" src="/img/southafrica.jpeg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="/contact">
                             <h5 class="text-white">South Africa</h5>
-                            <span>100 Cities</span>
+                            <span>Regional</span>
                         </a>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="destination-item position-relative overflow-hidden mb-2">
-                        <img class="img-fluid" src="/img/destination-6.jpg" alt="">
-                        <a class="destination-overlay text-white text-decoration-none" href="">
-                            <h5 class="text-white">Indonesia</h5>
-                            <span>100 Cities</span>
+                        <img class="img-fluid" src="/img/zanzibar.jpeg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="/contact">
+                            <h5 class="text-white">Zanzibar</h5>
+                            <span>Regional</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="destination-item position-relative overflow-hidden mb-2">
+                        <img class="img-fluid" src="/img/egypt.jpeg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="/contact">
+                            <h5 class="text-white">Egypt</h5>
+                            <span>Regional</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="destination-item position-relative overflow-hidden mb-2">
+                        <img class="img-fluid" src="/img/mauritius.jpeg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="/contact">
+                            <h5 class="text-white">Mauritius</h5>
+                            <span>Regional</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="destination-item position-relative overflow-hidden mb-2">
+                        <img class="img-fluid" src="/img/maldives.jpeg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="/contact">
+                            <h5 class="text-white">Maldives</h5>
+                            <span>International</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="destination-item position-relative overflow-hidden mb-2">
+                        <img class="img-fluid" src="/img/malaysia.jpg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="/contact">
+                            <h5 class="text-white">Malaysia</h5>
+                            <span>International</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="destination-item position-relative overflow-hidden mb-2">
+                        <img class="img-fluid" src="/img/singapore.jpeg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="/contact">
+                            <h5 class="text-white">Singapore</h5>
+                            <span>International</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="destination-item position-relative overflow-hidden mb-2">
+                        <img class="img-fluid" src="/img/china.jpeg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="/contact">
+                            <h5 class="text-white">China</h5>
+                            <span>International</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="destination-item position-relative overflow-hidden mb-2">
+                        <img class="img-fluid" src="/img/india.jpeg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="/contact">
+                            <h5 class="text-white">India</h5>
+                            <span>International</span>
                         </a>
                     </div>
                 </div>

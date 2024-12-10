@@ -33,9 +33,9 @@
             <div class="row">
                 <div class="col-lg-6 text-center text-lg-left mb-2 mb-lg-0">
                     <div class="d-inline-flex align-items-center">
-                        <p><i class="fa fa-envelope mr-2"></i>info@example.com</p>
+                        <p><i class="fa fa-envelope mr-2"></i>bookings@lenmanyaadventures.com</p>
                         <p class="text-body px-3">|</p>
-                        <p><i class="fa fa-phone-alt mr-2"></i>+012 345 6789</p>
+                        <p><i class="fa fa-phone-alt mr-2"></i>+254 794 983890</p>
                     </div>
                 </div>
                 <div class="col-lg-6 text-center text-lg-right">
@@ -123,36 +123,29 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="mb-3 mb-md-0">
-                                    <select class="custom-select px-4" style="height: 47px;">
-                                        <option selected>Destination</option>
-                                        <option value="1">Destination 1</option>
-                                        <option value="2">Destination 1</option>
-                                        <option value="3">Destination 1</option>
-                                    </select>
+                                    <label for="fname">Full Name*</label>
+                                    <input type="text" name="fname" class="form-control" id="fname" placeholder="Enter Name" required>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="mb-3 mb-md-0">
-                                    <div class="date" id="date1" data-target-input="nearest">
-                                        <input type="text" class="form-control p-4 datetimepicker-input" placeholder="Depart Date" data-target="#date1" data-toggle="datetimepicker"/>
+                                    <label for="destination">Destination*</label>
+                                    <input type="text" name="destination" id="destination" placeholder="Destination" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3 mb-md-0">
+                                    <div class="date" id="date1" onfocus="disablePastDates()" data-target-input="nearest">
+                                        <label for="date1">Date of Travel*</label>
+                                        <input type="text" id="date1" class="form-control p-4 datetimepicker-input" placeholder="Enter Date" data-target="#date1" data-toggle="datetimepicker" required/>
                                     </div>
                                 </div>
                             </div>
+                            
                             <div class="col-md-3">
                                 <div class="mb-3 mb-md-0">
-                                    <div class="date" id="date2" data-target-input="nearest">
-                                        <input type="text" class="form-control p-4 datetimepicker-input" placeholder="Return Date" data-target="#date2" data-toggle="datetimepicker"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="mb-3 mb-md-0">
-                                    <select class="custom-select px-4" style="height: 47px;">
-                                        <option selected>Duration</option>
-                                        <option value="1">Duration 1</option>
-                                        <option value="2">Duration 1</option>
-                                        <option value="3">Duration 1</option>
-                                    </select>
+                                    <label for="whatsapp">WhatsApp Number*</label>
+                                    <input type="text" class="form-control" name="whatsapp" id="whatsapp" placeholder="Enter Number" required>
                                 </div>
                             </div>
                         </div>
