@@ -1,4 +1,43 @@
 <%- include('./_layouts/header') %>
 
+<!-- Admin Profile Card -->
+<div class="container">
+    <div class="card card-profile bg-white">
+        <h3 class="text-center text-primary mb-4">Admin Profile Information</h3>
+        <form>
+            <!-- Display Name -->
+            <div class="mb-3">
+                <label for="displayName" class="form-label">Display Name</label>
+                <input type="text" id="displayName" name="displayName" class="form-control" placeholder="Admin Name" value="John Doe" readonly>
+            </div>
+            <!-- Email Address -->
+            <div class="mb-3">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="admin@example.com" value="admin@example.com" readonly>
+            </div>
+            <!-- Phone Number -->
+            <div class="mb-3">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="tel" id="phone" name="phone" class="form-control" placeholder="+123456789" value="+123456789">
+            </div>
+            <!-- Password Update -->
+            <div class="mb-4">
+                <label for="password" class="form-label">Update Password</label>
+                <input type="password" id="password" name="oldPass" class="form-control" placeholder="Enter old password">
+                <input type="password" id="password" name="newPass" class="form-control" placeholder="Enter new password">
+            </div>
+            <!-- Update Button -->
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-save"></i> Update Profile
+                </button>
+                <a href="#" class="btn logout-btn">
+                    <i class="fa fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
 
 <%- include('./_layouts/footer') %>
