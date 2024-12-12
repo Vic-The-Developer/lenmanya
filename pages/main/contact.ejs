@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Lenmanya Adventures | Top rated Tours and Travel Company in Kenya</title>
+    <title>Contact Us - Lenmanya Adventures</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
@@ -117,44 +117,46 @@
     <!-- Booking Start -->
     <div class="container-fluid booking mt-5 pb-5">
         <div class="container pb-5">
-            <div class="bg-light shadow" style="padding: 30px;">
-                <div class="row align-items-center" style="min-height: 60px;">
-                    <div class="col-md-10">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="mb-3 mb-md-0">
-                                    <label for="fname">Full Name*</label>
-                                    <input type="text" name="fname" class="form-control" id="fname" placeholder="Enter Name" required>
+            <form action="/admin/enquire" enctype="application/x-www-form-urlencoded" method="post">
+                <div class="bg-light shadow" style="padding: 30px;">
+                    <div class="row align-items-center" style="min-height: 60px;">
+                        <div class="col-md-10">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="mb-3 mb-md-0">
+                                        <label for="fname">Full Name*</label>
+                                        <input type="text" name="fname" class="form-control" id="fname" placeholder="Enter Name" required>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="mb-3 mb-md-0">
-                                    <label for="destination">Destination*</label>
-                                    <input type="text" name="destination" id="destination" placeholder="Destination" class="form-control" required>
+                                <div class="col-md-3">
+                                    <div class="mb-3 mb-md-0">
+                                        <label for="destination">Destination*</label>
+                                        <input type="text" name="destination" id="destination" placeholder="Destination" class="form-control" required>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="mb-3 mb-md-0">
-                                    <div class="date" id="date1" onfocus="disablePastDates()" data-target-input="nearest">
-                                        <label for="date1">Date of Travel*</label>
-                                        <input type="text" id="date1" class="form-control p-4 datetimepicker-input" placeholder="Enter Date" data-target="#date1" data-toggle="datetimepicker" required/>
+                                <div class="col-md-3">
+                                    <div class="mb-3 mb-md-0">
+                                        <div class="date" id="date1" onfocus="disablePastDates()" data-target-input="nearest">
+                                            <label for="date1">Date of Travel*</label>
+                                            <input type="text" id="date1" class="form-control p-4 datetimepicker-input" placeholder="Enter Date" data-target="#date1" data-toggle="datetimepicker" required/>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <div class="mb-3 mb-md-0">
+                                        <label for="whatsapp">WhatsApp Number*</label>
+                                        <input type="text" class="form-control" name="whatsapp" id="whatsapp" placeholder="Enter Number" required>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="col-md-3">
-                                <div class="mb-3 mb-md-0">
-                                    <label for="whatsapp">WhatsApp Number*</label>
-                                    <input type="text" class="form-control" name="whatsapp" id="whatsapp" placeholder="Enter Number" required>
-                                </div>
-                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-primary btn-block" type="submit" style="height: 47px; margin-top: -2px;">Submit</button>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <button class="btn btn-primary btn-block" type="submit" style="height: 47px; margin-top: -2px;">Submit</button>
-                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
     <!-- Booking End -->

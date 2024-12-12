@@ -120,14 +120,14 @@ router.get('/contact', (req, res)=>{
  * Terms and conditions
  */
 router.get('/terms', (req, res)=>{
-    res.render('main/extras/terms')
+    res.render('main/terms')
 })
 
 /**
  * Privacy page
  */
 router.get('/privacy', (req, res)=>{
-    res.render('main/extras/privacy')
+    res.render('main/privacy')
 })
 
 

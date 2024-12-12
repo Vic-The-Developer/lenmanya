@@ -16,6 +16,28 @@ const { title } = require("process");
 router.use(flash());
 
 
+
+/**
+ * Login Page
+ */
+router.get('/login', (req, res)=>{
+  res.render('dash/login')
+})
+
+/**
+ * Reset Page
+ */
+router.get('/reset', (req, res)=>{
+  res.render('dash/reset')
+})
+
+/**
+ * New password Page
+ */
+router.get('/new_pass', (req, res)=>{
+  res.render('dash/newPass')
+})
+
 /**
  * Main Dashboard
  */
@@ -26,6 +48,16 @@ router.get('/dash', (req, res)=>{
   })
 })
 
+
+/**
+ * Manage blogs
+ */
+router.get('/packages', (req, res)=>{
+  res.render('dash/packages', {
+    title: 'Manage Packages | Lenmanya Adventures',
+    currentPath: '/admin/packages'
+  })
+})
 
 /**
  * Manage blogs
@@ -74,90 +106,90 @@ router.get('/create-blog', (req, res)=>{
  */
 
 
-router.get("/dash/:page", async (req, res) => {
+// router.get("/dash/:page", async (req, res) => {
 
-  //if not logged in
-  if (req.user == undefined || req.user.admin != 0) res.redirect('/user/login');
+//   //if not logged in
+//   if (req.user == undefined || req.user.admin != 0) res.redirect('/user/login');
 
-  try {
-    // Get total users, properties, suspended listings, featured listings
+//   try {
+//     // Get total users, properties, suspended listings, featured listings
 
-    // get paginated results
-    const perPage = 2;
-    const page = parseInt(req.params.page) || 1;
+//     // get paginated results
+//     const perPage = 2;
+//     const page = parseInt(req.params.page) || 1;
 
-    // find featured listings
-    const featuredListings = await Apartment.find({ sponsored: 'true' })
-      .skip((perPage * page) - perPage)
-      .limit(perPage)
-      .exec();
+//     // find featured listings
+//     const featuredListings = await Apartment.find({ sponsored: 'true' })
+//       .skip((perPage * page) - perPage)
+//       .limit(perPage)
+//       .exec();
 
-    console.log('Paginated listings', featuredListings);
+//     console.log('Paginated listings', featuredListings);
 
-    // get total pages and total Apartment
-    const totalListings = await Apartment.countDocuments({});
-    const pages = Math.ceil(totalListings / perPage);
+//     // get total pages and total Apartment
+//     const totalListings = await Apartment.countDocuments({});
+//     const pages = Math.ceil(totalListings / perPage);
 
-    //get sponsored listings
-    const sponsTot = await Apartment.countDocuments({sponsored: 'true'});
-    console.log('sponsored', sponsTot);
+//     //get sponsored listings
+//     const sponsTot = await Apartment.countDocuments({sponsored: 'true'});
+//     console.log('sponsored', sponsTot);
 
-    // Get total users
-    const totalUsers = await User.countDocuments({});
+//     // Get total users
+//     const totalUsers = await User.countDocuments({});
 
-    console.log('Users total', totalUsers);
+//     console.log('Users total', totalUsers);
 
-    // get total suspended listings
-    const totalSuspendedListings = await Apartment.countDocuments({ disabled: 'true' });
+//     // get total suspended listings
+//     const totalSuspendedListings = await Apartment.countDocuments({ disabled: 'true' });
 
-    console.log('Suspended total', totalSuspendedListings);
+//     console.log('Suspended total', totalSuspendedListings);
 
-    // Get Search Terms
-    // const topLocations = await SearchTerms.aggregate([
-    //   { $group: { _id: '$loc', count: { $sum: 1 } } },
-    //   { $sort: { count: -1 } },
-    //   { $limit: 5 },
-    // ]);
+//     // Get Search Terms
+//     // const topLocations = await SearchTerms.aggregate([
+//     //   { $group: { _id: '$loc', count: { $sum: 1 } } },
+//     //   { $sort: { count: -1 } },
+//     //   { $limit: 5 },
+//     // ]);
 
-    // const topApartmentTypes = await SearchTerms.aggregate([
-    //   { $group: { _id: '$appaType', count: { $sum: 1 } } },
-    //   { $sort: { count: -1 } },
-    //   { $limit: 5 },
-    // ]);
+//     // const topApartmentTypes = await SearchTerms.aggregate([
+//     //   { $group: { _id: '$appaType', count: { $sum: 1 } } },
+//     //   { $sort: { count: -1 } },
+//     //   { $limit: 5 },
+//     // ]);
 
-    // const topMaxBudgets = await SearchTerms.aggregate([
-    //   { $group: { _id: '$maxBudget', count: { $sum: 1 } } },
-    //   { $sort: { count: -1 } },
-    //   { $limit: 5 },
-    // ]);
+//     // const topMaxBudgets = await SearchTerms.aggregate([
+//     //   { $group: { _id: '$maxBudget', count: { $sum: 1 } } },
+//     //   { $sort: { count: -1 } },
+//     //   { $limit: 5 },
+//     // ]);
 
-    const successMessage = req.flash("success");
+//     const successMessage = req.flash("success");
 
-    // render the view
-    res.render('dash/dash', {
-      title: 'Main Dashboard | Keja Connect',
-      apart: featuredListings,
-      current: page,
-      pages,
-      usersTot: totalUsers,
-      apartTot: totalListings,
-      suspendedTot: totalSuspendedListings,
-      successMessage,
-      sponsTot
-      // topLocations,
-      // topApartmentTypes,
-      // topMaxBudgets,
-    });
-  } catch (err) {
-    console.error(err);
-    req.flash('success', "Error in quering data");
-    res.redirect('/')
-  }
+//     // render the view
+//     res.render('dash/dash', {
+//       title: 'Main Dashboard | Keja Connect',
+//       apart: featuredListings,
+//       current: page,
+//       pages,
+//       usersTot: totalUsers,
+//       apartTot: totalListings,
+//       suspendedTot: totalSuspendedListings,
+//       successMessage,
+//       sponsTot
+//       // topLocations,
+//       // topApartmentTypes,
+//       // topMaxBudgets,
+//     });
+//   } catch (err) {
+//     console.error(err);
+//     req.flash('success', "Error in quering data");
+//     res.redirect('/')
+//   }
 
-  // res.render("dash/dash", {
-  //   title: "Main Dashboard | Keja Connect",
-  // });
-});
+//   // res.render("dash/dash", {
+//   //   title: "Main Dashboard | Keja Connect",
+//   // });
+// });
 
 
 

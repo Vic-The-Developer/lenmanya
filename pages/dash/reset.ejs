@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password | Lenmanya Adventures</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Favicon -->
+    <link href="/img/lenmanya fav.png" rel="icon">
+    <style>
+        body {
+            height: 100vh;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-container {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .login-container h3 {
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+            color: #333;
+        }
+        .forgot-link {
+            text-decoration: none;
+            color: #007bff;
+        }
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+        .btn-login {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Form Container -->
+    <div class="login-container">
+        <img src="/img/logo-nobg.png" alt="logo" width="300px" style="margin-bottom: 20px;">
+        <h3>Reset Password</h3>
+        <form>
+            <!-- Email Input -->
+            <div class="mb-3">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
+            </div>
+            
+            
+            <!-- Login Button -->
+            <button type="submit" class="btn btn-login w-100">
+                <i class="fa fa-refresh me-2"></i>Send Reset Link
+            </button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

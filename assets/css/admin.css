@@ -455,6 +455,22 @@ html {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+/*Manage Packages*/
+.action-buttons i {
+    cursor: pointer;
+    margin-right: 10px;
+    transition: color 0.3s ease;
+}
+.action-buttons i:hover {
+    color: #007bff;
+}
+.table-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 
 /*Manage Blog Styling*/
 .table th, .table td {
