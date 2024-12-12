@@ -85,7 +85,7 @@
 
     <!-- Filter and Search Section -->
     <div class="filter-section mb-4">
-        <form class="row g-3">
+        <form class="row g-3" action="" method="get" enctype="application/x-www-form-urlencoded">
             <div class="col-md-6">
                 <input type="text" class="form-control" placeholder="Search by Name or Subject" id="search">
             </div>
@@ -110,12 +110,12 @@
                 <thead class="table-light">
                     <tr>
                         <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Subject</th>
-                        <th>Message</th>
-                        <th>Date Submitted</th>
-                        <th>Status</th>
+                        <th>Destination</th>
+                        <th>WhatsApp No.</th>
+                        <th>Date Submited</th>
+                        <th>Adults</th>
+                        <th>Children</th>
+                        <th>status</th>
                         <th>Actions</th> <!-- Actions Header -->
                     </tr>
                 </thead>
@@ -123,34 +123,32 @@
                     <!-- Sample Row 1 -->
                     <tr>
                         <td>John Doe</td>
-                        <td>john.doe@example.com</td>
+                        <td>Maasai Mara</td>
                         <td>+254 700 123 456</td>
-                        <td>Booking Inquiry</td>
-                        <td>Looking for a safari package...</td>
-                        <td>2024-06-28</td>
+                        <td>12-03-2021</td>
+                        <td>-</td>
+                        <td>-</td>
                         <td><span class="badge bg-warning text-dark">Pending</span></td>
                         <td>
                             <div class="d-flex justify-content-center gap-2">
-                                <button class="btn btn-sm btn-success" title="Mark as Resolved"><i class="fa fa-check"></i></button>
-                                <button class="btn btn-sm btn-info" title="View Details"><i class="fa fa-eye"></i></button>
-                                <button class="btn btn-sm btn-primary" title="Respond"><i class="fa fa-envelope"></i></button>
+                                <button class="btn btn-sm btn-primary" title="Mark as Resolved"><i class="fa fa-check"></i></button>
+                                <a href="#" class="btn btn-sm btn-success" title="Respond via WhatsApp"><i class="fa fa-whatsapp" style="color: white;"></i></a>
                             </div>
                         </td>
                     </tr>
                     <!-- Sample Row 2 -->
                     <tr>
                         <td>Jane Smith</td>
-                        <td>jane.smith@example.com</td>
+                        <td>Diani beach hotel</td>
                         <td>+254 711 234 567</td>
-                        <td>Pricing Information</td>
-                        <td>Please send me details on costs...</td>
-                        <td>2024-06-27</td>
+                        <td>11-06-2024</td>
+                        <td>-</td>
+                        <td>-</td>
                         <td><span class="badge bg-success">Resolved</span></td>
                         <td>
                             <div class="d-flex justify-content-center gap-2">
                                 <button class="btn btn-sm btn-secondary" disabled><i class="fa fa-check"></i></button>
-                                <button class="btn btn-sm btn-info" title="View Details"><i class="fa fa-eye"></i></button>
-                                <button class="btn btn-sm btn-primary" title="Respond"><i class="fa fa-envelope"></i></button>
+                                <a href="#" class="btn btn-sm btn-success" title="Respond via WhatsApp"><i class="fa fa-whatsapp" style="color: white;"></i></a>
                             </div>
                         </td>
                     </tr>

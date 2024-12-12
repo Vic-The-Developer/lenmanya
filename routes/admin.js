@@ -8,10 +8,14 @@ const fs2 = require("fs").promises;
 const multer = require("multer");
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
+const Admin = require("../models/Admin");
 
 var router = express.Router();
 const { check, body, validationResult } = require("express-validator");
 const flash = require("connect-flash");
+var passport = require('passport');
+const randtoken = require("rand-token");
+const bcrypt = require('bcrypt');
 const { title } = require("process");
 router.use(flash());
 
@@ -21,8 +25,44 @@ router.use(flash());
  * Login Page
  */
 router.get('/login', (req, res)=>{
-  res.render('dash/login')
+  const successMessage = req.flash('success');
+
+  res.render('dash/login', {
+    successMessage
+  })
 })
+
+//post login code
+router.post('/login', [
+  // Validate email and password
+  body('email').notEmpty().withMessage('Email is required').isEmail().withMessage('Invalid email address'),
+  body('password').notEmpty().withMessage('Password is required'),
+], (req, res, next) => {
+  // Check for validation errors
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const errorMessages = errors.array().map(error => error.msg);
+    req.flash('success', errorMessages);
+    return res.redirect('/admin/login');
+  }
+
+  // If validation passes, proceed to authentication
+  passport.authenticate('local', {
+    successRedirect: '/admin/dash',
+    failureRedirect: '/admin/login',
+    failureFlash: true,
+  })(req, res, next);
+});
+
+router.get('/logout', function(req, res, next) {
+  req.logout(function(err) {
+    if (err) { return next(err); }
+
+    req.flash('success', 'You are logged out!');
+    res.redirect('/admin/login');
+  });
+});
+
 
 /**
  * Reset Page
@@ -31,12 +71,161 @@ router.get('/reset', (req, res)=>{
   res.render('dash/reset')
 })
 
+router.post("/reset", (req, res) => {
+  const emailSender = "webmailservices001@gmail.com"; // Your email
+  const emailPass = "jiavpmqyfoauqbvw"; // App-specific password or email password
+  var { email } = req.body;
+
+  // Validate email
+  if (!email) {
+    req.flash("error", "Please provide a valid email address.");
+    return res.redirect("/reset");
+  }
+
+  // Function to send the email
+  async function sendEmail(recipientEmail, resetCode) {
+    try {
+      // Nodemailer transporter
+      let transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false, // TLS enabled
+        auth: {
+          user: emailSender,
+          pass: emailPass,
+        },
+      });
+
+      // Email options
+      let mailOptions = {
+        from: emailSender,
+        to: recipientEmail,
+        subject: "Admin Password Reset Request - Lenmanya Adventures",
+        html: `
+          <p>You requested a password reset.</p>
+          <p>Click this <a href="http://localhost:5000/admin/new_pass?code=${resetCode}&email=${email}">link</a> to reset your password.</p>
+          <p>If you did not request this, please ignore this email.</p>
+        `,
+      };
+
+      let info = await transporter.sendMail(mailOptions);
+      console.log("Email sent successfully:", info.messageId);
+      return true;
+    } catch (error) {
+      console.error("Error sending email:", error);
+      return false;
+    }
+  }
+
+  // Find user/admin with the provided email
+  Admin.findOne({ email: email }).exec(async (err, user) => {
+    if (err) {
+      console.error(err);
+      req.flash("error", "An error occurred. Please try again.");
+      return res.redirect("/admin/reset");
+    }
+
+    if (!user) {
+      req.flash("error", "The provided email is not registered with us.");
+      return res.redirect("/admin/reset");
+    }
+
+    // Generate a random reset code
+    const resetCode = randtoken.generate(6); // A 6-character reset code
+
+    // Send email with the reset code and reset link
+    const emailSent = await sendEmail(email, resetCode);
+
+    if (emailSent) {
+      // Save reset code to the database for the user
+      user.resetCode = resetCode;
+      user.save((err) => {
+        if (err) {
+          console.error("Failed to save reset code:", err);
+          req.flash("error", "Failed to process the reset request.");
+          return res.redirect("/admin/reset");
+        }
+
+        req.flash("success", "Reset code has been sent to your email.");
+        return res.redirect("/admin/reset");
+      });
+    } else {
+      req.flash("error", "Failed to send the reset email. Try again later.");
+      return res.redirect("/admin/reset");
+    }
+  });
+});
+
+
+
 /**
  * New password Page
  */
 router.get('/new_pass', (req, res)=>{
   res.render('dash/newPass')
 })
+
+router.post("/new_pass", (req, res) => {
+  const token = req.query.token; // Reset token from the link
+  const email = req.query.email; // Email from the link
+  const password = req.body.password; // New password from the form
+
+  if (!token || !password) {
+    req.flash("error", "Invalid request. Missing reset code or password.");
+    return res.redirect("/admin/login"); // Redirect if input is invalid
+  }
+
+  // Step 1: Find the user by reset token
+  Admin.findOne({ email: email, resetCode: token }).exec((err, user) => {
+    if (err) {
+      console.error("Error finding user by reset code:", err);
+      req.flash("error", "An error occurred. Please try again.");
+      return res.redirect("/admin/login");
+    }
+
+    if (!user) {
+      req.flash("error", "Invalid or expired reset code.");
+      return res.redirect("/admin/login");
+    }
+
+    // Step 2: Hash the new password
+    const saltRounds = 10;
+    bcrypt.genSalt(saltRounds, (err, salt) => {
+      if (err) {
+        console.error("Error generating salt:", err);
+        req.flash("error", "An error occurred while processing your request.");
+        return res.redirect("/admin/login");
+      }
+
+      bcrypt.hash(password, salt, (err, hash) => {
+        if (err) {
+          console.error("Error hashing password:", err);
+          req.flash("error", "Failed to update password. Try again.");
+          return res.redirect("/admin/login");
+        }
+
+        // Step 3: Update password and remove reset token
+        Admin.findOneAndUpdate(
+          { email: user.email },
+          { $set: { password: hash }, $unset: { resetCode: "" } },
+          { new: true }
+        ).exec((err, updatedUser) => {
+          if (err) {
+            console.error("Error updating password:", err);
+            req.flash("error", "Failed to update your password.");
+            return res.redirect("/admin/login");
+          }
+
+          console.log("Password updated successfully for:", updatedUser.email);
+          req.flash("success", "Your password has been reset successfully.");
+          res.redirect("/admin/login"); // Redirect to login page
+        });
+      });
+    });
+  });
+});
+
+
 
 /**
  * Main Dashboard

@@ -11,17 +11,101 @@
                 <i class="fa fa-plus me-2"></i>Add New Package
             </a>
         </div>
-        <!-- Table Container -->
-        <div class="table-container">
-            <div class="mb-3 d-flex justify-content-between">
-                <!-- Search Input -->
-                <div class="input-group w-50">
-                    <input type="text" class="form-control" placeholder="Search by package name, category...">
-                    <button class="btn btn-outline-secondary" type="button">
-                        <i class="fa fa-search"></i>
-                    </button>
+
+        <!-- Key Metrics Section -->
+        <div class="row mb-4">
+            <!-- Total Enquiries -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card card-metric">
+                    <div class="row w-100">
+                        <!-- Left Column -->
+                        <div class="col-4 icon-col">
+                            <i class="fa fa-folder"></i>
+                        </div>
+                        <!-- Right Column -->
+                        <div class="col-8">
+                            <div class="cardRight">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h5>123</h5>
+                                    </div>
+                                    <div class="col-12">
+                                        <p>Total Packages</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <!-- Unresolved Enquiries -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card card-metric">
+                    <div class="row w-100">
+                        <!-- Left Column -->
+                        <div class="col-4 icon-col">
+                            <i class="fa fa-hourglass-half"></i>
+                        </div>
+                        <!-- Right Column -->
+                        <div class="col-8">
+                            <div class="cardRight">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h5>45</h5>
+                                    </div>
+                                    <div class="col-12">
+                                        <p>Pending</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Resolved Enquiries -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card card-metric">
+                    <div class="row w-100">
+                        <!-- Left Column -->
+                        <div class="col-4 icon-col">
+                            <i class="fa fa-check-square-o"></i>
+                        </div>
+                        <!-- Right Column -->
+                        <div class="col-8">
+                            <div class="cardRight">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h5>67</h5>
+                                    </div>
+                                    <div class="col-12">
+                                        <p>Active</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table Container -->
+        <div class="table-container">
+
+            <!-- Filter and Search Section -->
+            <div class=" mb-4">
+                <form class="row g-3" action="" method="get" enctype="application/x-www-form-urlencoded">
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" placeholder="Search by package name, category...">
+                    </div>
+                    
+                    <div class="col-md-4 text-end">
+                        <button class="btn btn-success" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
             <!-- Packages Table -->
             <div class="table-responsive">
                 <table class="table table-striped table-hover text-center">
@@ -46,10 +130,9 @@
                             <td><span class="badge bg-success">Active</span></td>
                             <td>2024-08-01</td>
                             <td class="action-buttons">
-                                <a href="#" class="text-info"><i class="fa fa-edit"></i></a>
-                                <a href="#" class="text-danger"><i class="fa fa-trash"></i></a>
-                                <a href="#" class="text-success"><i class="fa fa-eye"></i></a>
-                                <a href="#" class="text-secondary"><i class="fa fa-toggle-on"></i></a>
+                                <a href="#" class="text-info" title="Edit"><i class="fa fa-edit"></i></a>
+                                <a href="#" class="text-danger" title="Delete"><i class="fa fa-trash"></i></a>
+                                <a href="#" class="text-success" title="View Details"><i class="fa fa-eye"></i></a>
                             </td>
                         </tr>
                         <!-- Another Example Row -->
@@ -61,10 +144,9 @@
                             <td><span class="badge bg-warning text-dark">Pending</span></td>
                             <td>2024-07-25</td>
                             <td class="action-buttons">
-                                <a href="#" class="text-info"><i class="fa fa-edit"></i></a>
-                                <a href="#" class="text-danger"><i class="fa fa-trash"></i></a>
-                                <a href="#" class="text-success"><i class="fa fa-eye"></i></a>
-                                <a href="#" class="text-secondary"><i class="fa fa-toggle-on"></i></a>
+                                <a href="#" class="text-info" title="Edit"><i class="fa fa-edit"></i></a>
+                                <a href="#" class="text-danger" title="Delete"><i class="fa fa-trash"></i></a>
+                                <a href="#" class="text-success" title="View Details"><i class="fa fa-eye"></i></a>
                             </td>
                         </tr>
                         <!-- Add More Rows Dynamically -->

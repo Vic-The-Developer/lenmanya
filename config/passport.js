@@ -1,6 +1,7 @@
 var LocalStrategy = require('passport-local').Strategy;
 // var GoogleStrategy = require('passport-google-oauth20').Strategy;
 // var User = require('../models/user');
+const User = require("../models/Admin");
 // var Login = require('../models/logins');
 
 

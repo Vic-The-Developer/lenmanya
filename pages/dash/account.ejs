@@ -3,7 +3,9 @@
 <!-- Admin Profile Card -->
 <div class="container">
     <div class="card card-profile bg-white">
-        <h3 class="text-center text-primary mb-4">Admin Profile Information</h3>
+        <h3 class="text-center text-primary mb-4">
+            Admin Profile Information
+        </h3>
         <form>
             <!-- Display Name -->
             <div class="mb-3">
@@ -31,11 +33,36 @@
                 <button type="submit" class="btn btn-primary">
                     <i class="fa fa-save"></i> Update Profile
                 </button>
-                <a href="#" class="btn logout-btn">
+                <a href="/admin/logout" class="btn logout-btn">
                     <i class="fa fa-sign-out-alt"></i> Logout
                 </a>
             </div>
+            <div style="margin-top: 40px; text-align: center;">
+                <a href="#" class="btn btn-success" data-toggle="modal" data-target=".bd-example-modal-lg">Add New Admin</a>
+            </div>
         </form>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Create New Admin</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form action="/admin/new_admin" method="post" enctype="application/x-www-form-urlencoded">
+                
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
     </div>
 </div>
 
