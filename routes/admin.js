@@ -9,6 +9,8 @@ const multer = require("multer");
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
 const Admin = require("../models/Admin");
+const Enquiry = require("../models/Enquiry");
+const Package = require('../models/Package');
 
 var router = express.Router();
 const { check, body, validationResult } = require("express-validator");
@@ -242,21 +244,208 @@ router.get('/dash', (req, res)=>{
  * Manage blogs
  */
 router.get('/packages', (req, res)=>{
+
+  const successMessage = req.flash('success')[0];
+  const errorMessage = req.flash('error')[0];
+
+
   res.render('dash/packages', {
     title: 'Manage Packages | Lenmanya Adventures',
-    currentPath: '/admin/packages'
+    currentPath: '/admin/packages',
+    successMessage,
+    errorMessage
   })
 })
 
+
+// Multer Storage Configuration
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadPath = path.join(__dirname, "public", "packages");
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath, { recursive: true });
+    }
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    // Append timestamp to make the filename unique
+    const timestamp = Date.now();
+    const extension = path.extname(file.originalname);
+    cb(null, `${timestamp}${extension}`);
+  },
+});
+
+const upload = multer({ storage: storage });
+
+// POST route to add a new package
+router.post(
+  "/packages_add",
+  upload.array("pImages", 5), // Limit to 5 images
+  [
+    // Validation rules using express-validator
+    body("pTitle").notEmpty().withMessage("Package title is required"),
+    body("pLoc").notEmpty().withMessage("Location is required"),
+    body("pDays")
+      .isInt({ min: 1 })
+      .withMessage("Days must be a valid positive number"),
+    body("description")
+      .isLength({ min: 10 })
+      .withMessage("Description must be at least 10 characters long"),
+    body("price")
+      .isFloat({ min: 0 })
+      .withMessage("Price must be a valid positive number"),
+    body("pRating")
+      .optional()
+      .isFloat({ min: 0, max: 5 })
+      .withMessage("Rating must be between 0 and 5"),
+  ],
+  async (req, res) => {
+    // Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      req.flash(
+        "error",
+        errors.array().map((error) => error.msg)
+      );
+      return res.redirect("/admin/packages");
+    }
+
+    // Extract validated data from the request body
+    const { pTitle, pLoc, pDays, description, price, pRating } = req.body;
+
+    // Extract file paths from uploaded images
+    const images = req.files.map((file) => `/packages/${file.filename}`);
+
+    try {
+      // Create a new package instance
+      const newPackage = new Package({
+        pTitle: pTitle,
+        pLoc: pLoc,
+        pDays: pDays,
+        description: description,
+        price: price,
+        pRating: pRating || 0, // Default to 0 if not provided
+        pImages: images, // Save image file paths
+      });
+
+      // Save to MongoDB
+      await newPackage.save();
+
+      // Success response
+      req.flash("success", "Package added successfully!");
+      res.redirect("/admin/packages");
+    } catch (err) {
+      console.error("Error saving package:", err);
+      req.flash("error", "Error adding package.");
+      res.redirect("/admin/packages");
+    }
+  }
+);
+
+
 /**
- * Manage blogs
+ * Edit Package
  */
-router.get('/manage-Enquiries', (req, res)=>{
-  res.render('dash/manage_enquiries', {
-    title: 'Manage Enquiries | Lenmanya Adventures',
-    currentPath: '/admin/manage-Enquiries'
-  })
-})
+router.post(
+  "/edit_package",
+  [
+    // Validation rules
+    body("pTitle").notEmpty().withMessage("Title is required"),
+    body("pLoc").notEmpty().withMessage("Location is required"),
+    body("pDays")
+      .isInt({ min: 1 })
+      .withMessage("Days must be a number greater than 0"),
+    body("description")
+      .isLength({ min: 10 })
+      .withMessage("Description must be at least 10 characters"),
+    body("price")
+      .isFloat({ min: 0 })
+      .withMessage("Price must be a positive number"),
+    body("pRating")
+      .optional()
+      .isFloat({ min: 0, max: 5 })
+      .withMessage("Rating must be between 0 and 5"),
+  ],
+  async (req, res) => {
+    var id = req.query.id;
+
+    // Validate input data
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      req.flash(
+        "error",
+        errors.array().map((error) => error.msg)
+      );
+      return res.redirect("/admin/packages");
+    }
+
+    try {
+      // Find the package by ID
+      const packageToUpdate = await Package.findById(id);
+      if (!packageToUpdate) {
+        req.flash("error", "Package not found!");
+        return res.redirect("/admin/packages");
+      }
+
+      // Update fields with new data (images remain untouched)
+      packageToUpdate.pTitle = req.body.pTitle;
+      packageToUpdate.pLoc = req.body.pLoc;
+      packageToUpdate.pDays = req.body.pDays;
+      packageToUpdate.description = req.body.description;
+      packageToUpdate.price = req.body.price;
+      packageToUpdate.pRating = req.body.pRating || packageToUpdate.pRating;
+
+      // Save updated package to the database
+      await packageToUpdate.save();
+
+      req.flash("success", "Package updated successfully!");
+      res.redirect("/admin/packages");
+    } catch (error) {
+      console.error("Error updating package:", error);
+      req.flash("error", "Failed to update package. Please try again.");
+      res.redirect("/admin/packages");
+    }
+  }
+);
+
+/**
+ * Delete package
+ */
+router.get("/delete_package", async (req, res) => {
+  const id = req.query.id;
+
+  try {
+    // Find the package by ID
+    const packageToDelete = await Package.findById(id);
+
+    if (!packageToDelete) {
+      req.flash("error", "Package not found!");
+      return res.redirect("/admin/packages");
+    }
+
+    // Delete package images from the file system
+    if (packageToDelete.pImages && packageToDelete.pImages.length > 0) {
+      packageToDelete.pImages.forEach((imagePath) => {
+        const filePath = path.join(__dirname, "..", "public", imagePath);
+
+        // Delete the image file if it exists
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+      });
+    }
+
+    // Delete the package from the database
+    await Package.findByIdAndDelete(id);
+
+    req.flash("success", "Package deleted successfully!");
+    res.redirect("/admin/packages");
+  } catch (error) {
+    console.error("Error deleting package:", error);
+    req.flash("error", "Failed to delete the package. Please try again.");
+    res.redirect("/admin/packages");
+  }
+});
 
 /**
  * Manage blogs
@@ -266,6 +455,128 @@ router.get('/manage-blogs', (req, res)=>{
     title: 'Manage Blogs | Lenmanya Adventures',
     currentPath: '/admin/manage-blogs'
   })
+})
+
+/**
+ * Create blog
+ */
+router.post('/create_blog', (req, res)=>{
+
+})
+
+/**
+ * Edit Blog
+ */
+router.post('/edit_blog', (req, res)=>{
+
+})
+
+/**
+ * Delete Blog
+ */
+router.get('/delete_blog', (req, res)=>{
+  
+})
+
+/**
+ * Manage Enquiries
+ */
+router.get('/manage-Enquiries', (req, res)=>{
+
+  const successMessage = req.flash('success')[0];
+  const errorMessage = req.flash('error')[0];
+
+  res.render('dash/manage_enquiries', {
+    title: 'Manage Enquiries | Lenmanya Adventures',
+    currentPath: '/admin/manage-Enquiries',
+    successMessage,
+    errorMessage
+  })
+})
+
+/**
+ * Toggle Resolve Enquiry
+ */
+router.get('/resolve_enquiry', (req, res) => {
+  const enquiryId = req.query.id; // Extract ID of the enquiry from URL query options
+
+  // Find the enquiry and toggle its status
+  Enquiry.findById(enquiryId).exec((err, enquiry) => {
+      if (err) {
+          console.error("Error finding enquiry:", err);
+          req.flash("error", "Something went wrong!");
+          return res.redirect('/admin/manage-Enquiries');
+      }
+
+      if (!enquiry) {
+          req.flash("error", "Enquiry not found.");
+          return res.redirect('/admin/manage-Enquiries');
+      }
+
+      // Toggle the status
+      const newStatus = enquiry.status === "pending" ? "resolved" : "pending";
+
+      // Update the status in the database
+      Enquiry.findByIdAndUpdate(
+          enquiryId,
+          { $set: { status: newStatus } },
+          { new: true }
+      ).exec((err, updatedEnquiry) => {
+          if (err) {
+              console.error("Error updating enquiry status:", err);
+              req.flash("error", "Failed to update enquiry status.");
+              return res.redirect('/admin/manage-Enquiries');
+          }
+
+          console.log(`Enquiry status updated to: ${newStatus}`);
+          req.flash("success", `Enquiry status changed to ${newStatus}.`);
+          res.redirect('/admin/manage-Enquiries');
+      });
+  });
+});
+
+
+/**
+ * Create Blog
+ */
+router.get('/create-blog', (req, res)=>{
+  res.render('dash/create_blog', {
+    title: 'Create Blog Post | Lenmanya Adventures',
+    currentPath: '/admin/create-blog'
+  })
+})
+
+/**
+ * Create blog
+ */
+router.post('/create_blog', (req, res)=>{
+
+})
+
+/**
+ * Edit Blog
+ */
+router.post('/edit_blog', (req, res)=>{
+
+  var id = req.query.id;
+
+})
+
+/**
+ * Toggle publish or suspended
+ */
+router.get('/blog_status', (req, res)=>{
+
+  var statusBlog = req.query.status; //suspend or publish
+})
+
+/**
+ * Delete Blog
+ */
+router.get('/delete_blog', (req, res)=>{
+
+  var id = req.query.id;
+
 })
 
 
@@ -280,20 +591,6 @@ router.get('/account', (req, res)=>{
 })
 
 
-/**
- * Create Blog
- */
-router.get('/create-blog', (req, res)=>{
-  res.render('dash/create_blog', {
-    title: 'Create Blog Post | Lenmanya Adventures',
-    currentPath: '/admin/create-blog'
-  })
-})
-
-/**
- * Edit Blog
- */
-
 
 // router.get("/dash/:page", async (req, res) => {
 
@@ -305,7 +602,7 @@ router.get('/create-blog', (req, res)=>{
 
 //     // get paginated results
 //     const perPage = 2;
-//     const page = parseInt(req.params.page) || 1;
+//     const page = parseInt(req.query.page) || 1;
 
 //     // find featured listings
 //     const featuredListings = await Apartment.find({ sponsored: 'true' })
@@ -383,68 +680,24 @@ router.get('/create-blog', (req, res)=>{
 
 
 // Multer setup for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadPath = path.join(__dirname, "public", "uploads");
-    if (!fs.existsSync(uploadPath)) {
-      fs.mkdirSync(uploadPath, { recursive: true });
-    }
-    cb(null, uploadPath);
-  },
-  filename: (req, file, cb) => {
-    // Append current timestamp to make the filename unique
-    const timestamp = Date.now();
-    const extension = path.extname(file.originalname);
-    cb(null, `${timestamp}${extension}`);
-  },
-});
 
-const upload = multer({ storage: storage });
-
-function generateApartmentId() {
-  return uuidv4();
-}
 
 router.post(
   "/properties_add",
   upload.array("images"), // 'images' is the field name for the images in the form
   [
     // Validate the data using express-validator
-    body("capName").notEmpty().withMessage("Caption/Name cannot be empty"),
-    body("buildingName")
-      .notEmpty()
-      .withMessage("Building name cannot be empty"),
-    body("loc").notEmpty().withMessage("Location cannot be empty"),
-    body("specLoc").notEmpty().withMessage("Specific location cannot be empty"),
-    body("rent").isNumeric().withMessage("Rent must be a numeric value"),
-    body("deposit").isNumeric().withMessage("Deposit must be a numeric value"),
-    body("desc").notEmpty().withMessage("Description cannot be empty"),
-    body("amenities").notEmpty().withMessage("Amenities must be a list"),
-    body("appaType").notEmpty().withMessage("Apartment type cannot be empty"),
-    body("transType")
-      .notEmpty()
-      .withMessage("Transaction type cannot be empty"),
-    body("beds").notEmpty().withMessage("Beds must have a value"),
-    body("baths").notEmpty().withMessage("Baths must have a value"),
-    body("agentName").notEmpty().withMessage("Agent name cannot be empty"),
-    body("agentPhone")
-      .isMobilePhone()
-      .matches(/^(?:\+254|07|01)[0-9]\d*$/)
-      .withMessage("Invalid phone number format"),
-    body("booked").notEmpty().withMessage("Booked must have a boolean value"),
-    body("sponsored")
-      .notEmpty()
-      .withMessage("Sponsored must be a boolean value"),
+    
     // Custom validator for checking the maximum number of images
-    body("images").custom((images) => {
-      if (!Array.isArray(images) || images.length >= 10) {
+    body("pImages").custom((images) => {
+      if (!Array.isArray(images) || images.length >= 5) {
         // Check if images is undefined or not an array
         const imagesLength = Array.isArray(images) ? images.length : 0;
     
         console.log(imagesLength);
         
         if (imagesLength >= 10) {
-          throw new Error("Maximum of 9 images allowed");
+          throw new Error("Maximum of 5 images allowed");
         }
       }
       return true;
@@ -459,102 +712,29 @@ router.post(
         "success",
         errors.array().map((error) => error.msg)
       );
-      return res.redirect("/admin/properties_add");
-    }
-
-    // Check if the buildingName already exists
-    const existingApartment = await Apartment.findOne({
-      buildingName: buildingName,
-    });
-    if (existingApartment) {
-      req.flash(
-        "success",
-        "Apartment with the same building name already exists"
-      );
-      return res.redirect("/admin/properties_add");
+      return res.redirect("/admin/manage_packages");
     }
 
     // Extract validated parameters from the request body
-    var capName = req.body.capName;
-    var buildingName = req.body.buildingName;
-    var loc = req.body.loc;
-    var specLoc = req.body.specLoc;
-    var rent = parseInt(req.body.rent);
-    var deposit = req.body.deposit;
-    var desc = req.body.desc;
-    var amenities = req.body.amenities;
-    var appaType = req.body.appaType;
-    var transType = req.body.transType;
-    var beds = req.body.beds;
-    var baths = req.body.baths;
-    var agentName = req.body.agentName;
-    var agentPhone = req.body.agentPhone;
-    var booked = req.body.booked;
-    var sponsored = req.body.sponsored;
-    var disabled = req.body.disabled;
-    var uDate = new Date().toISOString(); //uploaded date
-
-    // Calculate sponsorFrom as the current date in ISO format
-    var sponsorFrom = new Date().toISOString();
-    let sponsorTo;
-
-    if (sponsored == "true") {
-      // Calculate sponsorTo based on sponsorFrom and the received number of days
-      const sponsorToDays = parseInt(req.body.sponsorTo);
-      if (sponsorToDays) {
-        const sponsorFromDate = new Date(sponsorFrom);
-        sponsorFromDate.setDate(
-          sponsorFromDate.getDate() + parseInt(sponsorToDays, 10)
-        );
-        sponsorTo = sponsorFromDate.toISOString();
-      } else {
-        sponsorTo = "N/A"; // or set a default value if needed
-      }
-    } else {
-      console.log("Apartment is not sponsored!");
-    }
+    
 
     // Extract image file paths from the uploaded files
     var images = req.files.map((file) => `/uploads/${file.filename}`);
 
-    // Generate a unique apartment ID
-    const Id = generateApartmentId();
 
     try {
-      // Example: Save to MongoDB
-      const newApartment = new Apartment({
-        Id,
-        capName,
-        buildingName,
-        loc,
-        specLoc,
-        rent,
-        deposit,
-        desc,
-        amenities,
-        appaType,
-        transType,
-        beds,
-        baths,
-        agentName,
-        agentPhone,
-        booked,
-        sponsored,
-        sponsorFrom,
-        sponsorTo,
-        disabled,
-        images,
-        uDate,
-      });
+      //Save to MongoDB
+      
+      
 
-      await newApartment.save();
+      await newPackage.save();
 
-      req.flash("success", "Apartment added successfully");
-      res.redirect("/admin/properties_add");
+      req.flash("success", "package added successfully");
+      res.redirect("/admin/manage_packages");
     } catch (err) {
       console.error(err);
-      req.flash("success", "Error adding apartment");
-      res.redirect("/admin/properties_add");
+      req.flash("error", "Error adding package");
+      res.redirect("/admin/manage_packages");
     }
   }
 );

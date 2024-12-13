@@ -1,13 +1,31 @@
 <%- include('./_layouts/header') %>
 
 
+<% if (successMessage) { %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <%= successMessage %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<% } %>
+
+<% if (errorMessage) { %>
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <%= successMessage %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<% } %>
+
 <!-- Main Content -->
 <div class="container-fluid py-4">
     <div class="container">
         <!-- Page Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="fw-bold text-primary">Manage Travel Packages</h2>
-            <a href="#" class="btn btn-primary">
+            <a href="#" class="btn btn-primary" data-toggle="modal" data-target=".bd-package-modal-lg">
                 <i class="fa fa-plus me-2"></i>Add New Package
             </a>
         </div>
@@ -130,7 +148,7 @@
                             <td><span class="badge bg-success">Active</span></td>
                             <td>2024-08-01</td>
                             <td class="action-buttons">
-                                <a href="#" class="text-info" title="Edit"><i class="fa fa-edit"></i></a>
+                                <a href="#" class="text-info" title="Edit" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fa fa-edit"></i></a>
                                 <a href="#" class="text-danger" title="Delete"><i class="fa fa-trash"></i></a>
                                 <a href="#" class="text-success" title="View Details"><i class="fa fa-eye"></i></a>
                             </td>
@@ -156,5 +174,128 @@
         </div>
     </div>
 </div>
+
+<!-- Edit package Modal -->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit Package: (name)</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form action="/admin/edit_package" method="post" enctype="application/x-www-form-urlencoded">
+                <!-- Display Name -->
+                <div class="mb-3">
+                    <label for="pTitle" class="form-label">Package Title</label>
+                    <input type="text" id="pTitle" name="pTitle" class="form-control" placeholder="Enter title">
+                </div>
+                <!-- Location -->
+                <div class="mb-3">
+                    <label for="pLoc" class="form-label">Location</label>
+                    <input type="text" id="pLoc" name="pLoc" class="form-control" placeholder="Enter Location">
+                </div>
+                <!-- Number of Days -->
+                <div class="mb-3">
+                    <label for="pDays" class="form-label">Days</label>
+                    <input type="text" id="pDays" name="pDays" class="form-control" placeholder="Enter no of Days">
+                </div>
+                <!-- Price -->
+                <div class="mb-3">
+                    <label for="price" class="form-label">Cost</label>
+                    <input type="text" id="price" name="price" class="form-control" placeholder="Enter total cost i.e. Ksh27,000 or $300">
+                </div>
+                <!-- Description -->
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea name="description" class="form-control" id="description" rows="6"></textarea>
+                </div>
+                <!-- Rating -->
+                <div class="mb-3">
+                    <label for="rating" class="form-label">Rating</label>
+                    <input type="text" id="pRating" name="pRating" class="form-control" placeholder="E.g. 4.9">
+                </div>
+                
+                <!-- Update Button -->
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-save"></i> Update Package
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<!-- Create package Modal -->
+<div class="modal fade bd-package-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Create a New Package</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form action="/admin/add_package" method="post" enctype="application/x-www-form-urlencoded">
+                <!-- Display Name -->
+                <div class="mb-3">
+                    <label for="pTitle" class="form-label">Package Title</label>
+                    <input type="text" id="pTitle" name="pTitle" class="form-control" placeholder="Enter title">
+                </div>
+                <!-- Location -->
+                <div class="mb-3">
+                    <label for="pLoc" class="form-label">Location</label>
+                    <input type="text" id="pLoc" name="pLoc" class="form-control" placeholder="Enter Location">
+                </div>
+                <!-- Number of Days -->
+                <div class="mb-3">
+                    <label for="pDays" class="form-label">Days</label>
+                    <input type="number" id="pDays" name="pDays" class="form-control" placeholder="Enter no of Days">
+                </div>
+                <!-- Price -->
+                <div class="mb-3">
+                    <label for="price" class="form-label">Cost</label>
+                    <input type="text" id="price" name="price" class="form-control" placeholder="Enter total cost i.e. Ksh27,000 or $300">
+                </div>
+                <!-- Description -->
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea name="description" class="form-control" id="description" rows="6"></textarea>
+                </div>
+                <!-- Rating -->
+                <div class="mb-3">
+                    <label for="rating" class="form-label">Rating</label>
+                    <input type="number" id="pRating" name="pRating" class="form-control" placeholder="E.g. 4.9">
+                </div>
+                <!-- Images -->
+                <div class="mb-3">
+                    <label for="pImage" class="form-label">Upload upto 5 images</label>
+                    <input type="file" name="pImages" id="pImages" class="form-control" accept="" multiple>
+                </div>
+                <div style="margin: 30px 0;">Images preview</div>
+                
+                <!-- Update Button -->
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-save"></i> Create Package
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
+
 
 <%- include('./_layouts/footer') %>
