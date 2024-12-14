@@ -591,30 +591,121 @@ router.post('/upload_image', upload3.single('file'), (req, res) => {
 });
 
 
-/**
- * Edit Blog
- */
-router.post('/edit_blog', (req, res)=>{
+// Route to edit a blog
+router.post('/edit_blog', upload2.single('featuredImage'), async (req, res) => {
+    try {
+        const { id } = req.query; // Blog ID to identify which blog to edit
+        const {
+            bTitle,
+            category,
+            content,
+            metaTitle,
+            metaDescription,
+            keywords,
+            status
+        } = req.body;
 
-})
+        // Validate required fields
+        if (!id || !bTitle || !category || !content || !metaTitle || !metaDescription) {
+            req.flash('error', 'All fields are required.');
+            return res.redirect('/admin/manage-blogs');
+        }
 
+        // Fetch the blog to update
+        const blog = await Blog.findById(id);
+        if (!blog) {
+            req.flash('error', 'Blog not found.');
+            return res.redirect('/admin/manage-blogs');
+        }
 
+        // Update blog fields
+        blog.bTitle = bTitle;
+        blog.category = category;
+        blog.content = content;
+        blog.metaTitle = metaTitle;
+        blog.metaDescription = metaDescription;
+        blog.keywords = keywords;
+        blog.status = status;
 
-/**
- * Toggle publish or suspended
- */
-router.get('/blog_status', (req, res)=>{
+        // If a new featured image is uploaded
+        if (req.file) {
+            // Delete the old featured image if it exists
+            if (blog.featuredImage) {
+                const oldImagePath = path.join(__dirname, "../public", blog.featuredImage);
+                if (fs.existsSync(oldImagePath)) {
+                    fs.unlinkSync(oldImagePath);
+                }
+            }
 
-  var statusBlog = req.query.status; //suspend or publish
-})
+            // Save the new featured image
+            blog.featuredImage = `/uploads/blogs/${req.file.filename}`;
+        }
+
+        // Save the updated blog
+        await blog.save();
+
+        req.flash('success', 'Blog updated successfully.');
+        res.redirect('/admin/manage-blogs');
+    } catch (error) {
+        console.error(error);
+        req.flash('error', 'An error occurred while updating the blog.');
+        res.redirect('/admin/manage-blogs');
+    }
+});
+
 
 
 /**
  * Delete Blog
  */
-router.get('/delete_blog', (req, res)=>{
-  
-})
+router.get('/delete_blog', async (req, res) => {
+  try {
+      const blogId = req.query.id; // Get blog ID from query parameters
+
+      if (!blogId) {
+          req.flash('error', 'Invalid request. Blog ID is required.');
+          return res.redirect('/admin/manage-blogs');
+      }
+
+      // Find the blog to get the featured image path and content
+      const blog = await Blog.findById(blogId);
+
+      if (!blog) {
+          req.flash('error', 'Blog not found.');
+          return res.redirect('/admin/manage-blogs');
+      }
+
+      // Delete the featured image if it exists
+      if (blog.featuredImage) {
+          const featuredImagePath = path.join(__dirname, '..', 'public', blog.featuredImage);
+          if (fs.existsSync(featuredImagePath)) {
+              fs.unlinkSync(featuredImagePath); // Delete the featured image
+          }
+      }
+
+      // Extract and delete any images from the blog content folder
+      const contentImagesPath = path.join(__dirname, '..', 'public', 'uploads', 'contentImages');
+      const contentImages = blog.content.match(/\/uploads\/contentImages\/[^\s"]+/g) || [];
+
+      contentImages.forEach((imagePath) => {
+          const fullPath = path.join(__dirname, '..', 'public', imagePath);
+          if (fs.existsSync(fullPath)) {
+              fs.unlinkSync(fullPath); // Delete each image in the blog content
+          }
+      });
+
+      // Delete the blog document from the database
+      await Blog.findByIdAndDelete(blogId);
+
+      req.flash('success', 'Blog deleted successfully.');
+      res.redirect('/admin/manage-blogs');
+  } catch (error) {
+      console.error(error);
+      req.flash('error', 'An error occurred while deleting the blog.');
+      res.redirect('/admin/manage-blogs');
+  }
+});
+
 
 /**
  * Manage Enquiries
@@ -679,12 +770,72 @@ router.get('/resolve_enquiry', (req, res) => {
  * Account Page
  */
 router.get('/account', (req, res)=>{
+
+  const successMessage = req.flash('success')[0];
+  const errorMessage = req.flash('error')[0];
+
+
   res.render('dash/account', {
     title: 'Account | Lenmanya Adventures',
-    currentPath: '/admin/account'
+    currentPath: '/admin/account',
+    successMessage,
+    errorMessage
   })
 })
 
+
+// Create New Admin
+router.post('/new_admin', async (req, res) => {
+  const { name, email, password, role = 'Admin' } = req.body;
+
+  try {
+      // Check if email exists
+      const existingAdmin = await Admin.findOne({ email });
+      if (existingAdmin) {
+          req.flash('error', 'Admin with this email already exists.');
+          return res.redirect('/admin/account');
+      }
+
+      // Hash password and save admin
+      const bcrypt = require('bcrypt');
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const newAdmin = new Admin({ name, email, password: hashedPassword, role });
+      await newAdmin.save();
+
+      req.flash('success', 'New admin created successfully.');
+      res.redirect('/admin/account');
+  } catch (err) {
+      console.error(err);
+      req.flash('error', 'An error occurred while creating admin.');
+      res.redirect('/admin/account');
+  }
+});
+
+
+// Delete Admin
+router.delete('/delete_admin', async (req, res) => {
+  const adminId = req.query.id;
+  try {
+      await Admin.findByIdAndDelete(adminId);
+      res.json({ message: "Admin successfully deleted." });
+  } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Error deleting admin." });
+  }
+});
+
+// Revoke Access
+router.post('/revoke_access', async (req, res) => {
+  const adminId = req.query.id;
+  try {
+      await Admin.findByIdAndUpdate(adminId, { role: "Revoked" });
+      res.json({ message: "Admin access successfully revoked." });
+  } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Error revoking admin access." });
+  }
+});
 
 
 // router.get("/dash/:page", async (req, res) => {
