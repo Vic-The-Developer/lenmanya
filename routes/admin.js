@@ -11,6 +11,7 @@ const { v4: uuidv4 } = require("uuid");
 const Admin = require("../models/Admin");
 const Enquiry = require("../models/Enquiry");
 const Package = require('../models/Package');
+const Blog = require('../models/Blog');
 
 var router = express.Router();
 const { check, body, validationResult } = require("express-validator");
@@ -260,12 +261,16 @@ router.get('/packages', (req, res)=>{
 
 // Multer Storage Configuration
 const storage = multer.diskStorage({
+
   destination: (req, file, cb) => {
-    const uploadPath = path.join(__dirname, "public", "packages");
+    const uploadPath = path.join(__dirname, "public/uploads/packages");
+
+    // Check if the directory exists; if not, create it
     if (!fs.existsSync(uploadPath)) {
-      fs.mkdirSync(uploadPath, { recursive: true });
+        fs.mkdirSync(uploadPath, { recursive: true });
     }
-    cb(null, uploadPath);
+
+    cb(null, uploadPath); // Pass the path to multer
   },
   filename: (req, file, cb) => {
     // Append timestamp to make the filename unique
@@ -451,18 +456,140 @@ router.get("/delete_package", async (req, res) => {
  * Manage blogs
  */
 router.get('/manage-blogs', (req, res)=>{
+
+  const successMessage = req.flash('success')[0];
+  const errorMessage = req.flash('error')[0];
+
   res.render('dash/manage_blog', {
     title: 'Manage Blogs | Lenmanya Adventures',
-    currentPath: '/admin/manage-blogs'
+    currentPath: '/admin/manage-blogs',
+    successMessage,
+    errorMessage
   })
 })
 
-/**
- * Create blog
- */
-router.post('/create_blog', (req, res)=>{
 
+/**
+ * Create Blog
+ */
+router.get('/create-blog', (req, res)=>{
+
+  const successMessage = req.flash('success')[0];
+  const errorMessage = req.flash('error')[0];
+
+
+  res.render('dash/create_blog', {
+    title: 'Create Blog Post | Lenmanya Adventures',
+    currentPath: '/admin/create-blog',
+    successMessage,
+    errorMessage
+  })
 })
+
+// Multer storage configuration
+const storage2 = multer.diskStorage({
+  destination: (req, file, cb) => {
+      const uploadPath = path.join(__dirname, "../public/uploads/blogs");
+
+      // Check if the directory exists; if not, create it
+      if (!fs.existsSync(uploadPath)) {
+          fs.mkdirSync(uploadPath, { recursive: true });
+      }
+
+      cb(null, uploadPath); // Pass the path to multer
+  },
+  filename: (req, file, cb) => {
+      const timestamp = Date.now();
+      const extension = path.extname(file.originalname);
+      cb(null, `${timestamp}${extension}`); // Unique filename with timestamp
+  },
+});
+
+// Initialize multer
+const upload2 = multer({ storage: storage2 });
+
+/**
+* Create Blog
+*/
+router.post('/create_blog', upload2.single('featuredImage'), async (req, res) => {
+  try {
+      // Extract blog data from the request body
+      const { bTitle, category, content, metaTitle, metaDescription, keywords, status } = req.body;
+
+      // Extract featured image path
+      let featuredImage = '';
+      if (req.file) {
+          featuredImage = `/uploads/blogs/${req.file.filename}`; // Path to save in the database
+      }
+
+      // Validate required fields
+      if (!bTitle || !category || !content || !metaTitle || !metaDescription || !status) {
+          req.flash('error', 'All fields are required!');
+          return res.redirect('/admin/create_blog');
+      }
+
+      // Create new blog object
+      const newBlog = new Blog({
+          bTitle,
+          category,
+          featuredImage,
+          content,
+          metaTitle,
+          metaDescription,
+          keywords: keywords ? keywords.split(',').map(kw => kw.trim()) : [], // Convert keywords to array
+          status,
+          createdAt: new Date(),
+      });
+
+      // Save the blog to the database
+      await newBlog.save();
+
+      // Success feedback
+      req.flash('success', 'Blog created successfully!');
+      res.redirect('/admin/manage-blogs');
+  } catch (err) {
+      console.error(err);
+      req.flash('error', 'An error occurred while creating the blog.');
+      res.redirect('/admin/create_blog');
+  }
+});
+
+/**
+ * Upload Images from WYSIWYG Editor
+ * 
+ * TinyMCE has a built-in file upload mechanism that uses an endpoint (/upload_image) to upload files like images. When an image is added through TinyMCE (drag and drop or file picker), TinyMCE sends an HTTP POST request with the file data to the endpoint defined in your backend
+ */
+// Configure multer for image upload
+const storage3 = multer.diskStorage({
+  destination: (req, file, cb) => {
+      const uploadPath = path.join(__dirname, "../public/uploads/contentImages");
+
+      // Check if the directory exists; if not, create it
+      if (!fs.existsSync(uploadPath)) {
+          fs.mkdirSync(uploadPath, { recursive: true }); // Create directories recursively
+      }
+
+      cb(null, uploadPath); // Set the destination path
+  },
+  filename: (req, file, cb) => {
+      const timestamp = Date.now();
+      const extension = path.extname(file.originalname);
+      cb(null, `${timestamp}${extension}`); // Unique filename with timestamp
+  },
+});
+
+const upload3 = multer({ storage: storage3 });
+
+// Route to upload images from TinyMCE
+router.post('/upload_image', upload3.single('file'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded.' });
+    }
+
+    const imagePath = `/uploads/contentImages/${req.file.filename}`;
+    return res.json({ location: imagePath }); // TinyMCE requires this response
+});
+
 
 /**
  * Edit Blog
@@ -470,6 +597,17 @@ router.post('/create_blog', (req, res)=>{
 router.post('/edit_blog', (req, res)=>{
 
 })
+
+
+
+/**
+ * Toggle publish or suspended
+ */
+router.get('/blog_status', (req, res)=>{
+
+  var statusBlog = req.query.status; //suspend or publish
+})
+
 
 /**
  * Delete Blog
@@ -535,49 +673,6 @@ router.get('/resolve_enquiry', (req, res) => {
   });
 });
 
-
-/**
- * Create Blog
- */
-router.get('/create-blog', (req, res)=>{
-  res.render('dash/create_blog', {
-    title: 'Create Blog Post | Lenmanya Adventures',
-    currentPath: '/admin/create-blog'
-  })
-})
-
-/**
- * Create blog
- */
-router.post('/create_blog', (req, res)=>{
-
-})
-
-/**
- * Edit Blog
- */
-router.post('/edit_blog', (req, res)=>{
-
-  var id = req.query.id;
-
-})
-
-/**
- * Toggle publish or suspended
- */
-router.get('/blog_status', (req, res)=>{
-
-  var statusBlog = req.query.status; //suspend or publish
-})
-
-/**
- * Delete Blog
- */
-router.get('/delete_blog', (req, res)=>{
-
-  var id = req.query.id;
-
-})
 
 
 /**

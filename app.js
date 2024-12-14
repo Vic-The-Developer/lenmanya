@@ -68,6 +68,7 @@ app.use(flash());
 app.use('/images', express.static('assets/images/'));
 app.use('/', express.static('assets/'));
 app.use('/', express.static('routes/public/'));
+app.use('/', express.static('public/'));
 
 
 //Set routes
