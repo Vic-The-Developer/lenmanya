@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+const Package = require('../models/Package');
+const Blog = require('../models/Blog');
 
 var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
@@ -17,9 +19,16 @@ router.use(flash());
 /**
  * Home (Landing Page)
  */
-router.get('/', (req, res)=>{
-    res.render('main/index')
-})
+router.get('/', async (req, res) => {
+    try {
+        const packages = await Package.find(); // Fetch packages from the database
+        const blogs = await Blog.find({ status: 'Published' }); // Only fetch published blogs
+        res.render('main/index', { packages, blogs });
+    } catch (err) {
+        console.log(err);
+        res.render('main/index', { packages: [], blogs: [] }); // If an error occurs, render with empty arrays
+    }
+});
 
 
 /**
@@ -187,9 +196,33 @@ router.get('/about', (req, res)=>{
 /**
  * Packages List
  */
-router.get('/package', (req, res)=>{
-    res.render('main/package')
-})
+router.get('/package', async (req, res) => {
+    try {
+        // Set the number of packages per page
+        const perPage = 2;
+        // Get the current page number from the query parameter or default to page 1
+        const page = parseInt(req.query.page) || 1;
+
+        // Fetch the paginated packages (skip and limit for pagination)
+        const packages = await Package.find()
+            .skip((perPage * page) - perPage) // Skip the first (page - 1) * perPage packages
+            .limit(perPage) // Limit the results to perPage packages
+            .exec();
+
+        // Get the total number of packages to calculate pagination
+        const packageCount = await Package.countDocuments();
+
+        // Render the package page with paginated packages
+        res.render('main/package', {
+            packages,
+            currentPage: page,
+            totalPages: Math.ceil(packageCount / perPage),
+        });
+    } catch (err) {
+        console.log(err);
+        res.render('main/package', { packages: [], currentPage: 1, totalPages: 1 });
+    }
+});
 
 /**
  * Guides List

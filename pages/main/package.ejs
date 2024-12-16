@@ -169,66 +169,50 @@
                 <h1>Perfect Tour Packages</h1>
             </div>
             <div class="row">
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="package-item bg-white mb-2">
-                        <img class="img-fluid" src="/img/kenya.jpeg" alt="maasai mara">
-                        <div class="p-4">
-                            <div class="d-flex justify-content-between mb-3">
-                                <small class="m-0"><i class="fa fa-map-marker-alt text-primary mr-2"></i>Maasai Mara</small>
-                                <small class="m-0"><i class="fa fa-calendar-alt text-primary mr-2"></i>3 days/2 nights</small>
-                                <small class="m-0"><i class="fa fa-user text-primary mr-2"></i></small>
-                            </div>
-                            <a class="h5 text-decoration-none" href="/contact">Explore Masai Mara safari packages with thrilling wildlife adventures, luxury lodges, and the iconic Great Migration experience. Book your dream safari!</a>
-                            <div class="border-top mt-4 pt-4">
-                                <div class="d-flex justify-content-between">
-                                    <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i>4.4 <small>(87)</small></h6>
-                                    <h5 class="m-0">$648</h5>
+                <% if (packages.length === 0) { %>
+                    <div class="col-12">
+                        <p class="text-center">No packages available at the moment. Please check back later.</p>
+                    </div>
+                <% } else { %>
+                    <% packages.forEach(package => { %>
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="package-item bg-white mb-2">
+                                <img class="img-fluid" src="/uploads/packages/<%= package.pImages[0] || 'default.jpg' %>" alt="<%= package.pTitle %>">
+                                <div class="p-4">
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <small class="m-0"><i class="fa fa-map-marker-alt text-primary mr-2"></i><%= package.pLoc %></small>
+                                        <small class="m-0"><i class="fa fa-calendar-alt text-primary mr-2"></i><%= package.pDays %> days</small>
+                                        <small class="m-0"><i class="fa fa-user text-primary mr-2"></i></small>
+                                    </div>
+                                    <a class="h5 text-decoration-none" href="/contact"><%= package.pTitle %></a>
+                                    <div class="border-top mt-4 pt-4">
+                                        <div class="d-flex justify-content-between">
+                                            <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i><%= package.pRating %> <small>(87)</small></h6>
+                                            <h5 class="m-0">$<%= package.price %></h5>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="package-item bg-white mb-2">
-                        <img class="img-fluid" src="/img/zanzibar.jpeg" alt="">
-                        <div class="p-4">
-                            <div class="d-flex justify-content-between mb-3">
-                                <small class="m-0"><i class="fa fa-map-marker-alt text-primary mr-2"></i>Zanzibar</small>
-                                <small class="m-0"><i class="fa fa-calendar-alt text-primary mr-2"></i>5 days/4 nights</small>
-                                <small class="m-0"><i class="fa fa-user text-primary mr-2"></i></small>
-                            </div>
-                            <a class="h5 text-decoration-none" href="/contact">Book a 5 day tours & Excursions in Zanzibar!</a>
-                            <div class="border-top mt-4 pt-4">
-                                <div class="d-flex justify-content-between">
-                                    <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i>5.0 <small>(66)</small></h6>
-                                    <h5 class="m-0">$12,848</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="package-item bg-white mb-2">
-                        <img class="img-fluid" src="/img/egypt.jpeg" alt="">
-                        <div class="p-4">
-                            <div class="d-flex justify-content-between mb-3">
-                                <small class="m-0"><i class="fa fa-map-marker-alt text-primary mr-2"></i>Egypt/Israel</small>
-                                <small class="m-0"><i class="fa fa-calendar-alt text-primary mr-2"></i>12 days/11 nights</small>
-                                <small class="m-0"><i class="fa fa-user text-primary mr-2"></i></small>
-                            </div>
-                            <a class="h5 text-decoration-none" href="/contact">Our Egypt or Israel package tours are designed to provide you with an unforgettable experience.</a>
-                            <div class="border-top mt-4 pt-4">
-                                <div class="d-flex justify-content-between">
-                                    <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i>4.5 <small>(20)</small></h6>
-                                    <h5 class="m-0">$51,900</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    <% }) %>
+                <% } %>
+            </div>
+    
+            <!-- Pagination controls -->
+            <div class="d-flex justify-content-center mt-4">
+                <% if (currentPage > 1) { %>
+                    <a href="/package?page=<%= currentPage - 1 %>" class="btn btn-primary mr-2">Previous</a>
+                <% } %>
+    
+                <% if (currentPage < totalPages) { %>
+                    <a href="/package?page=<%= currentPage + 1 %>" class="btn btn-primary">Next</a>
+                <% } %>
             </div>
         </div>
     </div>
+    
+    
+    
     <!-- Packages End -->
 
 

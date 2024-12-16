@@ -258,6 +258,35 @@ router.get('/packages', (req, res)=>{
   })
 })
 
+/**
+ * filter packages
+ */
+router.post('/filter_package', async (req, res) => {
+  try {
+      const { location } = req.body; // Extract location input from the form
+
+      // If no location input is provided, redirect back to manage page
+      if (!location || location.trim() === "") {
+          return res.redirect('/admin/packages');
+      }
+
+      // Query database for packages that match location (case-insensitive)
+      const filteredPackages = await Package.find({
+          location: { $regex: location, $options: 'i' } // Partial match, case-insensitive
+      });
+
+      // Render the results to the 'manage-package' page
+      res.render('admin/manage-package', {
+          packages: filteredPackages,
+          searchQuery: location // Pass the search input to repopulate the form
+      });
+  } catch (error) {
+      console.error('Error filtering packages:', error);
+      res.flash('error', 'Error filtering packages');
+      res.redirect('/admin/packages')
+  }
+});
+
 
 // Multer Storage Configuration
 const storage = multer.diskStorage({
@@ -485,6 +514,44 @@ router.get('/create-blog', (req, res)=>{
     errorMessage
   })
 })
+
+/**
+ * filter blogs
+ */
+router.post('/filter_blogs', async (req, res) => {
+  try {
+      const { category, status } = req.body; // Extract category and status from form submission
+
+      // Build the filter object dynamically
+      const filter = {};
+
+      if (category && category.trim() !== "") {
+          filter.category = category; // Filter by category
+      }
+
+      if (status && status.trim() !== "") {
+          filter.status = status; // Filter by status
+      }
+
+      // If no filters are applied, redirect to the blog management page
+      if (Object.keys(filter).length === 0) {
+          return res.redirect('/admin/manage-blogs');
+      }
+
+      // Fetch filtered blogs from the database
+      const filteredBlogs = await Blog.find(filter);
+
+      // Render the results to the 'manage-blogs' page
+      res.render('admin/manage-blogs', {
+          blogs: filteredBlogs,
+          filters: { category, status } // Pass applied filters to repopulate form
+      });
+  } catch (error) {
+      console.error('Error filtering blogs:', error);
+      res.flash('error', "Error filtering blogs");
+      res.redirect('/admin/manage-blogs')
+  }
+});
 
 // Multer storage configuration
 const storage2 = multer.diskStorage({
@@ -722,6 +789,48 @@ router.get('/manage-Enquiries', (req, res)=>{
     errorMessage
   })
 })
+
+/**
+ * filter enquiries
+ */
+router.post('/filter_enquiries', async (req, res) => {
+  try {
+      var Whatsapp = req.body.Whatsapp;
+      var statusFilter = req.body.status-filter;
+
+      // If no filters are applied, redirect to the enquiries management page
+      if (!Whatsapp && !statusFilter) {
+          return res.redirect('/admin/manage-enquiry');
+      }
+
+      // Build filter query dynamically
+      const filter = {};
+      if (Whatsapp) filter.Whatsapp = { $regex: Whatsapp, $options: 'i' }; // Case-insensitive search
+      if (statusFilter) filter.status = statusFilter;
+
+      // Pagination setup
+      const perPage = 10; // Results per page
+      const page = parseInt(req.query.page) || 1;
+
+      // Query database for filtered and paginated enquiries
+      const totalEnquiries = await Enquiry.countDocuments(filter);
+      const enquiries = await Enquiry.find(filter)
+          .skip((perPage * page) - perPage)
+          .limit(perPage);
+
+      // Render results in the 'manage-enquiry' page
+      res.render('admin/manage-enquiry', {
+          enquiries,
+          currentPage: page,
+          totalPages: Math.ceil(totalEnquiries / perPage),
+          filters: { Whatsapp, statusFilter } // Pass filters to repopulate input fields
+      });
+  } catch (error) {
+      console.error('Error filtering enquiries:', error);
+      res.flash('error', 'Error filtering enquiries');
+      res.redirect('/admin/manage-Enquiries')
+  }
+});
 
 /**
  * Toggle Resolve Enquiry

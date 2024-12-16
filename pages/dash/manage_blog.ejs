@@ -104,18 +104,20 @@
             <h2 class="text-primary">Manage Blogs</h2>
             <!-- Search and Filters -->
             <div class="d-flex gap-2">
-                <select class="form-select">
-                    <option value="">Filter by Category</option>
-                    <option value="Travel">Travel</option>
-                    <option value="Guides">Guides</option>
-                    <option value="News">News</option>
-                </select>
-                <select class="form-select">
-                    <option value="">Filter by Status</option>
-                    <option value="Published">Published</option>
-                    <option value="Draft">Draft</option>
-                </select>
-                <button class="btn btn-primary">Search</button>
+                <form action="/admin/filter_blogs" method="post">
+                    <select class="form-select" name="category" id="category">
+                        <option value="">Filter by Category</option>
+                        <option value="Travel">Travel</option>
+                        <option value="Guides">Guides</option>
+                        <option value="News">News</option>
+                    </select>
+                    <select class="form-select" name="status" id="status">
+                        <option value="">Filter by Status</option>
+                        <option value="Published">Published</option>
+                        <option value="Draft">Draft</option>
+                    </select>
+                    <button class="btn btn-primary">Search</button>
+                </form>
             </div>
         </div>
 
