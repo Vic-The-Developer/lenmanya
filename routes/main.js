@@ -141,9 +141,51 @@ router.post(
 /**
  * Blogs List
  */
-router.get('/blog', (req, res)=>{
-    res.render('main/blog')
-})
+router.get('/blog', async (req, res) => {
+    const category = req.query.cat; // Get the category query parameter
+    const page = parseInt(req.query.page) || 1; // Current page (default: 1)
+    const perPage = 6; // Number of blogs per page
+    let query = {}; // Initialize query object for filtering
+
+    // Add category filter if 'cat' query is provided
+    if (category) {
+        query.category = category;
+    }
+
+    try {
+        // Fetch the latest 3 recent posts
+        const recentPosts = await Blog.find()
+            .sort({ createdAt: -1 })
+            .limit(3);
+
+        // Fetch paginated blogs based on the filter
+        const blogs = await Blog.find(query)
+            .sort({ createdAt: -1 })
+            .skip((perPage * page) - perPage)
+            .limit(perPage);
+
+        // Count total blogs for pagination
+        const count = await Blog.countDocuments(query);
+
+        // Fetch blog counts for each category
+        const categories = await Blog.aggregate([
+            { $group: { _id: "$category", count: { $sum: 1 } } } // Group blogs by category
+        ]);
+
+        // Render the blog page
+        res.render('main/blog', {
+            blogs: blogs,
+            recentPosts: recentPosts,
+            categories: categories, // Pass category counts to the template
+            category: category || null, // Pass the current category for heading
+            currentPage: page,
+            totalPages: Math.ceil(count / perPage),
+        });
+    } catch (error) {
+        console.error('Error fetching blogs:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 
 router.get('/properties/:page', async (req, res) => {
