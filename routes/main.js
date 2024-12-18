@@ -187,6 +187,41 @@ router.get('/blog', async (req, res) => {
     }
 });
 
+/**
+ * Blog page detail
+ */
+router.get('/blog/:id', async (req, res) => {
+    const blogId = req.params.id;
+
+    try {
+        // Fetch the blog post by ID
+        const blog = await Blog.findById(blogId);
+        if (!blog) {
+            return res.status(404).send('Blog not found');
+        }
+
+        // Fetch categories with counts
+        const categories = await Blog.aggregate([
+            { $group: { _id: "$category", count: { $sum: 1 } } },
+            { $sort: { _id: 1 } }, // Sort categories alphabetically
+        ]);
+
+        // Fetch the latest 3 blogs for "recent posts"
+        const recentBlogs = await Blog.find({ _id: { $ne: blogId } })
+            .sort({ createdAt: -1 })
+            .limit(3);
+
+        // Render the blog details page
+        res.render('main/blog-details', {
+            blog: blog,          // Blog details
+            categories: categories, // Categories with counts
+            recentBlogs: recentBlogs, // Recent posts
+        });
+    } catch (error) {
+        console.error('Error fetching blog details:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 router.get('/properties/:page', async (req, res) => {
     // get paginated results
@@ -265,6 +300,37 @@ router.get('/package', async (req, res) => {
         res.render('main/package', { packages: [], currentPage: 1, totalPages: 1 });
     }
 });
+
+/**
+ * Package detail
+ */
+router.get('/package/:id', async (req, res) => {
+    const packageId = req.params.id;
+
+    try {
+        // Fetch the main package details using the ID
+        const selectedPackage = await Package.findById(packageId);
+
+        // Fetch 4 suggested packages (exclude the selected package)
+        const suggestedPackages = await Package.find({ _id: { $ne: packageId } })
+            .limit(4);
+
+        if (!selectedPackage) {
+            return res.status(404).send('Package not found');
+        }
+
+        // Render the package details page
+        res.render('main/package-detail', {
+            selectedPackage: selectedPackage,
+            suggestedPackages: suggestedPackages,
+        });
+    } catch (error) {
+        console.error('Error fetching package details:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
 
 /**
  * Guides List
