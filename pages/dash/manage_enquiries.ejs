@@ -31,16 +31,14 @@
         <div class="col-lg-4 col-md-6 mb-4">
             <div class="card card-metric">
                 <div class="row w-100">
-                    <!-- Left Column -->
                     <div class="col-4 icon-col">
                         <i class="fa fa-envelope"></i>
                     </div>
-                    <!-- Right Column -->
                     <div class="col-8">
                         <div class="cardRight">
                             <div class="row">
                                 <div class="col-12">
-                                    <h5>123</h5>
+                                    <h5><%= totalEnquiries %></h5>
                                 </div>
                                 <div class="col-12">
                                     <p>Total Enquiries</p>
@@ -55,16 +53,14 @@
         <div class="col-lg-4 col-md-6 mb-4">
             <div class="card card-metric">
                 <div class="row w-100">
-                    <!-- Left Column -->
                     <div class="col-4 icon-col">
                         <i class="fa fa-files-o"></i>
                     </div>
-                    <!-- Right Column -->
                     <div class="col-8">
                         <div class="cardRight">
                             <div class="row">
                                 <div class="col-12">
-                                    <h5>45</h5>
+                                    <h5><%= unresolvedEnquiries %></h5>
                                 </div>
                                 <div class="col-12">
                                     <p>Unresolved</p>
@@ -79,16 +75,14 @@
         <div class="col-lg-4 col-md-6 mb-4">
             <div class="card card-metric">
                 <div class="row w-100">
-                    <!-- Left Column -->
                     <div class="col-4 icon-col">
                         <i class="fa fa-check-square-o"></i>
                     </div>
-                    <!-- Right Column -->
                     <div class="col-8">
                         <div class="cardRight">
                             <div class="row">
                                 <div class="col-12">
-                                    <h5>67</h5>
+                                    <h5><%= resolvedEnquiries %></h5>
                                 </div>
                                 <div class="col-12">
                                     <p>Resolved</p>
@@ -99,7 +93,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>  
 
     <!-- Filter and Search Section -->
     <div class="filter-section mb-4">
@@ -130,51 +124,84 @@
                         <th>Name</th>
                         <th>Destination</th>
                         <th>WhatsApp No.</th>
-                        <th>Date Submited</th>
+                        <th>Date Submitted</th>
                         <th>Adults</th>
                         <th>Children</th>
-                        <th>status</th>
-                        <th>Actions</th> <!-- Actions Header -->
+                        <th>Status</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Sample Row 1 -->
-                    <tr>
-                        <td>John Doe</td>
-                        <td>Maasai Mara</td>
-                        <td>+254 700 123 456</td>
-                        <td>12-03-2021</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td><span class="badge bg-warning text-dark">Pending</span></td>
-                        <td>
-                            <div class="d-flex justify-content-center gap-2">
-                                <button class="btn btn-sm btn-primary" title="Mark as Resolved"><i class="fa fa-check"></i></button>
-                                <a href="#" class="btn btn-sm btn-success" title="Respond via WhatsApp"><i class="fa fa-whatsapp" style="color: white;"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Sample Row 2 -->
-                    <tr>
-                        <td>Jane Smith</td>
-                        <td>Diani beach hotel</td>
-                        <td>+254 711 234 567</td>
-                        <td>11-06-2024</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td><span class="badge bg-success">Resolved</span></td>
-                        <td>
-                            <div class="d-flex justify-content-center gap-2">
-                                <button class="btn btn-sm btn-secondary" disabled><i class="fa fa-check"></i></button>
-                                <a href="#" class="btn btn-sm btn-success" title="Respond via WhatsApp"><i class="fa fa-whatsapp" style="color: white;"></i></a>
-                            </div>
-                        </td>
-                    </tr>
+                    <% if (enquiries.length > 0) { %>
+                        <% enquiries.forEach(enquiry => { %>
+                            <tr>
+                                <td><%= enquiry.name || '-' %></td>
+                                <td><%= enquiry.destination || '-' %></td>
+                                <td><%= enquiry.whatsapp || '-' %></td>
+                                <td><%= enquiry.createdAt.toISOString().split('T')[0] %></td>
+                                <td><%= enquiry.adults || '-' %></td>
+                                <td><%= enquiry.children || '-' %></td>
+                                <td>
+                                    <% if (enquiry.status === 'Resolved') { %>
+                                        <span class="badge bg-success">Resolved</span>
+                                    <% } else { %>
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <% if (enquiry.status !== 'Resolved') { %>
+                                            <form action="/admin/enquiries/<%= enquiry._id %>/resolve" method="POST">
+                                                <button type="submit" class="btn btn-sm btn-primary" title="Mark as Resolved">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                            </form>
+                                        <% } else { %>
+                                            <button class="btn btn-sm btn-secondary" disabled>
+                                                <i class="fa fa-check"></i>
+                                            </button>
+                                        <% } %>
+                                        <a href="https://wa.me/<%= enquiry.whatsapp %>" target="_blank" class="btn btn-sm btn-success" title="Respond via WhatsApp">
+                                            <i class="fa fa-whatsapp" style="color: white;"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="8" class="text-center">No enquiries available</td>
+                        </tr>
+                    <% } %>
                 </tbody>
             </table>
-            
+    
+            <!-- Pagination Controls -->
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <% if (currentPage > 1) { %>
+                        <li class="page-item">
+                            <a class="page-link" href="/admin/manage-Enquiries/<%= currentPage - 1 %>">Previous</a>
+                        </li>
+                    <% } %>
+    
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+                        <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                            <a class="page-link" href="/admin/manage-Enquiries/<%= i %>"><%= i %></a>
+                        </li>
+                    <% } %>
+    
+                    <% if (currentPage < totalPages) { %>
+                        <li class="page-item">
+                            <a class="page-link" href="/admin/manage-Enquiries/<%= currentPage + 1 %>">Next</a>
+                        </li>
+                    <% } %>
+                </ul>
+            </nav>
         </div>
     </div>
+    
+    
 
     <!-- Export Buttons -->
     <div class="text-end mt-3">

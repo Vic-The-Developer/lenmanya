@@ -28,7 +28,7 @@ router.use(flash());
  * Login Page
  */
 router.get('/login', (req, res)=>{
-  const successMessage = req.flash('success');
+  const successMessage = req.flash('success')[0];
 
   res.render('dash/login', {
     successMessage
@@ -233,30 +233,87 @@ router.post("/new_pass", (req, res) => {
 /**
  * Main Dashboard
  */
-router.get('/dash', (req, res)=>{
-  res.render('dash/dash', {
-    title: "Dashboard Overview | Lenmanya Adventures",
-    currentPath: '/admin/dash'
-  })
-})
+router.get('/dash', async (req, res) => {
+  try {
+      // Total Enquiries and Recent Enquiries (Limit 2)
+      const totalEnquiries = await Enquiry.countDocuments();
+      const recentEnquiries = await Enquiry.find()
+          .sort({ createdAt: -1 })
+          .limit(2);
 
+      // Published and Draft Blog Counts
+      const publishedBlogs = await Blog.countDocuments({ status: 'Published' });
+      const draftBlogs = await Blog.countDocuments({ status: 'Draft' });
+
+      // Latest Blogs (Limit 3)
+      const latestBlogs = await Blog.find({ status: 'Published' })
+          .sort({ createdAt: -1 })
+          .limit(3);
+
+      // Total Packages Placeholder
+      const totalPackages = 0; // Replace with actual logic when Package model exists
+
+      // Render the dashboard with fetched data
+      res.render('dash/dash', {
+          title: "Dashboard Overview | Lenmanya Adventures",
+          currentPath: '/admin/dash',
+          totalEnquiries: totalEnquiries || '-', // If no data, leave a dash
+          recentEnquiries: recentEnquiries || [],
+          publishedBlogs: publishedBlogs || '-',
+          draftBlogs: draftBlogs || '-',
+          totalPackages: totalPackages || '-',
+          latestBlogs: latestBlogs || []
+      });
+  } catch (error) {
+      console.error('Error loading dashboard data:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
 
 /**
  * Manage blogs
  */
-router.get('/packages', (req, res)=>{
+router.get('/packages/:page', async (req, res) => {
+  try {
+      const perPage = 10; // Records per page
+      const currentPage = parseInt(req.params.page) || 1;
 
-  const successMessage = req.flash('success')[0];
-  const errorMessage = req.flash('error')[0];
+      // Flash messages
+      const successMessage = req.flash('success')[0];
+      const errorMessage = req.flash('error')[0];
 
+      // Counts for metrics
+      const totalPackages = await Package.countDocuments();
+      const activePackages = await Package.countDocuments({ status: 'Active' });
+      const pendingPackages = await Package.countDocuments({ status: 'Pending' });
 
-  res.render('dash/packages', {
-    title: 'Manage Packages | Lenmanya Adventures',
-    currentPath: '/admin/packages',
-    successMessage,
-    errorMessage
-  })
-})
+      // Fetch paginated packages
+      const packages = await Package.find()
+          .sort({ createdAt: -1 }) // Sort by newest first
+          .skip((currentPage - 1) * perPage)
+          .limit(perPage);
+
+      const totalPages = Math.ceil(totalPackages / perPage);
+
+      // Render the template with data
+      res.render('dash/packages', {
+          title: 'Manage Packages | Lenmanya Adventures',
+          currentPath: '/admin/packages',
+          successMessage,
+          errorMessage,
+          totalPackages,
+          activePackages,
+          pendingPackages,
+          packages,
+          currentPage,
+          totalPages
+      });
+  } catch (error) {
+      console.error('Error fetching paginated packages:', error);
+      req.flash('error', 'An error occurred while loading packages.');
+      res.redirect('/admin/packages/1');
+  }
+});
 
 /**
  * filter packages
@@ -484,18 +541,45 @@ router.get("/delete_package", async (req, res) => {
 /**
  * Manage blogs
  */
-router.get('/manage-blogs', (req, res)=>{
+router.get('/manage-blogs', async (req, res) => {
+  try {
+    const successMessage = req.flash('success')[0];
+    const errorMessage = req.flash('error')[0];
 
-  const successMessage = req.flash('success')[0];
-  const errorMessage = req.flash('error')[0];
+    // Pagination setup
+    const page = parseInt(req.query.page) || 1; // Current page, default to 1
+    const limit = 15; // Number of blogs per page
+    const skip = (page - 1) * limit;
 
-  res.render('dash/manage_blog', {
-    title: 'Manage Blogs | Lenmanya Adventures',
-    currentPath: '/admin/manage-blogs',
-    successMessage,
-    errorMessage
-  })
-})
+    // Fetch paginated blogs
+    const blogs = await Blog.find().skip(skip).limit(limit).sort({ datePublished: -1 });
+
+    // Fetch metrics
+    const totalBlogs = await Blog.countDocuments();
+    const publishedBlogs = await Blog.countDocuments({ status: 'Published' });
+    const draftBlogs = await Blog.countDocuments({ status: 'Draft' });
+
+    // Calculate total pages
+    const totalPages = Math.ceil(totalBlogs / limit);
+
+    res.render('dash/manage_blog', {
+      title: 'Manage Blogs | Lenmanya Adventures',
+      currentPath: '/admin/manage-blogs',
+      successMessage,
+      errorMessage,
+      blogs,
+      currentPage: page,
+      totalPages,
+      totalBlogs,
+      publishedBlogs,
+      draftBlogs
+    });
+  } catch (err) {
+    console.error(err);
+    req.flash('error', 'Error fetching blog data.');
+    res.redirect('/admin/dash');
+  }
+});
 
 
 /**
@@ -777,18 +861,47 @@ router.get('/delete_blog', async (req, res) => {
 /**
  * Manage Enquiries
  */
-router.get('/manage-Enquiries', (req, res)=>{
+router.get('/manage-Enquiries/:page', async (req, res) => {
+  try {
+      const perPage = 15; // Number of records per page
+      const currentPage = parseInt(req.params.page) || 1;
 
-  const successMessage = req.flash('success')[0];
-  const errorMessage = req.flash('error')[0];
+      // Flash messages
+      const successMessage = req.flash('success')[0];
+      const errorMessage = req.flash('error')[0];
 
-  res.render('dash/manage_enquiries', {
-    title: 'Manage Enquiries | Lenmanya Adventures',
-    currentPath: '/admin/manage-Enquiries',
-    successMessage,
-    errorMessage
-  })
-})
+      // Fetch counts
+      const totalEnquiries = await Enquiry.countDocuments();
+      const resolvedEnquiries = await Enquiry.countDocuments({ status: 'Resolved' });
+      const unresolvedEnquiries = await Enquiry.countDocuments({ status: { $ne: 'Resolved' } });
+
+      // Paginated Enquiries
+      const enquiries = await Enquiry.find()
+          .sort({ createdAt: -1 })
+          .skip((currentPage - 1) * perPage)
+          .limit(perPage);
+
+      const totalPages = Math.ceil(totalEnquiries / perPage);
+
+      // Render the template
+      res.render('dash/manage_enquiries', {
+          title: 'Manage Enquiries | Lenmanya Adventures',
+          currentPath: '/admin/manage-Enquiries',
+          successMessage,
+          errorMessage,
+          totalEnquiries,
+          resolvedEnquiries,
+          unresolvedEnquiries,
+          enquiries,
+          currentPage,
+          totalPages
+      });
+  } catch (error) {
+      console.error('Error fetching paginated enquiries:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
 
 /**
  * filter enquiries

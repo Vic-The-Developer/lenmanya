@@ -15,16 +15,14 @@
         <div class="col-lg-4 col-md-6 mb-4">
             <div class="card card-metric">
                 <div class="row w-100">
-                    <!-- Left Column -->
                     <div class="col-4 icon-col">
                         <i class="fa fa-envelope"></i>
                     </div>
-                    <!-- Right Column -->
                     <div class="col-8">
                         <div class="cardRight">
                             <div class="row">
                                 <div class="col-12">
-                                    <h5>123</h5>
+                                    <h5><%= totalEnquiries %></h5>
                                 </div>
                                 <div class="col-12">
                                     <p>Total Enquiries</p>
@@ -35,20 +33,19 @@
                 </div>
             </div>
         </div>
+
         <!-- Published Blogs -->
         <div class="col-lg-4 col-md-6 mb-4">
             <div class="card card-metric">
                 <div class="row w-100">
-                    <!-- Left Column -->
                     <div class="col-4 icon-col">
                         <i class="fa fa-file-text"></i>
                     </div>
-                    <!-- Right Column -->
                     <div class="col-8">
                         <div class="cardRight">
                             <div class="row">
                                 <div class="col-12">
-                                    <h5>45</h5>
+                                    <h5><%= publishedBlogs %></h5>
                                 </div>
                                 <div class="col-12">
                                     <p>Published Blogs</p>
@@ -59,20 +56,19 @@
                 </div>
             </div>
         </div>
+
         <!-- Draft Blogs -->
         <div class="col-lg-4 col-md-6 mb-4">
             <div class="card card-metric">
                 <div class="row w-100">
-                    <!-- Left Column -->
                     <div class="col-4 icon-col">
                         <i class="fa fa-map-marker"></i>
                     </div>
-                    <!-- Right Column -->
                     <div class="col-8">
                         <div class="cardRight">
                             <div class="row">
                                 <div class="col-12">
-                                    <h5>12</h5>
+                                    <h5><%= totalPackages %></h5>
                                 </div>
                                 <div class="col-12">
                                     <p>Total Packages</p>
@@ -83,6 +79,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 
     <!-- Recent Enquiries Section -->
@@ -99,18 +96,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>John Doe</td>
-                        <td>0710443487</td>
-                        <td>Maasai Mara</td>
-                        <td>2024-08-01</td>
-                    </tr>
-                    <tr>
-                        <td>Jane Smith</td>
-                        <td>0712345678</td>
-                        <td>Diani, Mombasa</td>
-                        <td>2024-08-03</td>
-                    </tr>
+                    <% if (recentEnquiries.length > 0) { %>
+                        <% recentEnquiries.forEach(enquiry => { %>
+                            <tr>
+                                <td><%= enquiry.name || '-' %></td>
+                                <td><%= enquiry.whatsapp || '-' %></td>
+                                <td><%= enquiry.destination || '-' %></td>
+                                <td><%= enquiry.createdAt.toISOString().split('T')[0] || '-' %></td>
+                            </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="4" class="text-center">No enquiries available</td>
+                        </tr>
+                    <% } %>
                 </tbody>
             </table>
         </div>
@@ -118,40 +117,32 @@
             <a href="/admin/manage-Enquiries" class="btn btn-success">View More</a>
         </div>
     </div>
+    
 
     <!-- Blog Summary Section -->
     <div>
         <h4 class="section-title">Latest Blogs</h4>
         <div class="row">
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Top 10 Safari Destinations</h5>
-                        <p class="card-text">Explore the best safari locations in East Africa for an unforgettable experience.</p>
-                        <a href="#" class="btn btn-primary btn-sm">View Blog</a>
+            <% if (latestBlogs.length > 0) { %>
+                <% latestBlogs.forEach(blog => { %>
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title"><%= blog.bTitle || '-' %></h5>
+                                <p class="card-text"><%= blog.metaDescription || '-' %></p>
+                                <a href="/blog/<%= blog._id %>" class="btn btn-primary btn-sm">View Blog</a>
+                            </div>
+                        </div>
                     </div>
+                <% }) %>
+            <% } else { %>
+                <div class="col-12">
+                    <p class="text-center">No blogs available</p>
                 </div>
-            </div>
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Beach Getaways in Kenya</h5>
-                        <p class="card-text">Discover pristine beaches and relaxing coastal experiences along the Indian Ocean.</p>
-                        <a href="#" class="btn btn-primary btn-sm">View Blog</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Corporate Team-Building Ideas</h5>
-                        <p class="card-text">Perfect team-building activities for companies seeking productivity and fun.</p>
-                        <a href="#" class="btn btn-primary btn-sm">View Blog</a>
-                    </div>
-                </div>
-            </div>
+            <% } %>
         </div>
     </div>
+    
 </div>
 
 

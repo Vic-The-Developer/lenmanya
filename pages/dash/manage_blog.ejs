@@ -23,79 +23,56 @@
 
     <!-- Key Metrics Section -->
     <div class="row mb-4">
-        <!-- Total Enquiries -->
+        <!-- Total Blog Posts -->
         <div class="col-lg-4 col-md-6 mb-4">
             <div class="card card-metric">
                 <div class="row w-100">
-                    <!-- Left Column -->
                     <div class="col-4 icon-col">
                         <i class="fa fa-envelope"></i>
                     </div>
-                    <!-- Right Column -->
                     <div class="col-8">
                         <div class="cardRight">
-                            <div class="row">
-                                <div class="col-12">
-                                    <h5>123</h5>
-                                </div>
-                                <div class="col-12">
-                                    <p>Total Blog Posts</p>
-                                </div>
-                            </div>
+                            <h5><%= totalBlogs %></h5>
+                            <p>Total Blog Posts</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Unresolved Enquiries -->
+        <!-- Draft Blogs -->
         <div class="col-lg-4 col-md-6 mb-4">
             <div class="card card-metric">
                 <div class="row w-100">
-                    <!-- Left Column -->
                     <div class="col-4 icon-col">
                         <i class="fa fa-pencil-square-o"></i>
                     </div>
-                    <!-- Right Column -->
                     <div class="col-8">
                         <div class="cardRight">
-                            <div class="row">
-                                <div class="col-12">
-                                    <h5>45</h5>
-                                </div>
-                                <div class="col-12">
-                                    <p>Draft</p>
-                                </div>
-                            </div>
+                            <h5><%= draftBlogs %></h5>
+                            <p>Draft</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Resolved Enquiries -->
+        <!-- Published Blogs -->
         <div class="col-lg-4 col-md-6 mb-4">
             <div class="card card-metric">
                 <div class="row w-100">
-                    <!-- Left Column -->
                     <div class="col-4 icon-col">
                         <i class="fa fa-file-text"></i>
                     </div>
-                    <!-- Right Column -->
                     <div class="col-8">
                         <div class="cardRight">
-                            <div class="row">
-                                <div class="col-12">
-                                    <h5>67</h5>
-                                </div>
-                                <div class="col-12">
-                                    <p>Published</p>
-                                </div>
-                            </div>
+                            <h5><%= publishedBlogs %></h5>
+                            <p>Published</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    
 
 
     <div class="border"  style="padding: 20px;">
@@ -125,137 +102,128 @@
         <!-- Blog List Table -->
         <div class="table-responsive">
             <table class="table table-hover table-bordered text-center align-middle">
-                <thead class="table-light">
+              <thead class="table-light">
+                <tr>
+                  <th>Blog Title</th>
+                  <th>Category</th>
+                  <th>Date Published</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (blogs && blogs.length > 0) { %>
+                  <% blogs.forEach((blog) => { %>
                     <tr>
-                        <th>Blog Title</th>
-                        <th>Category</th>
-                        <th>Date Published</th>
-                        <th>Status</th>
-                        <th>Actions</th>
+                      <td><%= blog.title %></td>
+                      <td><%= blog.category || 'N/A' %></td>
+                      <td><%= blog.datePublished ? blog.datePublished.toDateString() : 'Not Published' %></td>
+                      <td>
+                        <% if (blog.status === 'Published') { %>
+                          <span class="badge bg-success">Published</span>
+                        <% } else { %>
+                          <span class="badge bg-warning text-dark">Draft</span>
+                        <% } %>
+                      </td>
+                      <td>
+                        <div class="d-flex justify-content-center gap-2">
+                          <!-- Edit Button -->
+                          <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#editBlogModal-<%= blog._id %>" title="Edit">
+                            <i class="fa fa-edit"></i>
+                          </button>
+                          <!-- Delete Button -->
+                          <form action="/admin/delete-blog/<%= blog._id %>" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger" title="Delete">
+                              <i class="fa fa-trash"></i>
+                            </button>
+                          </form>
+                          <!-- View Button -->
+                          <a href="/blogs/view/<%= blog._id %>" class="btn btn-sm btn-primary" title="View">
+                            <i class="fa fa-eye"></i>
+                          </a>
+                        </div>
+                      </td>
                     </tr>
-                </thead>
-                <tbody>
-                    <!-- Blog Row 1 -->
-                    <tr>
-                        <td>Top 10 Safari Destinations</td>
-                        <td>Travel</td>
-                        <td>2024-06-27</td>
-                        <td><span class="badge bg-success">Published</span></td>
-                        <td>
-                            <div class="d-flex justify-content-center gap-2">
-                                <button class="btn btn-sm btn-info" data-toggle="modal" data-target=".bd-example-modal-lg" title="Edit"><i class="fa fa-edit"></i></button>
-                                <button class="btn btn-sm btn-danger" title="Delete"><i class="fa fa-trash"></i></button>
-                                <a href="#" class="btn btn-sm btn-primary" title="View"><i class="fa fa-eye"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Blog Row 2 -->
-                    <tr>
-                        <td>A Beginner's Guide to Safari Tours</td>
-                        <td>Guides</td>
-                        <td>2024-06-25</td>
-                        <td><span class="badge bg-warning text-dark">Draft</span></td>
-                        <td>
-                            <div class="d-flex justify-content-center gap-2">
-                                <button class="btn btn-sm btn-info" title="Edit"><i class="fa fa-edit"></i></button>
-                                <button class="btn btn-sm btn-danger" title="Delete"><i class="fa fa-trash"></i></button>
-                                <a href="#" class="btn btn-sm btn-primary" title="View"><i class="fa fa-eye"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Add More Rows Here -->
-                </tbody>
+                    
+                    <!-- Edit Blog Modal -->
+                    <div class="modal fade" id="editBlogModal-<%= blog._id %>" tabindex="-1" role="dialog" aria-labelledby="editBlogModalLabel-<%= blog._id %>" aria-hidden="true">
+                      <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="editBlogModalLabel-<%= blog._id %>">Edit Blog: <%= blog.title %></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <form action="/admin/edit-blog/<%= blog._id %>" method="post" enctype="multipart/form-data">
+                              <!-- Blog Title -->
+                              <div class="form-group mb-3">
+                                <label for="title-<%= blog._id %>">Blog Title</label>
+                                <input type="text" id="title-<%= blog._id %>" name="title" class="form-control" value="<%= blog.title %>" required>
+                              </div>
+          
+                              <!-- Category -->
+                              <div class="form-group mb-3">
+                                <label for="category-<%= blog._id %>">Category</label>
+                                <select id="category-<%= blog._id %>" name="category" class="form-control">
+                                  <option value="Travel Tips" <%= blog.category === 'Travel Tips' ? 'selected' : '' %>>Travel Tips</option>
+                                  <option value="Destinations" <%= blog.category === 'Destinations' ? 'selected' : '' %>>Destinations</option>
+                                  <option value="Special Offers" <%= blog.category === 'Special Offers' ? 'selected' : '' %>>Special Offers</option>
+                                </select>
+                              </div>
+          
+                              <!-- Featured Image -->
+                              <div class="form-group mb-3">
+                                <label for="featuredImage-<%= blog._id %>">Featured Image</label>
+                                <input type="file" id="featuredImage-<%= blog._id %>" name="featuredImage" class="form-control" accept="image/*">
+                              </div>
+          
+                              <!-- Content -->
+                              <div class="form-group mb-3">
+                                <label for="content-<%= blog._id %>">Content</label>
+                                <textarea id="content-<%= blog._id %>" name="content" class="form-control" rows="10"><%= blog.content %></textarea>
+                              </div>
+          
+                              <!-- Status -->
+                              <div class="form-group mb-3">
+                                <label>Status</label><br>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="status" value="Draft" <%= blog.status === 'Draft' ? 'checked' : '' %>>
+                                  <label class="form-check-label">Draft</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="status" value="Published" <%= blog.status === 'Published' ? 'checked' : '' %>>
+                                  <label class="form-check-label">Published</label>
+                                </div>
+                              </div>
+          
+                              <!-- Action Buttons -->
+                              <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Save Changes</button>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  <% }); %>
+                <% } else { %>
+                  <tr>
+                    <td colspan="5">No blogs available.</td>
+                  </tr>
+                <% } %>
+              </tbody>
             </table>
         </div>
-    </div>
-</div>
-
-
-<!-- Modal -->
-<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Edit Blog: (title)</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <form action="/admin/create_blog" method="post" enctype="multipart/form-data">
-                <!-- Blog Title Row -->
-                <div class="form-row">
-                    <label for="title">Blog Title</label>
-                    <input type="text" id="bTitle" name="bTitle" class="form-control" placeholder="Enter blog title" required>
-                </div>
-        
-                <!-- Category Row -->
-                <div class="form-row">
-                    <label for="category">Category</label>
-                    <select id="category"  class="form-control" name="category" required>
-                        <option value="">-- Select Category --</option>
-                        <option value="Travel Tips">Travel Tips</option>
-                        <option value="Destinations">Destinations</option>
-                        <option value="Special Offers">Special Offers</option>
-                    </select>
-                </div>
-
-                <div class="form-row">current image preview</div>
-        
-                <!-- Featured Image Row -->
-                <div class="form-row">
-                    <label for="featuredImage">Featured Image/Thumbnail</label>
-                    <input type="file" id="featuredImage" name="featuredImage" class="form-control" accept="image/*">
-                </div>
-        
-                <!-- Blog Content Row -->
-                <div class="form-row">
-                    <label for="content">Blog Content</label>
-                </div>
-        
-                <div class="form-row">
-                    <textarea id="content" name="content" class="form-control" rows="14"></textarea>
-                </div>
-        
-                <!-- SEO Metadata Section -->
-                <h5 class="mb-3 mt-4">SEO Metadata</h5>
-                <div class="form-row">
-                    <label for="metaTitle">Meta Title</label>
-                    <input type="text" id="metaTitle" name="metaTitle" class="form-control" placeholder="Enter meta title" required>
-                </div>
-                <div class="form-row">
-                    <label for="metaDescription">Meta Description</label>
-                    <input type="text" id="metaDescription" name="metaDescription" class="form-control" placeholder="Enter meta description" required>
-                </div>
-                <div class="form-row">
-                    <label for="keywords">Keywords</label>
-                    <input type="text" id="keywords" name="keywords" class="form-control" placeholder="E.g., Travel, Safari, Offers">
-                </div>
-        
-                <!-- Blog Status -->
-                <div class="form-row">
-                    <label class="form-label mb-2">Status:</label>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="status" id="draft" value="Draft" checked>
-                        <label class="form-check-label" for="draft">Draft</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="status" id="published" value="Published">
-                        <label class="form-check-label" for="published">Publish</label>
-                    </div>
-                </div>
-        
-                <!-- Action Buttons -->
-                <div class="d-flex gap-2 mt-4">
-                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Update Blog</button>
-                    <button type="button" class="btn btn-primary btn-preview"><i class="fa fa-eye"></i> Preview</button>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
+        <!-- Pagination Controls -->
+        <nav aria-label="Blog Pagination">
+            <ul class="pagination justify-content-center">
+            <% for (let i = 1; i <= totalPages; i++) { %>
+                <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                </li>
+            <% } %>
+            </ul>
+        </nav>
     </div>
 </div>
 
