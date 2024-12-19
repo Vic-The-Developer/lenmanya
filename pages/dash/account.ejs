@@ -26,47 +26,50 @@
         <h3 class="text-center text-primary mb-4">
             Admin Profile Information
         </h3>
-        <form action="/admin/edit_profile" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="/admin/edit_profile/<%= currentAdmin ? currentAdmin.email : '' %>" method="post" enctype="application/x-www-form-urlencoded">
             <!-- Display Name -->
             <div class="mb-3">
                 <label for="displayName" class="form-label">Display Name</label>
-                <input type="text" id="displayName" name="displayName" class="form-control" placeholder="Admin Name" value="John Doe">
+                <input type="text" id="displayName" name="displayName" class="form-control"
+                       placeholder="Admin Name" value="<%= currentAdmin ? currentAdmin.displayName : '' %>">
             </div>
             <!-- Email Address -->
             <div class="mb-3">
                 <label for="email" class="form-label">Email Address</label>
-                <input type="email" id="email" name="email" class="form-control" placeholder="admin@example.com" value="admin@example.com">
+                <input type="email" id="email" name="email" class="form-control"
+                       placeholder="admin@example.com" value="<%= currentAdmin ? currentAdmin.email : '' %>">
             </div>
             <!-- Phone Number -->
             <div class="mb-3">
                 <label for="phone" class="form-label">Phone Number</label>
-                <input type="tel" id="phone" name="phone" class="form-control" placeholder="+123456789" value="+123456789">
+                <input type="tel" id="phone" name="phone" class="form-control"
+                       placeholder="+123456789" value="<%= currentAdmin ? currentAdmin.phone || '' : '' %>">
             </div>
             <!-- Password Update -->
             <div class="mb-4">
                 <label for="password" class="form-label">Update Password</label>
-                <input type="password" id="password" name="oldPass" class="form-control" placeholder="Enter old password">
-                <input type="password" id="password" name="newPass" class="form-control" placeholder="Enter new password">
+                <input type="password" name="oldPass" class="form-control" placeholder="Enter old password">
+                <input type="password" name="newPass" class="form-control mt-2" placeholder="Enter new password">
             </div>
             <!-- Update Button -->
             <div class="d-flex justify-content-between">
                 <button type="submit" class="btn btn-primary">
                     <i class="fa fa-save"></i> Update Profile
                 </button>
-                <a href="/admin/logout" class="btn logout-btn">
+                <a href="/admin/logout" class="btn btn-danger">
                     <i class="fa fa-sign-out-alt"></i> Logout
                 </a>
             </div>
-            <div style="margin-top: 40px; text-align: center;">
-                <a href="#" class="btn btn-success" data-toggle="modal" data-target=".bd-example-modal-lg">Add New Admin</a>
-            </div>
         </form>
+        <div style="margin-top: 40px; text-align: center;">
+            <a href="#" class="btn btn-success" data-toggle="modal" data-target=".bd-example-modal-lg">Add New Admin</a>
+        </div>
     </div>
 
     <h2 class="text-primary mb-4">Admin Accounts</h2>
 
     <!-- Admin Table -->
-    <table class="table table-striped table-bordered">
+    <table class="table table-striped table-bordered mt-4">
         <thead class="thead-secondary">
             <tr>
                 <th>#</th>
@@ -77,37 +80,33 @@
             </tr>
         </thead>
         <tbody>
-            <!-- Example Admins -->
-            <tr>
-                <td>1</td>
-                <td>John Doe</td>
-                <td>john@example.com</td>
-                <td>SuperAdmin</td>
-                <td>
-                    <button class="btn btn-danger btn-sm" onclick="deleteAdmin(1)">
-                        <i class="fa fa-trash"></i> &nbsp; Delete
-                    </button>
-                    <button class="btn btn-warning btn-sm" onclick="revokeAccess(1)">
-                        <i class="fa fa-ban"></i> &nbsp; Revoke Access
-                    </button>
-                </td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Jane Smith</td>
-                <td>jane@example.com</td>
-                <td>Admin</td>
-                <td>
-                    <button class="btn btn-danger btn-sm" onclick="deleteAdmin(2)">
-                        <i class="fa fa-trash"></i> &nbsp; Delete
-                    </button>
-                    <button class="btn btn-warning btn-sm" onclick="revokeAccess(2)">
-                        <i class="fa fa-ban"></i> &nbsp; Revoke Access
-                    </button>
-                </td>
-            </tr>
+            <% if (admins && admins.length > 0) { %>
+                <% admins.forEach((admin, index) => { %>
+                    <tr>
+                        <td><%= index + 1 %></td>
+                        <td><%= admin.displayName %></td>
+                        <td><%= admin.email %></td>
+                        <td><%= admin.role || 'Admin' %></td>
+                        <td>
+                            <form action="/admin/delete_admin?id=<%= admin._id %>" method="post" style="display: inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="fa fa-trash"></i> &nbsp; Delete
+                                </button>
+                            </form>
+                            <button class="btn btn-warning btn-sm" onclick="revokeAccess('<%= admin._id %>')">
+                                <i class="fa fa-ban"></i> &nbsp; Revoke Access
+                            </button>
+                        </td>
+                    </tr>
+                <% }); %>
+            <% } else { %>
+                <tr>
+                    <td colspan="5" class="text-center">No administrators found.</td>
+                </tr>
+            <% } %>
         </tbody>
     </table>
+    
 </div>
 
 <!-- Modal -->

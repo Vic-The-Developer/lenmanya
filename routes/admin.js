@@ -991,19 +991,31 @@ router.get('/resolve_enquiry', (req, res) => {
 /**
  * Account Page
  */
-router.get('/account', (req, res)=>{
+router.get('/account', async (req, res) => {
+  try {
+    const successMessage = req.flash('success')[0];
+    const errorMessage = req.flash('error')[0];
 
-  const successMessage = req.flash('success')[0];
-  const errorMessage = req.flash('error')[0];
+    // Fetch the logged-in admin's details
+    const currentAdmin = await Admin.findById(req.session.adminId); // Assuming sessions are used
 
+    // Fetch all admins
+    const admins = await Admin.find();
 
-  res.render('dash/account', {
-    title: 'Account | Lenmanya Adventures',
-    currentPath: '/admin/account',
-    successMessage,
-    errorMessage
-  })
-})
+    res.render('dash/account', {
+      title: 'Account | Lenmanya Adventures',
+      currentPath: '/admin/account',
+      successMessage,
+      errorMessage,
+      currentAdmin,
+      admins,
+    });
+  } catch (err) {
+    console.error(err);
+    req.flash('error', 'Unable to fetch account details.');
+    res.redirect('/admin/dashboard');
+  }
+});
 
 
 // Create New Admin
