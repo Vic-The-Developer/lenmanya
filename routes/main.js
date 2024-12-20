@@ -20,13 +20,27 @@ router.use(flash());
  * Home (Landing Page)
  */
 router.get('/', async (req, res) => {
+
+    const successMessage = req.flash('success')[0];
+    const errorMessage = req.flash('error')[0];
+
     try {
         const packages = await Package.find(); // Fetch packages from the database
         const blogs = await Blog.find({ status: 'Published' }); // Only fetch published blogs
-        res.render('main/index', { packages, blogs });
+        res.render('main/index', { 
+            packages, 
+            blogs,
+            successMessage,
+            errorMessage
+        });
     } catch (err) {
         console.log(err);
-        res.render('main/index', { packages: [], blogs: [] }); // If an error occurs, render with empty arrays
+        res.render('main/index', { 
+            packages: [], 
+            blogs: [],
+            successMessage,
+            errorMessage
+        }); // If an error occurs, render with empty arrays
     }
 });
 
@@ -39,15 +53,17 @@ router.post('/enquiry', [
     body('fname').trim().notEmpty().withMessage('Full Name is required'),
     body('destination').trim().notEmpty().withMessage('Destination is required'),
     body('date1').notEmpty().withMessage('Travel Date is required'),
-    body('whatsapp').isMobilePhone().withMessage('Valid WhatsApp number is required'),
+    body('whatsapp').notEmpty().withMessage('Valid WhatsApp number is required'),
     body('adults').optional().isInt({ min: 1 }).withMessage('Adults must be a number'),
     body('children').optional().isInt({ min: 0 }).withMessage('Children must be a number')
 ], async (req, res) => {
+    console.log('date', req.body.date1)
     // Extract validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        console.log(errors)
         req.flash('error', errors.array().map(err => err.msg).join(', '));
-        return res.redirect('/contact'); // Redirect to contact page if validation fails
+        return res.redirect('/'); // Redirect to contact page if validation fails
     }
 
     try {
@@ -68,11 +84,11 @@ router.post('/enquiry', [
         await newEnquiry.save();
 
         req.flash('success', 'Your enquiry has been submitted successfully!');
-        res.redirect('/contact'); // Redirect to contact page
+        res.redirect('/'); // Redirect to contact page
     } catch (err) {
         console.error(err);
         req.flash('error', 'Something went wrong. Please try again later.');
-        res.redirect('/contact'); // Redirect on error
+        res.redirect('/'); // Redirect on error
     }
 });
 
@@ -93,6 +109,7 @@ router.post(
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             req.flash('error', errors.array().map(err => err.msg));
+            console.log(errors)
             return res.redirect('/contact'); // Reload the contact page with errors
         }
 
@@ -117,7 +134,7 @@ router.post(
                 text: `You have received a new enquiry from:
                 
                 Name: ${fname}
-                Email: ${email}
+                Email: ${email} ← click to reply
                 Subject: ${subject}
                 
                 Message:
@@ -367,6 +384,8 @@ router.get('/testimonial', (req, res)=>{
 router.get('/contact', (req, res)=>{
     const successMessage = req.flash('success')[0];
     const errorMessage = req.flash('error')[0];
+
+    console.log(errorMessage)
 
     res.render('main/contact', {
         successMessage,

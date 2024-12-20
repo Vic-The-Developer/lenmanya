@@ -298,7 +298,7 @@ router.get('/packages/:page', async (req, res) => {
       // Render the template with data
       res.render('dash/packages', {
           title: 'Manage Packages | Lenmanya Adventures',
-          currentPath: '/admin/packages',
+          currentPath: '/admin/packages/1',
           successMessage,
           errorMessage,
           totalPackages,
@@ -339,7 +339,7 @@ router.post('/filter_package', async (req, res) => {
       });
   } catch (error) {
       console.error('Error filtering packages:', error);
-      res.flash('error', 'Error filtering packages');
+      req.flash('error', 'Error filtering packages');
       res.redirect('/admin/packages')
   }
 });
@@ -632,7 +632,7 @@ router.post('/filter_blogs', async (req, res) => {
       });
   } catch (error) {
       console.error('Error filtering blogs:', error);
-      res.flash('error', "Error filtering blogs");
+      req.flash('error', "Error filtering blogs");
       res.redirect('/admin/manage-blogs')
   }
 });
@@ -872,8 +872,8 @@ router.get('/manage-Enquiries/:page', async (req, res) => {
 
       // Fetch counts
       const totalEnquiries = await Enquiry.countDocuments();
-      const resolvedEnquiries = await Enquiry.countDocuments({ status: 'Resolved' });
-      const unresolvedEnquiries = await Enquiry.countDocuments({ status: { $ne: 'Resolved' } });
+      const resolvedEnquiries = await Enquiry.countDocuments({ status: 'resolved' });
+      const unresolvedEnquiries = await Enquiry.countDocuments({ status: { $ne: 'resolved' } });
 
       // Paginated Enquiries
       const enquiries = await Enquiry.find()
@@ -886,7 +886,7 @@ router.get('/manage-Enquiries/:page', async (req, res) => {
       // Render the template
       res.render('dash/manage_enquiries', {
           title: 'Manage Enquiries | Lenmanya Adventures',
-          currentPath: '/admin/manage-Enquiries',
+          currentPath: '/admin/manage-Enquiries/1',
           successMessage,
           errorMessage,
           totalEnquiries,
@@ -907,48 +907,65 @@ router.get('/manage-Enquiries/:page', async (req, res) => {
  * filter enquiries
  */
 router.post('/filter_enquiries', async (req, res) => {
-  try {
-      var Whatsapp = req.body.Whatsapp;
-      var statusFilter = req.body.status-filter;
+  // Flash messages
+  const successMessage = req.flash('success')[0];
+  const errorMessage = req.flash('error')[0];
 
-      // If no filters are applied, redirect to the enquiries management page
-      if (!Whatsapp && !statusFilter) {
-          return res.redirect('/admin/manage-enquiry');
+  try {
+      const whatsapp = req.body.whatsapp; // Correctly declare input
+      const statusFilter = req.body['status-filter']; // Correctly handle hyphenated keys
+
+      // Redirect if no filters are applied
+      if (!whatsapp && !statusFilter) {
+          return res.redirect('/admin/manage_enquiries');
       }
 
-      // Build filter query dynamically
-      const filter = {};
-      if (Whatsapp) filter.Whatsapp = { $regex: Whatsapp, $options: 'i' }; // Case-insensitive search
+      // Initialize filter object dynamically
+      const filter = {}; // Properly declare 'filter' before usage
+      if (whatsapp) filter.whatsapp = { $regex: whatsapp, $options: 'i' }; // Case-insensitive search
       if (statusFilter) filter.status = statusFilter;
 
+      // Fetch counts
+      const totalEnquiries = await Enquiry.countDocuments();
+      const resolvedEnquiries = await Enquiry.countDocuments({ status: 'resolved' });
+      const unresolvedEnquiries = await Enquiry.countDocuments({ status: { $ne: 'resolved' } });
+
       // Pagination setup
-      const perPage = 10; // Results per page
+      const perPage = 10;
       const page = parseInt(req.query.page) || 1;
 
-      // Query database for filtered and paginated enquiries
-      const totalEnquiries = await Enquiry.countDocuments(filter);
+      // Query database for filtered and paginated results
+      const totalEnquiries2 = await Enquiry.countDocuments(filter);
       const enquiries = await Enquiry.find(filter)
           .skip((perPage * page) - perPage)
           .limit(perPage);
 
-      // Render results in the 'manage-enquiry' page
-      res.render('admin/manage-enquiry', {
+      // Render results
+      res.render('dash/manage_enquiries', {
+        title: 'Manage Enquiries | Lenmanya Adventures',
+        currentPath: '/admin/manage-Enquiries/1',
+        successMessage,
+          errorMessage,
+          totalEnquiries,
+          resolvedEnquiries,
+          unresolvedEnquiries,
           enquiries,
           currentPage: page,
-          totalPages: Math.ceil(totalEnquiries / perPage),
-          filters: { Whatsapp, statusFilter } // Pass filters to repopulate input fields
+          totalPages: Math.ceil(totalEnquiries2 / perPage),
+          filters: { whatsapp, statusFilter }
       });
   } catch (error) {
       console.error('Error filtering enquiries:', error);
-      res.flash('error', 'Error filtering enquiries');
-      res.redirect('/admin/manage-Enquiries')
+      req.flash('error', 'Error filtering enquiries');
+      res.redirect('/admin/manage-Enquiries/1');
   }
 });
+
 
 /**
  * Toggle Resolve Enquiry
  */
-router.get('/resolve_enquiry', (req, res) => {
+router.post('/resolve_enquiry', (req, res) => {
   const enquiryId = req.query.id; // Extract ID of the enquiry from URL query options
 
   // Find the enquiry and toggle its status
@@ -956,12 +973,12 @@ router.get('/resolve_enquiry', (req, res) => {
       if (err) {
           console.error("Error finding enquiry:", err);
           req.flash("error", "Something went wrong!");
-          return res.redirect('/admin/manage-Enquiries');
+          return res.redirect('/admin/manage-Enquiries/1');
       }
 
       if (!enquiry) {
           req.flash("error", "Enquiry not found.");
-          return res.redirect('/admin/manage-Enquiries');
+          return res.redirect('/admin/manage-Enquiries/1');
       }
 
       // Toggle the status
@@ -976,15 +993,16 @@ router.get('/resolve_enquiry', (req, res) => {
           if (err) {
               console.error("Error updating enquiry status:", err);
               req.flash("error", "Failed to update enquiry status.");
-              return res.redirect('/admin/manage-Enquiries');
+              return res.redirect('/admin/manage-Enquiries/1');
           }
 
           console.log(`Enquiry status updated to: ${newStatus}`);
           req.flash("success", `Enquiry status changed to ${newStatus}.`);
-          res.redirect('/admin/manage-Enquiries');
+          res.redirect('/admin/manage-Enquiries/1');
       });
   });
 });
+
 
 
 

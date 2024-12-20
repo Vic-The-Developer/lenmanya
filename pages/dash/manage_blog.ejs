@@ -11,7 +11,7 @@
 
 <% if (errorMessage) { %>
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        <%= successMessage %>
+        <%= errorMessage %>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -82,13 +82,13 @@
             <!-- Search and Filters -->
             <div class="d-flex gap-2">
                 <form action="/admin/filter_blogs" method="post">
-                    <select class="form-select" name="category" id="category">
+                    <select class="form-control" name="category" id="category">
                         <option value="">Filter by Category</option>
                         <option value="Travel">Travel</option>
                         <option value="Guides">Guides</option>
                         <option value="News">News</option>
                     </select>
-                    <select class="form-select" name="status" id="status">
+                    <select class="form-control" name="status" id="status">
                         <option value="">Filter by Status</option>
                         <option value="Published">Published</option>
                         <option value="Draft">Draft</option>

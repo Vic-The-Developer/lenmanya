@@ -21,6 +21,7 @@
     <!-- Libraries Stylesheet -->
     <link href="/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
     <link href="/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempus-dominus/5.39.0/css/tempus-dominus.min.css" />
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="/css/style.css" rel="stylesheet">
@@ -95,7 +96,7 @@
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
                             <div class="dropdown-menu border-0 rounded-0 m-0">
-                                <a href="/blog" class="dropdown-item">Blogs</a>
+                                <a href="/blog" class="dropdown-item">Blog Posts</a>
                                 <a href="/destination" class="dropdown-item">Destination</a>
                                 <a href="/testimonial" class="dropdown-item">Testimonial</a>
                             </div>
@@ -119,7 +120,7 @@
                         <div class="p-3" style="max-width: 900px;">
                             <h4 class="text-white text-uppercase mb-md-3">Lenmanya Adventures</h4>
                             <h1 class="display-3 text-white mb-md-4">Luxury Away From Home</h1>
-                            <a href="" class="btn btn-primary py-md-3 px-md-5 mt-2">Book Now</a>
+                            <a href="/package" class="btn btn-primary py-md-3 px-md-5 mt-2">Book Now</a>
                         </div>
                     </div>
                 </div>
@@ -154,6 +155,23 @@
         <div class="container pb-5">
             <form action="/enquiry" enctype="application/x-www-form-urlencoded" method="post">
                 <div class="bg-light shadow" style="padding: 30px;">
+                    <% if (successMessage) { %>
+                        <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                            <%= successMessage %>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    <% } %>
+                    
+                    <% if (errorMessage) { %>
+                        <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
+                            <%= errorMessage %>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    <% } %>
                     <div class="row align-items-center" style="min-height: 60px;">
                         <div class="col-md-10">
                             <div class="row">
@@ -171,9 +189,9 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="mb-3 mb-md-0">
-                                        <div class="date" id="date1" onfocus="disablePastDates()" data-target-input="nearest">
+                                        <div class="date" id="date1" data-target-input="nearest">
                                             <label for="date1">Date of Travel*</label>
-                                            <input type="text" id="date1" class="form-control p-4 datetimepicker-input" placeholder="Enter Date" data-target="#date1" data-toggle="datetimepicker" required/>
+                                            <input type="date" name="date1" id="date1" class="form-control datetimepicker-input" placeholder="Enter Date" required/>
                                         </div>
                                     </div>
                                 </div>
@@ -181,9 +199,9 @@
                                 <div class="col-md-3">
                                     <div class="mb-3 mb-md-0">
                                         <label for="whatsapp">WhatsApp Number*</label>
-                                        <input type="text" class="form-control" name="whatsapp" id="whatsapp" placeholder="Enter Number" required>
+                                        <input type="text" class="form-control" name="whatsapp" id="whatsapp" placeholder="07 or 011 or 010****" required>
                                     </div>
-                                </div>
+                                </div>                                
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -704,6 +722,71 @@
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tempus-dominus/5.39.0/js/tempus-dominus.min.js"></script>
+
+    <!-- Initialize the datetimepicker -->
+    <script>
+        // Ensure the DOM is fully loaded
+    document.addEventListener("DOMContentLoaded", function () {
+        // Initialize Tempus Dominus datetimepicker
+        const dateInput = document.getElementById('date1');
+
+        // Use Tempus Dominus API
+        const picker = new tempusDominus.TempusDominus(dateInput, {
+            display: {
+                format: 'YYYY-MM-DD', // Set date format
+                theme: 'light',
+            },
+            useCurrent: false // Prevents auto-filling the current date
+        });
+
+        // Capture value when focus leaves the input
+        dateInput.addEventListener('blur', function () {
+            const dateValue = dateInput.value; // Get input field's value
+            console.log("Selected Date:", dateValue);
+        });
+    });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const phoneInput = document.getElementById("whatsapp");
+        
+            phoneInput.addEventListener("blur", function () {
+                let phoneNumber = phoneInput.value.trim();
+        
+                // Remove all non-digit characters except the leading "+"
+                phoneNumber = phoneNumber.replace(/[^\d+]/g, "");
+        
+                // Handle phone numbers starting with +254 or 07/011/010
+                if (phoneNumber.startsWith("+254")) {
+                    phoneNumber = "254" + phoneNumber.substring(4); // Remove + and keep 254
+                } else if (phoneNumber.startsWith("07") || phoneNumber.startsWith("011") || phoneNumber.startsWith("010")) {
+                    phoneNumber = "254" + phoneNumber.substring(1); // Replace 07, 011, 010 with 254
+                }
+        
+                // Ensure the phone number is exactly 12 digits
+                if (/^254\d{9}$/.test(phoneNumber)) {
+                    phoneInput.value = phoneNumber; // Set formatted number
+                } else {
+                    alert("Invalid phone number format. Use 07XXXXXXX, 011XXXXXXX, or 010XXXXXXX.");
+                    phoneInput.value = ""; // Clear invalid input
+                }
+            });
+        
+            // Prevent form submission if the phone number is invalid
+            const form = phoneInput.closest("form");
+            form.addEventListener("submit", function (event) {
+                const phoneNumber = phoneInput.value.trim();
+                if (!/^254\d{9}$/.test(phoneNumber)) {
+                    alert("Please enter a valid phone number in the correct format.");
+                    event.preventDefault(); // Stop form submission
+                }
+            });
+        });
+    </script>        
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

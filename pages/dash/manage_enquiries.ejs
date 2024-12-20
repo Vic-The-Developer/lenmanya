@@ -1,7 +1,7 @@
 <%- include('./_layouts/header') %>
 
 <% if (successMessage) { %>
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <div class="alert alert-success alert-dismissible fade show mt-5" role="alert">
         <%= successMessage %>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -10,8 +10,8 @@
 <% } %>
 
 <% if (errorMessage) { %>
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        <%= successMessage %>
+    <div class="alert alert-warning alert-dismissible fade show mt-5" role="alert">
+        <%= errorMessage %>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -99,18 +99,18 @@
     <div class="filter-section mb-4">
         <form class="row g-3" action="/admin/filter_enquiries" method="post" enctype="application/x-www-form-urlencoded">
             <div class="col-md-6">
-                <input type="text" class="form-control" placeholder="Search by Whatsapp number: i.e. 0712345678" name="Whatsapp" id="Whatsapp">
+                <input type="text" class="form-control" placeholder="Whatsapp number: i.e. 07 or 011 or 010***" name="whatsapp" id="whatsapp" required>
             </div>
             
             <div class="col-md-3">
-                <select class="form-select" name="status-filter" id="status-filter">
+                <select class="form-control" name="status-filter" id="status-filter" required>
                     <option value="">Filter by Status</option>
                     <option value="pending">Pending</option>
                     <option value="resolved">Resolved</option>
                 </select>
             </div>
             <div class="col-md-3 text-end">
-                <button type="button" class="btn btn-primary"><i class="fa fa-filter"></i> Filter</button>
+                <button type="submit" class="btn btn-primary"><i class="fa fa-filter"></i> Filter</button>
             </div>
         </form>
     </div>
@@ -124,6 +124,7 @@
                         <th>Name</th>
                         <th>Destination</th>
                         <th>WhatsApp No.</th>
+                        <th>Date of Travel</th>
                         <th>Date Submitted</th>
                         <th>Adults</th>
                         <th>Children</th>
@@ -135,14 +136,15 @@
                     <% if (enquiries.length > 0) { %>
                         <% enquiries.forEach(enquiry => { %>
                             <tr>
-                                <td><%= enquiry.name || '-' %></td>
+                                <td><%= enquiry.fname || '-' %></td>
                                 <td><%= enquiry.destination || '-' %></td>
                                 <td><%= enquiry.whatsapp || '-' %></td>
+                                <td><%= enquiry.date1.toISOString().split('T')[0] %></td>
                                 <td><%= enquiry.createdAt.toISOString().split('T')[0] %></td>
                                 <td><%= enquiry.adults || '-' %></td>
                                 <td><%= enquiry.children || '-' %></td>
                                 <td>
-                                    <% if (enquiry.status === 'Resolved') { %>
+                                    <% if (enquiry.status === 'resolved') { %>
                                         <span class="badge bg-success">Resolved</span>
                                     <% } else { %>
                                         <span class="badge bg-warning text-dark">Pending</span>
@@ -150,18 +152,19 @@
                                 </td>
                                 <td>
                                     <div class="d-flex justify-content-center gap-2">
-                                        <% if (enquiry.status !== 'Resolved') { %>
-                                            <form action="/admin/enquiries/<%= enquiry._id %>/resolve" method="POST">
+                                        <% if (enquiry.status !== 'resolved') { %>
+                                            <form action="/admin/resolve_enquiry?id=<%= enquiry._id %>" method="POST">
                                                 <button type="submit" class="btn btn-sm btn-primary" title="Mark as Resolved">
                                                     <i class="fa fa-check"></i>
                                                 </button>
                                             </form>
+                                            
                                         <% } else { %>
                                             <button class="btn btn-sm btn-secondary" disabled>
                                                 <i class="fa fa-check"></i>
                                             </button>
                                         <% } %>
-                                        <a href="https://wa.me/<%= enquiry.whatsapp %>" target="_blank" class="btn btn-sm btn-success" title="Respond via WhatsApp">
+                                        <a href="https://api.whatsapp.com/send?phone=<%= enquiry.whatsapp %>" target="_blank" class="btn btn-sm btn-success" title="Respond via WhatsApp">
                                             <i class="fa fa-whatsapp" style="color: white;"></i>
                                         </a>
                                     </div>
@@ -180,24 +183,43 @@
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">
                     <% if (currentPage > 1) { %>
+                        <!-- Previous button -->
                         <li class="page-item">
                             <a class="page-link" href="/admin/manage-Enquiries/<%= currentPage - 1 %>">Previous</a>
                         </li>
                     <% } %>
-    
-                    <% for (let i = 1; i <= totalPages; i++) { %>
+            
+                    <!-- First Page -->
+                    <% if (currentPage > 3) { %>
+                        <li class="page-item">
+                            <a class="page-link" href="/admin/manage-Enquiries/1">1</a>
+                        </li>
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                    <% } %>
+            
+                    <!-- Pages Around Current Page -->
+                    <% for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) { %>
                         <li class="page-item <%= i === currentPage ? 'active' : '' %>">
                             <a class="page-link" href="/admin/manage-Enquiries/<%= i %>"><%= i %></a>
                         </li>
                     <% } %>
-    
+            
+                    <!-- Last Page -->
+                    <% if (currentPage < totalPages - 2) { %>
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                        <li class="page-item">
+                            <a class="page-link" href="/admin/manage-Enquiries/<%= totalPages %>"><%= totalPages %></a>
+                        </li>
+                    <% } %>
+            
                     <% if (currentPage < totalPages) { %>
+                        <!-- Next button -->
                         <li class="page-item">
                             <a class="page-link" href="/admin/manage-Enquiries/<%= currentPage + 1 %>">Next</a>
                         </li>
                     <% } %>
                 </ul>
-            </nav>
+            </nav>            
         </div>
     </div>
     
@@ -210,5 +232,43 @@
     </div>
 </div>
 
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const phoneInput = document.getElementById("whatsapp");
+    
+        phoneInput.addEventListener("blur", function () {
+            let phoneNumber = phoneInput.value.trim();
+    
+            // Remove all non-digit characters except the leading "+"
+            phoneNumber = phoneNumber.replace(/[^\d+]/g, "");
+    
+            // Handle phone numbers starting with +254 or 07/011/010
+            if (phoneNumber.startsWith("+254")) {
+                phoneNumber = "254" + phoneNumber.substring(4); // Remove + and keep 254
+            } else if (phoneNumber.startsWith("07") || phoneNumber.startsWith("011") || phoneNumber.startsWith("010")) {
+                phoneNumber = "254" + phoneNumber.substring(1); // Replace 07, 011, 010 with 254
+            }
+    
+            // Ensure the phone number is exactly 12 digits
+            if (/^254\d{9}$/.test(phoneNumber)) {
+                phoneInput.value = phoneNumber; // Set formatted number
+            } else {
+                alert("Invalid phone number format. Use 07XXXXXXX, 011XXXXXXX, or 010XXXXXXX.");
+                phoneInput.value = ""; // Clear invalid input
+            }
+        });
+    
+        // Prevent form submission if the phone number is invalid
+        const form = phoneInput.closest("form");
+        form.addEventListener("submit", function (event) {
+            const phoneNumber = phoneInput.value.trim();
+            if (!/^254\d{9}$/.test(phoneNumber)) {
+                alert("Please enter a valid phone number in the correct format.");
+                event.preventDefault(); // Stop form submission
+            }
+        });
+    });
+</script>
 
 <%- include('./_layouts/footer') %>

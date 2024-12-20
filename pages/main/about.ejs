@@ -84,7 +84,7 @@
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
                             <div class="dropdown-menu border-0 rounded-0 m-0">
-                                <a href="/blog" class="dropdown-item">Blog Grid</a>
+                                <a href="/blog" class="dropdown-item">Blog Posts</a>
                                 <a href="/destination" class="dropdown-item">Destination</a>
                                 <a href="/guide" class="dropdown-item">Travel Guides</a>
                                 <a href="/testimonial" class="dropdown-item">Testimonial</a>
@@ -139,7 +139,7 @@
                                     <div class="mb-3 mb-md-0">
                                         <div class="date" id="date1" onfocus="disablePastDates()" data-target-input="nearest">
                                             <label for="date1">Date of Travel*</label>
-                                            <input type="text" id="date1" class="form-control p-4 datetimepicker-input" placeholder="Enter Date" data-target="#date1" data-toggle="datetimepicker" required/>
+                                            <input type="date" name="date1" id="date1" class="form-control datetimepicker-input" placeholder="Enter Date" required/>
                                         </div>
                                     </div>
                                 </div>
@@ -147,7 +147,7 @@
                                 <div class="col-md-3">
                                     <div class="mb-3 mb-md-0">
                                         <label for="whatsapp">WhatsApp Number*</label>
-                                        <input type="text" class="form-control" name="whatsapp" id="whatsapp" placeholder="Enter Number" required>
+                                        <input type="text" class="form-control" name="whatsapp" id="whatsapp" placeholder="07 or 011 or 010****" required>
                                     </div>
                                 </div>
                             </div>
@@ -391,6 +391,44 @@
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const phoneInput = document.getElementById("whatsapp");
+        
+            phoneInput.addEventListener("blur", function () {
+                let phoneNumber = phoneInput.value.trim();
+        
+                // Remove all non-digit characters except the leading "+"
+                phoneNumber = phoneNumber.replace(/[^\d+]/g, "");
+        
+                // Handle phone numbers starting with +254 or 07/011/010
+                if (phoneNumber.startsWith("+254")) {
+                    phoneNumber = "254" + phoneNumber.substring(4); // Remove + and keep 254
+                } else if (phoneNumber.startsWith("07") || phoneNumber.startsWith("011") || phoneNumber.startsWith("010")) {
+                    phoneNumber = "254" + phoneNumber.substring(1); // Replace 07, 011, 010 with 254
+                }
+        
+                // Ensure the phone number is exactly 12 digits
+                if (/^254\d{9}$/.test(phoneNumber)) {
+                    phoneInput.value = phoneNumber; // Set formatted number
+                } else {
+                    alert("Invalid phone number format. Use 07XXXXXXX, 011XXXXXXX, or 010XXXXXXX.");
+                    phoneInput.value = ""; // Clear invalid input
+                }
+            });
+        
+            // Prevent form submission if the phone number is invalid
+            const form = phoneInput.closest("form");
+            form.addEventListener("submit", function (event) {
+                const phoneNumber = phoneInput.value.trim();
+                if (!/^254\d{9}$/.test(phoneNumber)) {
+                    alert("Please enter a valid phone number in the correct format.");
+                    event.preventDefault(); // Stop form submission
+                }
+            });
+        });
+    </script>
+        
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

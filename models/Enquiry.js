@@ -40,7 +40,7 @@ const EnquirySchema = new mongoose.Schema({
         min: 0,
         default: null
     }
-});
+}, { timestamps: true }); // Enable createdAt and updatedAt
 
 // Export the Enquiry model
 module.exports = mongoose.model('Enquiry', EnquirySchema);
