@@ -524,19 +524,21 @@
                 <% } else { %> <!-- If there are packages, display them -->
                     <% packages.forEach(package => { %>
                         <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="package-item bg-white mb-2">
-                                <img class="img-fluid" src="/uploads/packages/<%= package.pImages[0] %>" alt="<%= package.pLoc %>">
-                                <div class="p-4">
-                                    <div class="d-flex justify-content-between mb-3">
-                                        <small class="m-0"><i class="fa fa-map-marker-alt text-primary mr-2"></i><%= package.pLoc %></small>
+                            <div class="product-card">
+                                <div class="product-card__image">
+                                    <img src="/public/uploads<%= package.pImages[0] %>" alt="Image">
+                                </div>
+                                <div class="product-card__info">
+                                    <h2 class="product-card__title"><%= package.pTitle %></h2>
+                                    <p class="product-card__description">
+                                        <small class="m-0"><i class="fa fa-map-marker-alt text-primary mr-2"></i><%= package.pLoc %></small> <br>
                                         <small class="m-0"><i class="fa fa-calendar-alt text-primary mr-2"></i><%= package.pDays %> days/<%= package.pDays - 1 %> nights</small>
-                                    </div>
-                                    <a class="h5 text-decoration-none" href="/contact"><%= package.description %></a>
-                                    <div class="border-top mt-4 pt-4">
-                                        <div class="d-flex justify-content-between">
-                                            <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i><%= package.pRating %> <small>(87)</small></h6>
-                                            <h5 class="m-0">$<%= package.price %></h5>
-                                        </div>
+                                    </p>
+                                    <div class="product-card__price-row">
+                                        <span class="product-card__price"><%= package.price %></span>
+                                        <button class="product-card__btn">
+                                            <a style="color: white; text-decoration: none;" href="/package/<%= package._id %>">Explore</a>
+                                        </button>
                                     </div>
                                 </div>
                             </div>

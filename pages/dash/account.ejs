@@ -88,11 +88,9 @@
                         <td><%= admin.email %></td>
                         <td><%= admin.role || 'Admin' %></td>
                         <td>
-                            <form action="/admin/delete_admin?id=<%= admin._id %>" method="post" style="display: inline;">
-                                <button type="submit" class="btn btn-danger btn-sm">
-                                    <i class="fa fa-trash"></i> &nbsp; Delete
-                                </button>
-                            </form>
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="deleteAdmin('<%= admin._id %>')">
+                                <i class="fa fa-trash"></i> &nbsp; Delete
+                            </button>
                             <button class="btn btn-warning btn-sm" onclick="revokeAccess('<%= admin._id %>')">
                                 <i class="fa fa-ban"></i> &nbsp; Revoke Access
                             </button>

@@ -25,9 +25,12 @@ const PackageSchema = new mongoose.Schema(
       trim: true,
     },
     price: {
-      type: Number,
+      type: String,
       required: true,
-      min: [0, "Price cannot be negative"],
+    },
+    stat: {
+      type: String,
+      required: true,
     },
     pRating: {
       type: Number,

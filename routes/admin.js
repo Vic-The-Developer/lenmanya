@@ -251,7 +251,7 @@ router.get('/dash', async (req, res) => {
           .limit(3);
 
       // Total Packages Placeholder
-      const totalPackages = 0; // Replace with actual logic when Package model exists
+      const totalPackages = await Package.countDocuments(); // Replace with actual logic when Package model exists
 
       // Render the dashboard with fetched data
       res.render('dash/dash', {
@@ -284,8 +284,8 @@ router.get('/packages/:page', async (req, res) => {
 
       // Counts for metrics
       const totalPackages = await Package.countDocuments();
-      const activePackages = await Package.countDocuments({ status: 'Active' });
-      const pendingPackages = await Package.countDocuments({ status: 'Pending' });
+      const activePackages = await Package.countDocuments({ stat: 'active' });
+      const pendingPackages = await Package.countDocuments({ stat: 'pending' });
 
       // Fetch paginated packages
       const packages = await Package.find()
@@ -294,6 +294,8 @@ router.get('/packages/:page', async (req, res) => {
           .limit(perPage);
 
       const totalPages = Math.ceil(totalPackages / perPage);
+
+      const packages2 = JSON.stringify(packages);
 
       // Render the template with data
       res.render('dash/packages', {
@@ -305,6 +307,7 @@ router.get('/packages/:page', async (req, res) => {
           activePackages,
           pendingPackages,
           packages,
+          packages2,
           currentPage,
           totalPages
       });
@@ -349,7 +352,7 @@ router.post('/filter_package', async (req, res) => {
 const storage = multer.diskStorage({
 
   destination: (req, file, cb) => {
-    const uploadPath = path.join(__dirname, "public/uploads/packages");
+    const uploadPath = path.join(__dirname, "../public/uploads/packages");
 
     // Check if the directory exists; if not, create it
     if (!fs.existsSync(uploadPath)) {
@@ -383,7 +386,7 @@ router.post(
       .isLength({ min: 10 })
       .withMessage("Description must be at least 10 characters long"),
     body("price")
-      .isFloat({ min: 0 })
+      .notEmpty()
       .withMessage("Price must be a valid positive number"),
     body("pRating")
       .optional()
@@ -398,7 +401,7 @@ router.post(
         "error",
         errors.array().map((error) => error.msg)
       );
-      return res.redirect("/admin/packages");
+      return res.redirect("/admin/packages/1");
     }
 
     // Extract validated data from the request body
@@ -414,6 +417,7 @@ router.post(
         pLoc: pLoc,
         pDays: pDays,
         description: description,
+        stat: 'active',
         price: price,
         pRating: pRating || 0, // Default to 0 if not provided
         pImages: images, // Save image file paths
@@ -424,11 +428,11 @@ router.post(
 
       // Success response
       req.flash("success", "Package added successfully!");
-      res.redirect("/admin/packages");
+      res.redirect("/admin/packages/1");
     } catch (err) {
       console.error("Error saving package:", err);
       req.flash("error", "Error adding package.");
-      res.redirect("/admin/packages");
+      res.redirect("/admin/packages/1");
     }
   }
 );
@@ -450,7 +454,7 @@ router.post(
       .isLength({ min: 10 })
       .withMessage("Description must be at least 10 characters"),
     body("price")
-      .isFloat({ min: 0 })
+      .notEmpty()
       .withMessage("Price must be a positive number"),
     body("pRating")
       .optional()
@@ -467,7 +471,7 @@ router.post(
         "error",
         errors.array().map((error) => error.msg)
       );
-      return res.redirect("/admin/packages");
+      return res.redirect("/admin/packages/1");
     }
 
     try {
@@ -475,26 +479,27 @@ router.post(
       const packageToUpdate = await Package.findById(id);
       if (!packageToUpdate) {
         req.flash("error", "Package not found!");
-        return res.redirect("/admin/packages");
+        return res.redirect("/admin/packages/1");
       }
 
       // Update fields with new data (images remain untouched)
       packageToUpdate.pTitle = req.body.pTitle;
       packageToUpdate.pLoc = req.body.pLoc;
       packageToUpdate.pDays = req.body.pDays;
-      packageToUpdate.description = req.body.description;
+      // packageToUpdate.description = req.body.description;
       packageToUpdate.price = req.body.price;
+      packageToUpdate.stat = req.body.stat;
       packageToUpdate.pRating = req.body.pRating || packageToUpdate.pRating;
 
       // Save updated package to the database
       await packageToUpdate.save();
 
       req.flash("success", "Package updated successfully!");
-      res.redirect("/admin/packages");
+      res.redirect("/admin/packages/1");
     } catch (error) {
       console.error("Error updating package:", error);
       req.flash("error", "Failed to update package. Please try again.");
-      res.redirect("/admin/packages");
+      res.redirect("/admin/packages/1");
     }
   }
 );
@@ -502,7 +507,7 @@ router.post(
 /**
  * Delete package
  */
-router.get("/delete_package", async (req, res) => {
+router.post("/delete_package", async (req, res) => {
   const id = req.query.id;
 
   try {
@@ -511,13 +516,13 @@ router.get("/delete_package", async (req, res) => {
 
     if (!packageToDelete) {
       req.flash("error", "Package not found!");
-      return res.redirect("/admin/packages");
+      return res.redirect("/admin/packages/1");
     }
 
     // Delete package images from the file system
     if (packageToDelete.pImages && packageToDelete.pImages.length > 0) {
       packageToDelete.pImages.forEach((imagePath) => {
-        const filePath = path.join(__dirname, "..", "public", imagePath);
+        const filePath = path.join(__dirname, "..", "public/uploads", imagePath);
 
         // Delete the image file if it exists
         if (fs.existsSync(filePath)) {
@@ -530,24 +535,24 @@ router.get("/delete_package", async (req, res) => {
     await Package.findByIdAndDelete(id);
 
     req.flash("success", "Package deleted successfully!");
-    res.redirect("/admin/packages");
+    res.redirect("/admin/packages/1");
   } catch (error) {
     console.error("Error deleting package:", error);
     req.flash("error", "Failed to delete the package. Please try again.");
-    res.redirect("/admin/packages");
+    res.redirect("/admin/packages/1");
   }
 });
 
 /**
  * Manage blogs
  */
-router.get('/manage-blogs', async (req, res) => {
+router.get('/manage-blogs/:page', async (req, res) => {
   try {
     const successMessage = req.flash('success')[0];
     const errorMessage = req.flash('error')[0];
 
     // Pagination setup
-    const page = parseInt(req.query.page) || 1; // Current page, default to 1
+    const page = parseInt(req.params.page) || 1; // Current page, default to 1
     const limit = 15; // Number of blogs per page
     const skip = (page - 1) * limit;
 
@@ -564,7 +569,7 @@ router.get('/manage-blogs', async (req, res) => {
 
     res.render('dash/manage_blog', {
       title: 'Manage Blogs | Lenmanya Adventures',
-      currentPath: '/admin/manage-blogs',
+      currentPath: '/admin/manage-blogs/1',
       successMessage,
       errorMessage,
       blogs,
