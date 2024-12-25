@@ -169,7 +169,7 @@
                     <div class="pb-3">
                         <div class="blog-item">
                             <div class="position-relative">
-                                <img class="img-fluid w-100" src="/uploads/blogs/<%= blog.featuredImage %>" alt="<%= blog.bTitle %>">
+                                <img class="img-fluid w-100" src="<%= blog.featuredImage %>" alt="<%= blog.bTitle %>">
                                 <div class="blog-date">
                                     <h6 class="font-weight-bold mb-n1">
                                         <%= blog.createdAt.toLocaleString('default', { day: '2-digit' }) %>
@@ -184,12 +184,12 @@
                             <div class="d-flex mb-3">
                                 <a class="text-primary text-uppercase text-decoration-none" href="">Admin</a>
                                 <span class="text-primary px-2">|</span>
-                                <a class="text-primary text-uppercase text-decoration-none" href="/blog?cat=<%= blog.category %>">
+                                <a class="text-primary text-uppercase text-decoration-none" href="/blog">
                                     <%= blog.category %>
                                 </a>
                             </div>
                             <h2 class="mb-3"><%= blog.bTitle %></h2>
-                            <p><%= blog.content %></p>
+                            <div id="blogContent"></div>
                         </div>
                     </div>
                     <!-- Blog Detail End -->
@@ -198,7 +198,7 @@
 
                     <!-- Send a message -->
                     <div class="row justify-content-center">
-                        <div class="col-lg-8">
+                        <div class="col-lg-12">
                             <div class="contact-form bg-white" style="padding: 30px;">
                                 <div id="success"></div>
                                 <form action="/enquiry_email" method="post" enctype="application/x-www-form-urlencoded">
@@ -322,6 +322,48 @@
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+
+    <script>
+        // Assume `package` is dynamically passed from the server as a single package object
+        const package = <%- blog2 %>;
+    
+        console.log('Package:', package);
+    
+        // Function to parse a string of HTML into DOM content
+        const stringToHTML = string => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(string, 'text/html');
+            return doc.body.innerHTML; // Return the entire body content as innerHTML
+        };
+    
+        // Function to populate the description div with parsed HTML
+        function populateDiv(pkgId, description) {
+            const container = document.getElementById('blogContent');
+            console.log('Container:', container);
+    
+            if (container) {
+                const htmlContent = stringToHTML(description);
+                console.log('Parsed HTML Content:', htmlContent);
+    
+                if (htmlContent) {
+                    // Directly set innerHTML to the container
+                    container.innerHTML = htmlContent;
+                } else {
+                    console.warn(`HTML content for package ${pkgId} is null or undefined.`);
+                }
+            } else {
+                console.warn(`Container with ID desc-${pkgId} not found.`);
+            }
+        }
+    
+        // Populate the single package description div
+        if (package._id && package.content) {
+            populateDiv(package._id, package.content);
+        } else {
+            console.warn('Package is missing an ID or description.');
+        }
+    </script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {

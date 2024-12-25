@@ -101,11 +101,11 @@
     <div class="container-fluid page-header">
         <div class="container">
             <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 400px">
-                <h3 class="display-4 text-white text-uppercase"><%= suggestedPackages.pName %></h3>
+                <h3 class="display-4 text-white text-uppercase"><%= selectedPackage.pTitle %></h3>
                 <div class="d-inline-flex text-white">
                     <p class="m-0 text-uppercase"><a class="text-white" href="/">Home</a></p>
                     <i class="fa fa-angle-double-right pt-1 px-3"></i>
-                    <p class="m-0 text-uppercase"><%= suggestedPackages.destination %></p>
+                    <p class="m-0 text-uppercase"><%= selectedPackage.pTitle %></p>
                 </div>
             </div>
         </div>
@@ -172,8 +172,8 @@
             <!-- Left Side: Package Details -->
             <div class="col-lg-8 mb-5">
                 <h2 class="mb-4"><%= selectedPackage.pTitle %></h2>
-                <img src="/uploads/packages/<%= selectedPackage.pImages[0] %>" alt="Package Image" class="img-fluid mb-4">
-                <p><%= selectedPackage.description %></p>
+                <img src="/uploads<%= selectedPackage.pImages[0] %>" alt="Package Image" class="img-fluid mb-4">
+                <div id="description"></div>
 
                 <!-- Image Gallery -->
                 <!-- Bootstrap Carousel for Multiple Images -->
@@ -181,7 +181,7 @@
                     <div class="carousel-inner">
                         <% selectedPackage.pImages.forEach((image, index) => { %>
                             <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
-                                <img src="/uploads/packages/<%= image %>" class="d-block w-100" alt="Package Image <%= index + 1 %>">
+                                <img src="/uploads<%= image %>" class="d-block w-100" alt="Package Image <%= index + 1 %>">
                             </div>
                         <% }) %>
                     </div>
@@ -196,9 +196,26 @@
                 </div>
 
 
-                <h5 class="mt-4">Destination: <%= selectedPackage.pLoc %></h5>
-                <p>Duration: <%= selectedPackage.pDays %></p>
-                <p>Price: $<%= selectedPackage.price %></p>
+                <div class="row" style="text-align: center;">
+                    <div class="col-sm">
+                        <button type="button" class="btn btn-primary">
+                            Destination <span class="badge badge-light"><%= selectedPackage.pLoc %></span>
+                            <span class="sr-only">location</span>
+                        </button>
+                    </div>
+                    <div class="col-sm">
+                        <button type="button" class="btn btn-primary">
+                            Duration <span class="badge badge-light"><%= selectedPackage.pDays %> Days</span>
+                            <span class="sr-only">location</span>
+                        </button>
+                    </div>
+                    <div class="col-sm">
+                        <button type="button" class="btn btn-primary">
+                            Price <span class="badge badge-light"><%= selectedPackage.price %></span>
+                            <span class="sr-only">price</span>
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <!-- Right Side: Enquiry Form -->
@@ -213,15 +230,15 @@
                         </div>
                         <div class="form-group">
                             <label>Full Name</label>
-                            <input type="text" class="form-control" name="fName" id="fName" placeholder="Your Full Name" required>
+                            <input type="text" class="form-control" name="fname" id="fname" placeholder="Your Full Name" required>
                         </div>
                         <div class="form-group">
                             <label>WhatsApp Number</label>
-                            <input type="tel" class="form-control" name="whatsapp" id="whatsapp" placeholder="Your WhatsApp Number" required>
+                            <input type="tel" class="form-control" name="whatsapp" id="whatsapp" placeholder="07 or 011 or 010****" required>
                         </div>
                         <div class="form-group">
                             <label>Preferred Date</label>
-                            <input type="date" class="form-control" id="date1" name="date1" required>
+                            <input type="date" name="date1" id="date1" class="form-control datetimepicker-input" placeholder="Enter Date" required/>
                         </div>
                         <div class="form-group">
                             <label>Adults</label>
@@ -243,10 +260,10 @@
             <% suggestedPackages.forEach(pkg => { %>
                 <div class="col-md-3 mb-4">
                     <div class="card">
-                        <img src="<%= pkg.imageURL %>" class="card-img-top" alt="Package Image">
+                        <img src="/uploads/<%= pkg.pImages[0] %>" class="card-img-top" alt="Package Image">
                         <div class="card-body">
                             <h5 class="card-title"><%= pkg.pTitle %></h5>
-                            <p class="card-text">Destination: <%= pkg.destination %></p>
+                            <p class="card-text">Destination: <%= pkg.pLoc %></p>
                             <a href="/package/<%= pkg._id %>" class="btn btn-sm btn-primary">View Details</a>
                         </div>
                     </div>
@@ -256,6 +273,85 @@
     </div>
 
 
+    <script>
+        // Assume `package` is dynamically passed from the server as a single package object
+        const package = <%- package2 %>;
+    
+        console.log('Package:', package);
+    
+        // Function to parse a string of HTML into DOM content
+        const stringToHTML = string => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(string, 'text/html');
+            return doc.body.innerHTML; // Return the entire body content as innerHTML
+        };
+    
+        // Function to populate the description div with parsed HTML
+        function populateDiv(pkgId, description) {
+            const container = document.getElementById('description');
+            console.log('Container:', container);
+    
+            if (container) {
+                const htmlContent = stringToHTML(description);
+                console.log('Parsed HTML Content:', htmlContent);
+    
+                if (htmlContent) {
+                    // Directly set innerHTML to the container
+                    container.innerHTML = htmlContent;
+                } else {
+                    console.warn(`HTML content for package ${pkgId} is null or undefined.`);
+                }
+            } else {
+                console.warn(`Container with ID desc-${pkgId} not found.`);
+            }
+        }
+    
+        // Populate the single package description div
+        if (package._id && package.description) {
+            populateDiv(package._id, package.description);
+        } else {
+            console.warn('Package is missing an ID or description.');
+        }
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const phoneInput = document.getElementById("whatsapp");
+        
+            phoneInput.addEventListener("blur", function () {
+                let phoneNumber = phoneInput.value.trim();
+        
+                // Remove all non-digit characters except the leading "+"
+                phoneNumber = phoneNumber.replace(/[^\d+]/g, "");
+        
+                // Handle phone numbers starting with +254 or 07/011/010
+                if (phoneNumber.startsWith("+254")) {
+                    phoneNumber = "254" + phoneNumber.substring(4); // Remove + and keep 254
+                } else if (phoneNumber.startsWith("07") || phoneNumber.startsWith("011") || phoneNumber.startsWith("010")) {
+                    phoneNumber = "254" + phoneNumber.substring(1); // Replace 07, 011, 010 with 254
+                }
+        
+                // Ensure the phone number is exactly 12 digits
+                if (/^254\d{9}$/.test(phoneNumber)) {
+                    phoneInput.value = phoneNumber; // Set formatted number
+                } else {
+                    alert("Invalid phone number format. Use 07XXXXXXX, 011XXXXXXX, or 010XXXXXXX.");
+                    phoneInput.value = ""; // Clear invalid input
+                }
+            });
+        
+            // Prevent form submission if the phone number is invalid
+            const form = phoneInput.closest("form");
+            form.addEventListener("submit", function (event) {
+                const phoneNumber = phoneInput.value.trim();
+                if (!/^254\d{9}$/.test(phoneNumber)) {
+                    alert("Please enter a valid phone number in the correct format.");
+                    event.preventDefault(); // Stop form submission
+                }
+            });
+        });
+    </script>
+    
 
     <!-- Footer Start -->
     <%- include('./_layouts/footer') %>

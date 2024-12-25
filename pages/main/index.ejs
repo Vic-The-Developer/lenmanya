@@ -526,7 +526,7 @@
                         <div class="col-lg-4 col-md-6 mb-4">
                             <div class="product-card">
                                 <div class="product-card__image">
-                                    <img src="/public/uploads<%= package.pImages[0] %>" alt="Image">
+                                    <img src="/uploads<%= package.pImages[0] %>" alt="Image">
                                 </div>
                                 <div class="product-card__info">
                                     <h2 class="product-card__title"><%= package.pTitle %></h2>
@@ -691,7 +691,7 @@
                         <div class="col-lg-4 col-md-6 mb-4 pb-2">
                             <div class="blog-item">
                                 <div class="position-relative">
-                                    <img class="img-fluid w-100" src="/uploads/blogs/<%= blog.featuredImage || 'default.jpg' %>" alt="<%= blog.bTitle %>">
+                                    <img class="img-fluid w-100" src="<%= blog.featuredImage || 'default.jpg' %>" alt="<%= blog.bTitle %>">
                                     <div class="blog-date">
                                         <h6 class="font-weight-bold mb-n1"><%= blog.createdAt.getDate() %></h6>
                                         <small class="text-white text-uppercase"><%= blog.createdAt.toLocaleString('default', { month: 'short' }) %></small>
@@ -701,9 +701,9 @@
                                     <div class="d-flex mb-2">
                                         <a class="text-primary text-uppercase text-decoration-none" href="#">Admin</a>
                                         <span class="text-primary px-2">|</span>
-                                        <a class="text-primary text-uppercase text-decoration-none" href="#"><%= blog.category %></a>
+                                        <a class="text-primary text-uppercase text-decoration-none" href="/blog"><%= blog.category %></a>
                                     </div>
-                                    <a class="h5 m-0 text-decoration-none" href="/blog_detail/<%= blog._id %>"><%= blog.bTitle %></a>
+                                    <a class="h5 m-0 text-decoration-none" href="/blog/<%= blog._id %>"><%= blog.bTitle %></a>
                                 </div>
                             </div>
                         </div>

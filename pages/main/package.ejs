@@ -179,7 +179,7 @@
                         <div class="col-lg-4 col-md-6 mb-4">
                             <div class="product-card">
                                 <div class="product-card__image">
-                                    <img src="/public/uploads<%= package.pImages[0] %>" alt="Image">
+                                    <img src="/uploads<%= package.pImages[0] %>" alt="Image">
                                 </div>
                                 <div class="product-card__info">
                                     <h2 class="product-card__title"><%= package.pTitle %></h2>
@@ -200,16 +200,48 @@
                 <% } %>
             </div>
     
-            <!-- Pagination controls -->
-            <div class="d-flex justify-content-center mt-4">
-                <% if (currentPage > 1) { %>
-                    <a href="/package?page=<%= currentPage - 1 %>" class="btn btn-primary mr-2">Previous</a>
-                <% } %>
-    
-                <% if (currentPage < totalPages) { %>
-                    <a href="/package?page=<%= currentPage + 1 %>" class="btn btn-primary">Next</a>
-                <% } %>
-            </div>
+            
+            <!-- Pagination Controls -->
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <% if (currentPage > 1) { %>
+                        <!-- Previous button -->
+                        <li class="page-item">
+                            <a class="page-link" href="/package/<%= currentPage - 1 %>">Previous</a>
+                        </li>
+                    <% } %>
+            
+                    <!-- First Page -->
+                    <% if (currentPage > 3) { %>
+                        <li class="page-item">
+                            <a class="page-link" href="/package/1">1</a>
+                        </li>
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                    <% } %>
+            
+                    <!-- Pages Around Current Page -->
+                    <% for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) { %>
+                        <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                            <a class="page-link" href="/package/<%= i %>"><%= i %></a>
+                        </li>
+                    <% } %>
+            
+                    <!-- Last Page -->
+                    <% if (currentPage < totalPages - 2) { %>
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                        <li class="page-item">
+                            <a class="page-link" href="/package/<%= totalPages %>"><%= totalPages %></a>
+                        </li>
+                    <% } %>
+            
+                    <% if (currentPage < totalPages) { %>
+                        <!-- Next button -->
+                        <li class="page-item">
+                            <a class="page-link" href="/package/<%= currentPage + 1 %>">Next</a>
+                        </li>
+                    <% } %>
+                </ul>
+            </nav>
         </div>
     </div>
     

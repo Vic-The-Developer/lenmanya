@@ -10,7 +10,7 @@ const blogSchema = new mongoose.Schema({
     category: {
         type: String,
         required: true,
-        enum: ['Travel Tips', 'Destinations', 'Special Offers'], // Predefined categories
+        enum: ['Travel Tips', 'Destinations', 'Lifestyle'], // Predefined categories
     },
     featuredImage: {
         type: String, // Path to the uploaded featured image

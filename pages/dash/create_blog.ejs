@@ -51,6 +51,11 @@
             <input type="file" id="featuredImage" name="featuredImage" class="form-control" accept="image/*">
         </div>
 
+        <div class="form-row">
+            <h5>Image Preview</h5>
+            <div id="imagePreview" style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
+        </div>
+
         <!-- Blog Content Row -->
         <div class="form-row">
             <label for="content">Blog Content</label>
@@ -139,6 +144,39 @@
 
 
 </script>
+
+<script>
+    document.getElementById('featuredImage').addEventListener('change', function(event) {
+        const previewContainer = document.getElementById('imagePreview');
+        previewContainer.innerHTML = ''; // Clear previous preview
+
+        const file = event.target.files[0]; // Only get the first file
+
+        if (!file) {
+            return; // No file selected
+        }
+
+        if (!file.type.startsWith('image/')) {
+            alert('Only image files are allowed.');
+            event.target.value = ''; // Reset file input
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.style.width = '200px';
+            img.style.height = '200px';
+            img.style.objectFit = 'cover';
+            img.style.border = '1px solid #ddd';
+            img.style.borderRadius = '10px';
+            previewContainer.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    });
+</script>
+
 
 <script>
      document.querySelector('.btn-preview').addEventListener('click', function() {

@@ -228,11 +228,14 @@ router.get('/blog/:id', async (req, res) => {
             .sort({ createdAt: -1 })
             .limit(3);
 
+            const blog2 = JSON.stringify(blog);
+
         // Render the blog details page
-        res.render('main/blog-details', {
+        res.render('main/single', {
             blog: blog,          // Blog details
             categories: categories, // Categories with counts
             recentBlogs: recentBlogs, // Recent posts
+            blog2
         });
     } catch (error) {
         console.error('Error fetching blog details:', error);
@@ -336,10 +339,13 @@ router.get('/package/:id', async (req, res) => {
             return res.status(404).send('Package not found');
         }
 
+        const package2 = JSON.stringify(selectedPackage);
+
         // Render the package details page
         res.render('main/package-detail', {
             selectedPackage: selectedPackage,
             suggestedPackages: suggestedPackages,
+            package2
         });
     } catch (error) {
         console.error('Error fetching package details:', error);

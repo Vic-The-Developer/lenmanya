@@ -77,31 +77,34 @@
 
     <div class="border"  style="padding: 20px;">
         <!-- Page Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="text-primary">Manage Blogs</h2>
+        <h2 class="text-primary">Manage Blogs</h2>
+        <div class=" justify-content-between align-items-center mb-4" style="width: 80%;">
+            
             <!-- Search and Filters -->
-            <div class="d-flex gap-2">
-                <form action="/admin/filter_blogs" method="post">
-                    <select class="form-control" name="category" id="category">
-                        <option value="">Filter by Category</option>
-                        <option value="Travel">Travel</option>
-                        <option value="Guides">Guides</option>
-                        <option value="News">News</option>
-                    </select>
-                    <select class="form-control" name="status" id="status">
-                        <option value="">Filter by Status</option>
-                        <option value="Published">Published</option>
-                        <option value="Draft">Draft</option>
-                    </select>
-                    <button class="btn btn-primary">Search</button>
-                </form>
-            </div>
+             <form action="/admin/filter_blogs" method="post">
+              <div class="d-flex gap-2">
+                <select class="form-control" name="category" id="category">
+                    <option value="">Filter by Category</option>
+                    <option value="Travel Tips">Travel</option>
+                    <option value="Destinations">Destinations</option>
+                    <option value="Lifestyle">Lifestyle</option>
+                </select>
+                <select class="form-control" name="status" id="status">
+                    <option value="">Filter by Status</option>
+                    <option value="Published">Published</option>
+                    <option value="Draft">Draft</option>
+                </select>
+                <button class="btn btn-primary">
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+             </form>
         </div>
 
 
         <!-- Blog List Table -->
         <div class="table-responsive">
-            <table class="table table-hover table-bordered text-center align-middle">
+            <table class="table table-striped table-hover table-bordered text-center align-middle">
               <thead class="table-light">
                 <tr>
                   <th>Blog Title</th>
@@ -115,9 +118,9 @@
                 <% if (blogs && blogs.length > 0) { %>
                   <% blogs.forEach((blog) => { %>
                     <tr>
-                      <td><%= blog.title %></td>
+                      <td><%= blog.bTitle %></td>
                       <td><%= blog.category || 'N/A' %></td>
-                      <td><%= blog.datePublished ? blog.datePublished.toDateString() : 'Not Published' %></td>
+                      <td><%= blog.createdAt ? blog.createdAt.toDateString() : 'Not Published' %></td>
                       <td>
                         <% if (blog.status === 'Published') { %>
                           <span class="badge bg-success">Published</span>

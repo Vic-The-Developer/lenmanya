@@ -323,27 +323,54 @@ router.get('/packages/:page', async (req, res) => {
  */
 router.post('/filter_package', async (req, res) => {
   try {
-      const { location } = req.body; // Extract location input from the form
+      const location  = req.body.search; // Extract location input from the form
+
+      const perPage = 10; // Records per page
+      const currentPage = parseInt(req.params.page) || 1;
 
       // If no location input is provided, redirect back to manage page
       if (!location || location.trim() === "") {
-          return res.redirect('/admin/packages');
+        console.log("no data")
+          return res.redirect('/admin/packages/1');
       }
 
       // Query database for packages that match location (case-insensitive)
       const filteredPackages = await Package.find({
-          location: { $regex: location, $options: 'i' } // Partial match, case-insensitive
+          pLoc: { $regex: location, $options: 'i' } // Partial match, case-insensitive
       });
 
+      // Flash messages
+      const successMessage = req.flash('success')[0];
+      const errorMessage = req.flash('error')[0];
+
+      // Counts for metrics
+      const totalPackages = await Package.countDocuments();
+      const activePackages = await Package.countDocuments({ stat: 'active' });
+      const pendingPackages = await Package.countDocuments({ stat: 'pending' });
+
+      const totalPages = Math.ceil(totalPackages / perPage);
+
+      const packages2 = JSON.stringify(filteredPackages);
+
       // Render the results to the 'manage-package' page
-      res.render('admin/manage-package', {
+      res.render('dash/packages', {
+        title: 'Manage Packages | Lenmanya Adventures',
+          currentPath: '/admin/packages/1',
+          successMessage,
+          errorMessage,
+          totalPackages,
+          activePackages,
+          pendingPackages,
+          currentPage,
+          totalPages,
           packages: filteredPackages,
+          packages2,
           searchQuery: location // Pass the search input to repopulate the form
       });
   } catch (error) {
       console.error('Error filtering packages:', error);
       req.flash('error', 'Error filtering packages');
-      res.redirect('/admin/packages')
+      res.redirect('/admin/packages/1')
   }
 });
 
@@ -507,7 +534,7 @@ router.post(
 /**
  * Delete package
  */
-router.post("/delete_package", async (req, res) => {
+router.delete("/delete_package", async (req, res) => {
   const id = req.query.id;
 
   try {
@@ -702,7 +729,7 @@ router.post('/create_blog', upload2.single('featuredImage'), async (req, res) =>
 
       // Success feedback
       req.flash('success', 'Blog created successfully!');
-      res.redirect('/admin/manage-blogs');
+      res.redirect('/admin/manage-blogs/1');
   } catch (err) {
       console.error(err);
       req.flash('error', 'An error occurred while creating the blog.');
