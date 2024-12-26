@@ -176,48 +176,76 @@
                 
                     <!-- Blogs List -->
                     <div class="row pb-3">
-                        <% if (blogs.length > 0) { %>
+                        <% if (blogs.length === 0) { %> <!-- Check if there are no blog posts -->
+                            <div class="col-12">
+                                <p class="text-center">No blog posts available at the moment.</p>
+                            </div>
+                        <% } else { %> <!-- If there are blog posts, display them -->
                             <% blogs.forEach(blog => { %>
-                                <div class="col-md-6 mb-4">
+                                <div class="col-lg-6 col-md-6 mb-4 pb-2">
                                     <div class="blog-item">
                                         <div class="position-relative">
-                                            <img class="img-fluid w-100" src="<%= blog.image || '/img/default.jpg' %>" alt="<%= blog.title %>">
+                                            <img class="img-fluid w-100" src="<%= blog.featuredImage || 'default.jpg' %>" alt="<%= blog.bTitle %>">
                                             <div class="blog-date">
-                                                <h6 class="font-weight-bold mb-n1">
-                                                    <%= new Date(blog.createdAt).getDate() %>
-                                                </h6>
-                                                <small class="text-white">
-                                                    <%= new Date(blog.createdAt).toLocaleString('en-US', { month: 'short' }) %>
-                                                </small>
+                                                <h6 class="font-weight-bold mb-n1"><%= blog.createdAt.getDate() %></h6>
+                                                <small class="text-white text-uppercase"><%= blog.createdAt.toLocaleString('default', { month: 'short' }) %></small>
                                             </div>
                                         </div>
-                                        <div class="p-4 bg-white">
-                                            <a class="h5 text-decoration-none" href="/blog_detail/<%= blog._id %>">
-                                                <%= blog.title %>
-                                            </a>
+                                        <div class="bg-white p-4">
+                                            <div class="d-flex mb-2">
+                                                <a class="text-primary text-uppercase text-decoration-none" href="#">Admin</a>
+                                                <span class="text-primary px-2">|</span>
+                                                <a class="text-primary text-uppercase text-decoration-none" href="/blog"><%= blog.category %></a>
+                                            </div>
+                                            <a class="h5 m-0 text-decoration-none" href="/blog/<%= blog._id %>"><%= blog.bTitle %></a>
                                         </div>
                                     </div>
                                 </div>
-                            <% }) %>
-                        <% } else { %>
-                            <p>No blogs found under this category.</p>
+                            <% }); %>
                         <% } %>
                     </div>
                 
-                    <!-- Pagination -->
-                    <div class="col-12">
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination justify-content-center">
-                                <% for (let i = 1; i <= totalPages; i++) { %>
-                                    <li class="page-item <%= i === currentPage ? 'active' : '' %>">
-                                        <a class="page-link" href="/blog?page=<%= i %><% if (category) { %>&cat=<%= category %><% } %>">
-                                            <%= i %>
-                                        </a>
-                                    </li>
-                                <% } %>
-                            </ul>
-                        </nav>
-                    </div>
+                    <!-- Pagination Controls -->
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            <% if (currentPage > 1) { %>
+                                <!-- Previous button -->
+                                <li class="page-item">
+                                    <a class="page-link" href="/admin/packages/<%= currentPage - 1 %>">Previous</a>
+                                </li>
+                            <% } %>
+                    
+                            <!-- First Page -->
+                            <% if (currentPage > 3) { %>
+                                <li class="page-item">
+                                    <a class="page-link" href="/admin/packages/1">1</a>
+                                </li>
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                            <% } %>
+                    
+                            <!-- Pages Around Current Page -->
+                            <% for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) { %>
+                                <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                                    <a class="page-link" href="/admin/packages/<%= i %>"><%= i %></a>
+                                </li>
+                            <% } %>
+                    
+                            <!-- Last Page -->
+                            <% if (currentPage < totalPages - 2) { %>
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="/admin/packages/<%= totalPages %>"><%= totalPages %></a>
+                                </li>
+                            <% } %>
+                    
+                            <% if (currentPage < totalPages) { %>
+                                <!-- Next button -->
+                                <li class="page-item">
+                                    <a class="page-link" href="/admin/packages/<%= currentPage + 1 %>">Next</a>
+                                </li>
+                            <% } %>
+                        </ul>
+                    </nav>
                 </div>
                 
                 <!-- Sidebar: Recent Posts -->
@@ -272,9 +300,9 @@
                             <h4 class="text-uppercase mb-4" style="letter-spacing: 5px;">Recent Post</h4>
                             <% recentPosts.forEach(post => { %>
                                 <a class="d-flex align-items-center text-decoration-none bg-white mb-3" href="/blog/<%= post._id %>">
-                                    <img class="img-fluid" src="<%= post.image %>" alt="Blog Image" style="width: 100px; height: 100px;">
+                                    <img class="img-fluid" src="<%= post.featuredImage %>" alt="Blog Image" style="width: 100px; height: 100px;">
                                     <div class="pl-3">
-                                        <h6 class="m-1"><%= post.title %></h6>
+                                        <h6 class="m-1"><%= post.bTitle %></h6>
                                         <small>
                                             <%= new Date(post.createdAt).toLocaleDateString('en-US', {
                                                 day: 'numeric', month: 'short', year: 'numeric'

@@ -230,8 +230,8 @@
     
                         <!-- Description -->
                         <div class="mb-3">
-                            <label for="description-<%= pkg._id %>" class="form-label">Description <small>(not editable)</small></label>
-                            <textarea name="description" class="form-control" id="description-<%= pkg._id %>" rows="6" readonly><%= pkg.description %></textarea>
+                            <label for="description-<%= pkg._id %>" class="form-label">Description:</label>
+                            <textarea name="description" class="desc form-control" id="description-<%= pkg._id %>" rows="6"><%= pkg.description %></textarea>
                         </div>
     
                         <!-- Rating -->
@@ -431,24 +431,49 @@
 
 <script>
     function deletePackage(id) {
+        if (!id) {
+            console.error("Package ID is missing");
+            return;
+        }
+    
         if (confirm("Are you sure you want to delete this package?")) {
+            const deleteButton = document.querySelector(`button[onclick="deletePackage('${id}')"]`);
+            if (deleteButton) {
+                deleteButton.disabled = true;
+                deleteButton.innerHTML = '<i class="fa fa-spinner fa-spin"></i>'; // Show a spinner
+            }
+    
             fetch(`/admin/delete_package?id=${id}`, { method: "DELETE" })
                 .then(response => response.json())
                 .then(data => {
-                    alert(data.message);
-                    location.reload();
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload(); // Reload the page to reflect changes
+                    } else {
+                        alert(data.message);
+                    }
                 })
-                .catch(err => console.error(err));
+                .catch(err => {
+                    console.error(err);
+                    alert("An error occurred while deleting the package. Please try again.");
+                })
+                .finally(() => {
+                    if (deleteButton) {
+                        deleteButton.disabled = false;
+                        deleteButton.innerHTML = '<i class="fa fa-trash"></i>'; // Restore original icon
+                    }
+                });
         }
     }
 </script>
+    
 
 <script src="https://cdn.tiny.cloud/1/wz6upinpprryclrsrruprdr6wyrcdymnv8lx75xu8t7q5qa9/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
 
 <script>
     
     tinymce.init({
-        selector: '#description', // Target your content textarea
+        selector: '.desc', // Target your content textarea
         plugins: 'image link media lists code',
         toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link | code',
         height: 500,

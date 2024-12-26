@@ -2,7 +2,7 @@
 
 
 <% if (successMessage) { %>
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
         <%= successMessage %>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -11,7 +11,7 @@
 <% } %>
 
 <% if (errorMessage) { %>
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
         <%= errorMessage %>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -33,6 +33,12 @@
                 <input type="text" id="displayName" name="displayName" class="form-control"
                        placeholder="Admin Name" value="<%= currentAdmin ? currentAdmin.displayName : '' %>">
             </div>
+            <!--Role-->
+            <div class="mb-3">
+                <label for="role" class="form-label">Admin Role</label>
+                <input type="text" id="role" name="role" class="form-control"
+                       placeholder="Super or Admin" value="<%= currentAdmin ? currentAdmin.displayName : '' %>">
+            </div>
             <!-- Email Address -->
             <div class="mb-3">
                 <label for="email" class="form-label">Email Address</label>
@@ -41,9 +47,9 @@
             </div>
             <!-- Phone Number -->
             <div class="mb-3">
-                <label for="phone" class="form-label">Phone Number</label>
-                <input type="tel" id="phone" name="phone" class="form-control"
-                       placeholder="+123456789" value="<%= currentAdmin ? currentAdmin.phone || '' : '' %>">
+                <label for="phone" class="form-label">Phone Number <small>(Optional)</small></label>
+                <input type="text" id="phone" name="phone" class="phone form-control"
+                       placeholder="07 or 011 or 010****" value="<%= currentAdmin ? currentAdmin.phone || '' : '' %>">
             </div>
             <!-- Password Update -->
             <div class="mb-4">
@@ -122,22 +128,22 @@
                 <!-- Display Name -->
                 <div class="mb-3">
                     <label for="displayName" class="form-label">Display Name</label>
-                    <input type="text" id="displayName" name="displayName" class="form-control" placeholder="Admin Name" value="John Doe">
+                    <input type="text" id="displayName" name="displayName" class="form-control" placeholder="Admin Name" required>
                 </div>
                 <!-- Email Address -->
                 <div class="mb-3">
                     <label for="email" class="form-label">Email Address</label>
-                    <input type="email" id="email" name="email" class="form-control" placeholder="admin@example.com" value="admin@example.com">
+                    <input type="email" id="email" name="email" class="form-control" placeholder="admin@example.com" required>
                 </div>
                 <!-- Phone Number -->
                 <div class="mb-3">
                     <label for="phone" class="form-label">Phone Number (Optional)</label>
-                    <input type="tel" id="phone" name="phone" class="form-control" placeholder="+123456789" value="+123456789">
+                    <input type="text" id="phone" name="phone" class="phone form-control" placeholder="07 or 011 or 010****" required>
                 </div>
                 <!-- Password Update -->
                 <div class="mb-4">
                     <label for="password" class="form-label">Assign Password</label>
-                    <input type="text" id="password" name="password" class="form-control" placeholder="Enter password">
+                    <input type="text" id="password" name="password" class="form-control" placeholder="Enter password" required>
                 </div>
                 <!-- Update Button -->
                 <div class="d-flex justify-content-between">
@@ -155,29 +161,120 @@
 </div>
 
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Use querySelectorAll to target all elements with class 'phone'
+        const phoneInputs = document.querySelectorAll('.phone');
+    
+        // Loop through all phone inputs and attach the event listener
+        phoneInputs.forEach(phoneInput => {
+            phoneInput.addEventListener("blur", function () {
+                let phoneNumber = phoneInput.value.trim();
+        
+                // Remove all non-digit characters except the leading "+"
+                phoneNumber = phoneNumber.replace(/[^\d+]/g, "");
+        
+                // Handle phone numbers starting with +254 or 07/011/010
+                if (phoneNumber.startsWith("+254")) {
+                    phoneNumber = "254" + phoneNumber.substring(4); // Remove + and keep 254
+                } else if (phoneNumber.startsWith("07") || phoneNumber.startsWith("011") || phoneNumber.startsWith("010")) {
+                    phoneNumber = "254" + phoneNumber.substring(1); // Replace 07, 011, 010 with 254
+                }
+        
+                // Ensure the phone number is exactly 12 digits
+                if (/^254\d{9}$/.test(phoneNumber)) {
+                    phoneInput.value = phoneNumber; // Set formatted number
+                } else {
+                    alert("Invalid phone number format. Use 07XXXXXXX, 011XXXXXXX, or 010XXXXXXX.");
+                    phoneInput.value = ""; // Clear invalid input
+                }
+            });
+    
+            // Prevent form submission if the phone number is invalid
+            const form = phoneInput.closest("form");
+            form.addEventListener("submit", function (event) {
+                const phoneNumber = phoneInput.value.trim();
+                if (!/^254\d{9}$/.test(phoneNumber)) {
+                    alert("Please enter a valid phone number in the correct format.");
+                    event.preventDefault(); // Stop form submission
+                }
+            });
+        });
+    });
+</script>
+
+
 <!-- Action Scripts -->
 <script>
     function deleteAdmin(id) {
-        if (confirm("Are you sure you want to delete this admin?")) {
+        if (!id) {
+            console.error("Package ID is missing");
+            return;
+        }
+    
+        if (confirm("Are you sure you want to delete this Admin?")) {
+            const deleteButton = document.querySelector(`button[onclick="deleteAdmin('${id}')"]`);
+            if (deleteButton) {
+                deleteButton.disabled = true;
+                deleteButton.innerHTML = '<i class="fa fa-spinner fa-spin"></i>'; // Show a spinner
+            }
+    
             fetch(`/admin/delete_admin?id=${id}`, { method: "DELETE" })
                 .then(response => response.json())
                 .then(data => {
-                    alert(data.message);
-                    location.reload();
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload(); // Reload the page to reflect changes
+                    } else {
+                        alert(data.message);
+                    }
                 })
-                .catch(err => console.error(err));
+                .catch(err => {
+                    console.error(err);
+                    alert("An error occurred while deleting the admin. Please try again.");
+                })
+                .finally(() => {
+                    if (deleteButton) {
+                        deleteButton.disabled = false;
+                        deleteButton.innerHTML = '<i class="fa fa-trash"></i>'; // Restore original icon
+                    }
+                });
         }
     }
 
     function revokeAccess(id) {
-        if (confirm("Are you sure you want to revoke this admin's access?")) {
+        if (!id) {
+            console.error("Package ID is missing");
+            return;
+        }
+    
+        if (confirm("Are you sure you want to revoke the Admin?")) {
+            const deleteButton = document.querySelector(`button[onclick="revokeAccess('${id}')"]`);
+            if (deleteButton) {
+                deleteButton.disabled = true;
+                deleteButton.innerHTML = '<i class="fa fa-spinner fa-spin"></i>'; // Show a spinner
+            }
+    
             fetch(`/admin/revoke_access?id=${id}`, { method: "POST" })
                 .then(response => response.json())
                 .then(data => {
-                    alert(data.message);
-                    location.reload();
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload(); // Reload the page to reflect changes
+                    } else {
+                        alert(data.message);
+                    }
                 })
-                .catch(err => console.error(err));
+                .catch(err => {
+                    console.error(err);
+                    alert("An error occurred while Revoking Admin. Please try again.");
+                })
+                .finally(() => {
+                    if (deleteButton) {
+                        deleteButton.disabled = false;
+                        deleteButton.innerHTML = '<i class="fa fa-ban"></i>'; // Restore original icon
+                    }
+                });
         }
     }
 </script>

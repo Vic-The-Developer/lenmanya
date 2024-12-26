@@ -18,6 +18,10 @@ const AdminSchema = new mongoose.Schema({
     type: String,
     required: false, // Optional field
   },
+  role: {
+    type: String,
+    required: true, 
+  },
   resetCode: {
     type: String,
     required: false, // Optional field for password reset

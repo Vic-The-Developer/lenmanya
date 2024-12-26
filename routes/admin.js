@@ -13,6 +13,8 @@ const Enquiry = require("../models/Enquiry");
 const Package = require('../models/Package');
 const Blog = require('../models/Blog');
 
+const mongoose = require('mongoose');
+
 var router = express.Router();
 const { check, body, validationResult } = require("express-validator");
 const flash = require("connect-flash");
@@ -482,7 +484,7 @@ router.post(
       .withMessage("Description must be at least 10 characters"),
     body("price")
       .notEmpty()
-      .withMessage("Price must be a positive number"),
+      .withMessage("Price must be included"),
     body("pRating")
       .optional()
       .isFloat({ min: 0, max: 5 })
@@ -538,37 +540,41 @@ router.delete("/delete_package", async (req, res) => {
   const id = req.query.id;
 
   try {
-    // Find the package by ID
-    const packageToDelete = await Package.findById(id);
+      // Validate the package ID
+      if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+          console.error("Invalid package ID:", id);
+          return res.status(400).json({ success: false, message: "Invalid Package ID provided." });
+      }
 
-    if (!packageToDelete) {
-      req.flash("error", "Package not found!");
-      return res.redirect("/admin/packages/1");
-    }
+      // Find the package by ID
+      const packageToDelete = await Package.findById(id);
 
-    // Delete package images from the file system
-    if (packageToDelete.pImages && packageToDelete.pImages.length > 0) {
-      packageToDelete.pImages.forEach((imagePath) => {
-        const filePath = path.join(__dirname, "..", "public/uploads", imagePath);
+      if (!packageToDelete) {
+          return res.status(404).json({ success: false, message: "Package not found." });
+      }
 
-        // Delete the image file if it exists
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath);
-        }
-      });
-    }
+      // Delete package images from the file system
+      if (packageToDelete.pImages && packageToDelete.pImages.length > 0) {
+          packageToDelete.pImages.forEach((imagePath) => {
+              const filePath = path.join(__dirname, "..", "public/uploads", imagePath);
 
-    // Delete the package from the database
-    await Package.findByIdAndDelete(id);
+              // Delete the image file if it exists
+              if (fs.existsSync(filePath)) {
+                  fs.unlinkSync(filePath);
+              }
+          });
+      }
 
-    req.flash("success", "Package deleted successfully!");
-    res.redirect("/admin/packages/1");
+      // Delete the package from the database
+      await Package.findByIdAndDelete(id);
+
+      return res.status(200).json({ success: true, message: "Package deleted successfully." });
   } catch (error) {
-    console.error("Error deleting package:", error);
-    req.flash("error", "Failed to delete the package. Please try again.");
-    res.redirect("/admin/packages/1");
+      console.error("Error deleting package:", error);
+      return res.status(500).json({ success: false, message: "Failed to delete the package. Please try again." });
   }
 });
+
 
 /**
  * Manage blogs
@@ -634,40 +640,69 @@ router.get('/create-blog', (req, res)=>{
 /**
  * filter blogs
  */
-router.post('/filter_blogs', async (req, res) => {
+router.post('/filter_blogs/:page?', async (req, res) => {
   try {
-      const { category, status } = req.body; // Extract category and status from form submission
+    const { category, status } = req.body; // Extract category and status from form submission
 
-      // Build the filter object dynamically
-      const filter = {};
+    // Pagination setup
+    const page = parseInt(req.params.page) || 1; // Current page, default to 1
+    const limit = 15; // Number of blogs per page
+    const skip = (page - 1) * limit;
 
-      if (category && category.trim() !== "") {
-          filter.category = category; // Filter by category
-      }
+    // Build the filter object dynamically
+    const filter = {};
 
-      if (status && status.trim() !== "") {
-          filter.status = status; // Filter by status
-      }
+    if (category && category.trim() !== "") {
+      filter.category = category; // Filter by category
+    }
 
-      // If no filters are applied, redirect to the blog management page
-      if (Object.keys(filter).length === 0) {
-          return res.redirect('/admin/manage-blogs');
-      }
+    if (status && status.trim() !== "") {
+      filter.status = status; // Filter by status
+    }
 
-      // Fetch filtered blogs from the database
-      const filteredBlogs = await Blog.find(filter);
+    // Fetch filtered blogs from the database
+    const filteredBlogs = await Blog.find(filter)
+      .skip(skip)
+      .limit(limit)
+      .sort({ datePublished: -1 });
 
-      // Render the results to the 'manage-blogs' page
-      res.render('admin/manage-blogs', {
-          blogs: filteredBlogs,
-          filters: { category, status } // Pass applied filters to repopulate form
-      });
+    // If no filters are applied, redirect to the blog management page
+    if (Object.keys(filter).length === 0) {
+      return res.redirect('/admin/manage-blogs/1');
+    }
+
+    const successMessage = req.flash('success')[0];
+    const errorMessage = req.flash('error')[0];
+
+    // Fetch metrics
+    const totalBlogs = await Blog.countDocuments();
+    const publishedBlogs = await Blog.countDocuments({ status: 'Published' });
+    const draftBlogs = await Blog.countDocuments({ status: 'Draft' });
+
+    // Calculate total pages
+    const totalPages = Math.ceil(totalBlogs / limit);
+
+    // Render the results to the 'manage-blogs' page
+    res.render('dash/manage_blog', {
+      title: 'Manage Blogs | Lenmanya Adventures',
+      currentPath: '/admin/manage-blogs/1',
+      successMessage,
+      errorMessage,
+      blogs: filteredBlogs,
+      filters: { category, status }, // Pass applied filters to repopulate form,
+      currentPage: page,
+      totalPages,
+      totalBlogs,
+      publishedBlogs,
+      draftBlogs,
+    });
   } catch (error) {
-      console.error('Error filtering blogs:', error);
-      req.flash('error', "Error filtering blogs");
-      res.redirect('/admin/manage-blogs')
+    console.error('Error filtering blogs:', error);
+    req.flash('error', "Error filtering blogs");
+    res.redirect('/admin/manage-blogs/1');
   }
 });
+
 
 // Multer storage configuration
 const storage2 = multer.diskStorage({
@@ -775,39 +810,33 @@ router.post('/upload_image', upload3.single('file'), (req, res) => {
 
 
 // Route to edit a blog
-router.post('/edit_blog', upload2.single('featuredImage'), async (req, res) => {
+router.post('/edit-blog/:id', upload2.single('featuredImage'), async (req, res) => {
     try {
-        const { id } = req.query; // Blog ID to identify which blog to edit
+        const id = req.params.id; // Blog ID to identify which blog to edit
         const {
             bTitle,
             category,
             content,
-            metaTitle,
-            metaDescription,
-            keywords,
             status
         } = req.body;
 
         // Validate required fields
-        if (!id || !bTitle || !category || !content || !metaTitle || !metaDescription) {
+        if (!id || !bTitle || !category || !content) {
             req.flash('error', 'All fields are required.');
-            return res.redirect('/admin/manage-blogs');
+            return res.redirect('/admin/manage-blogs/1');
         }
 
         // Fetch the blog to update
         const blog = await Blog.findById(id);
         if (!blog) {
             req.flash('error', 'Blog not found.');
-            return res.redirect('/admin/manage-blogs');
+            return res.redirect('/admin/manage-blogs/1');
         }
 
         // Update blog fields
         blog.bTitle = bTitle;
         blog.category = category;
         blog.content = content;
-        blog.metaTitle = metaTitle;
-        blog.metaDescription = metaDescription;
-        blog.keywords = keywords;
         blog.status = status;
 
         // If a new featured image is uploaded
@@ -828,11 +857,11 @@ router.post('/edit_blog', upload2.single('featuredImage'), async (req, res) => {
         await blog.save();
 
         req.flash('success', 'Blog updated successfully.');
-        res.redirect('/admin/manage-blogs');
+        res.redirect('/admin/manage-blogs/1');
     } catch (error) {
         console.error(error);
         req.flash('error', 'An error occurred while updating the blog.');
-        res.redirect('/admin/manage-blogs');
+        res.redirect('/admin/manage-blogs/1');
     }
 });
 
@@ -841,21 +870,21 @@ router.post('/edit_blog', upload2.single('featuredImage'), async (req, res) => {
 /**
  * Delete Blog
  */
-router.get('/delete_blog', async (req, res) => {
+router.delete('/delete_blog', async (req, res) => {
   try {
       const blogId = req.query.id; // Get blog ID from query parameters
 
-      if (!blogId) {
-          req.flash('error', 'Invalid request. Blog ID is required.');
-          return res.redirect('/admin/manage-blogs');
+      // Check if blogId is provided and is a valid ObjectId
+      if (!blogId || !mongoose.Types.ObjectId.isValid(blogId)) {
+          console.error("Invalid blog ID:", blogId);
+          return res.status(400).json({ success: false, message: 'Invalid Blog ID provided.' });
       }
 
       // Find the blog to get the featured image path and content
       const blog = await Blog.findById(blogId);
 
       if (!blog) {
-          req.flash('error', 'Blog not found.');
-          return res.redirect('/admin/manage-blogs');
+          return res.status(404).json({ success: false, message: 'Blog not found.' });
       }
 
       // Delete the featured image if it exists
@@ -867,9 +896,7 @@ router.get('/delete_blog', async (req, res) => {
       }
 
       // Extract and delete any images from the blog content folder
-      const contentImagesPath = path.join(__dirname, '..', 'public', 'uploads', 'contentImages');
       const contentImages = blog.content.match(/\/uploads\/contentImages\/[^\s"]+/g) || [];
-
       contentImages.forEach((imagePath) => {
           const fullPath = path.join(__dirname, '..', 'public', imagePath);
           if (fs.existsSync(fullPath)) {
@@ -880,14 +907,13 @@ router.get('/delete_blog', async (req, res) => {
       // Delete the blog document from the database
       await Blog.findByIdAndDelete(blogId);
 
-      req.flash('success', 'Blog deleted successfully.');
-      res.redirect('/admin/manage-blogs');
+      return res.status(200).json({ success: true, message: 'Blog deleted successfully.' });
   } catch (error) {
-      console.error(error);
-      req.flash('error', 'An error occurred while deleting the blog.');
-      res.redirect('/admin/manage-blogs');
+      console.error('Error deleting blog:', error);
+      return res.status(500).json({ success: false, message: 'An error occurred while deleting the blog.' });
   }
 });
+
 
 
 /**
@@ -1070,7 +1096,7 @@ router.get('/account', async (req, res) => {
 
 // Create New Admin
 router.post('/new_admin', async (req, res) => {
-  const { name, email, password, role = 'Admin' } = req.body;
+  const { displayName, email, password, role = 'Super' } = req.body;
 
   try {
       // Check if email exists
@@ -1084,7 +1110,7 @@ router.post('/new_admin', async (req, res) => {
       const bcrypt = require('bcrypt');
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      const newAdmin = new Admin({ name, email, password: hashedPassword, role });
+      const newAdmin = new Admin({ displayName, email, password: hashedPassword, role });
       await newAdmin.save();
 
       req.flash('success', 'New admin created successfully.');
@@ -1102,10 +1128,10 @@ router.delete('/delete_admin', async (req, res) => {
   const adminId = req.query.id;
   try {
       await Admin.findByIdAndDelete(adminId);
-      res.json({ message: "Admin successfully deleted." });
+      res.status(200).json({ success: true, message: "Admin successfully deleted." });
   } catch (err) {
       console.error(err);
-      res.status(500).json({ message: "Error deleting admin." });
+      res.status(500).json({ success: false, message: "Error deleting admin." });
   }
 });
 
@@ -1114,10 +1140,10 @@ router.post('/revoke_access', async (req, res) => {
   const adminId = req.query.id;
   try {
       await Admin.findByIdAndUpdate(adminId, { role: "Revoked" });
-      res.json({ message: "Admin access successfully revoked." });
+      res.status(200).json({ success: true, message: "Admin access successfully revoked." });
   } catch (err) {
       console.error(err);
-      res.status(500).json({ message: "Error revoking admin access." });
+      res.status(500).json({ success: false, message: "Error revoking admin access." });
   }
 });
 
@@ -1212,62 +1238,62 @@ router.post('/revoke_access', async (req, res) => {
 // Multer setup for file uploads
 
 
-router.post(
-  "/properties_add",
-  upload.array("images"), // 'images' is the field name for the images in the form
-  [
-    // Validate the data using express-validator
+// router.post(
+//   "/properties_add",
+//   upload.array("images"), // 'images' is the field name for the images in the form
+//   [
+//     // Validate the data using express-validator
     
-    // Custom validator for checking the maximum number of images
-    body("pImages").custom((images) => {
-      if (!Array.isArray(images) || images.length >= 5) {
-        // Check if images is undefined or not an array
-        const imagesLength = Array.isArray(images) ? images.length : 0;
+//     // Custom validator for checking the maximum number of images
+//     body("pImages").custom((images) => {
+//       if (!Array.isArray(images) || images.length >= 5) {
+//         // Check if images is undefined or not an array
+//         const imagesLength = Array.isArray(images) ? images.length : 0;
     
-        console.log(imagesLength);
+//         console.log(imagesLength);
         
-        if (imagesLength >= 10) {
-          throw new Error("Maximum of 5 images allowed");
-        }
-      }
-      return true;
-    }),
-  ],
-  async (req, res) => {
-    // Check for validation errors
-    const errors = validationResult(req);
-    console.log('errors', errors)
-    if (!errors.isEmpty()) {
-      req.flash(
-        "success",
-        errors.array().map((error) => error.msg)
-      );
-      return res.redirect("/admin/manage_packages");
-    }
+//         if (imagesLength >= 10) {
+//           throw new Error("Maximum of 5 images allowed");
+//         }
+//       }
+//       return true;
+//     }),
+//   ],
+//   async (req, res) => {
+//     // Check for validation errors
+//     const errors = validationResult(req);
+//     console.log('errors', errors)
+//     if (!errors.isEmpty()) {
+//       req.flash(
+//         "success",
+//         errors.array().map((error) => error.msg)
+//       );
+//       return res.redirect("/admin/manage_packages");
+//     }
 
-    // Extract validated parameters from the request body
+//     // Extract validated parameters from the request body
     
 
-    // Extract image file paths from the uploaded files
-    var images = req.files.map((file) => `/uploads/${file.filename}`);
+//     // Extract image file paths from the uploaded files
+//     var images = req.files.map((file) => `/uploads/${file.filename}`);
 
 
-    try {
-      //Save to MongoDB
+//     try {
+//       //Save to MongoDB
       
       
 
-      await newPackage.save();
+//       await newPackage.save();
 
-      req.flash("success", "package added successfully");
-      res.redirect("/admin/manage_packages");
-    } catch (err) {
-      console.error(err);
-      req.flash("error", "Error adding package");
-      res.redirect("/admin/manage_packages");
-    }
-  }
-);
+//       req.flash("success", "package added successfully");
+//       res.redirect("/admin/manage_packages");
+//     } catch (err) {
+//       console.error(err);
+//       req.flash("error", "Error adding package");
+//       res.redirect("/admin/manage_packages");
+//     }
+//   }
+// );
 
 
 module.exports = router;
