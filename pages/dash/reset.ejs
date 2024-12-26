@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reset Password | Lenmanya Adventures</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Favicon -->
     <link href="/img/lenmanya fav.png" rel="icon">
     <style>
@@ -51,6 +50,25 @@
     <div class="login-container">
         <img src="/img/logo-nobg.png" alt="logo" width="300px" style="margin-bottom: 20px;">
         <h3>Reset Password</h3>
+        
+        <% if (successMessage) { %>
+            <div class="alert alert-success alert-dismissible fade show mt-5" role="alert">
+                <%= successMessage %>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <% } %>
+        
+        <% if (errorMessage) { %>
+            <div class="alert alert-warning alert-dismissible fade show mt-5" role="alert">
+                <%= errorMessage %>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <% } %>
+
         <form action="/admin/reset" method="post" enctype="application/x-www-form-urlencoded">
             <!-- Email Input -->
             <div class="mb-3">
@@ -61,12 +79,15 @@
             
             <!-- Login Button -->
             <button type="submit" class="btn btn-login w-100">
-                <i class="fa fa-refresh me-2"></i>Send Reset Link
+                <i class="fa fa-refresh me-2"></i> Send Reset Link
             </button>
         </form>
     </div>
 
     <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -12,6 +12,9 @@ const Admin = require("../models/Admin");
 const Enquiry = require("../models/Enquiry");
 const Package = require('../models/Package');
 const Blog = require('../models/Blog');
+var nodemailer = require('nodemailer');
+var smtpTransport = require('nodemailer-smtp-transport');
+const moment = require('moment');
 
 const mongoose = require('mongoose');
 
@@ -31,9 +34,11 @@ router.use(flash());
  */
 router.get('/login', (req, res)=>{
   const successMessage = req.flash('success')[0];
+  const errorMessage = req.flash('error')[0];
 
   res.render('dash/login', {
-    successMessage
+    successMessage,
+    errorMessage
   })
 })
 
@@ -73,7 +78,14 @@ router.get('/logout', function(req, res, next) {
  * Reset Page
  */
 router.get('/reset', (req, res)=>{
-  res.render('dash/reset')
+  // Flash messages
+  const successMessage = req.flash('success')[0];
+  const errorMessage = req.flash('error')[0];
+
+  res.render('dash/reset', {
+    successMessage,
+    errorMessage
+  })
 })
 
 router.post("/reset", (req, res) => {
@@ -167,16 +179,28 @@ router.post("/reset", (req, res) => {
  * New password Page
  */
 router.get('/new_pass', (req, res)=>{
-  res.render('dash/newPass')
+    const { code, email } = req.query;
+
+    // Check if both code and email are provided
+    if (!code || !email) {
+        return res.status(400).send('Invalid reset link');
+    }
+
+  res.render('dash/newPass', {
+    code,
+    email
+  })
 })
 
 router.post("/new_pass", (req, res) => {
-  const token = req.query.token; // Reset token from the link
+  const token = req.query.code; // Reset token from the link
   const email = req.query.email; // Email from the link
-  const password = req.body.password; // New password from the form
+  const password = req.body.password1; // New password from the form
+
+  console.log(token, email)
 
   if (!token || !password) {
-    req.flash("error", "Invalid request. Missing reset code or password.");
+    req.flash("success", "Invalid request. Missing reset code or password.");
     return res.redirect("/admin/login"); // Redirect if input is invalid
   }
 
@@ -184,12 +208,12 @@ router.post("/new_pass", (req, res) => {
   Admin.findOne({ email: email, resetCode: token }).exec((err, user) => {
     if (err) {
       console.error("Error finding user by reset code:", err);
-      req.flash("error", "An error occurred. Please try again.");
+      req.flash("success", "An error occurred. Please try again.");
       return res.redirect("/admin/login");
     }
 
     if (!user) {
-      req.flash("error", "Invalid or expired reset code.");
+      req.flash("success", "Invalid or expired reset code.");
       return res.redirect("/admin/login");
     }
 
@@ -198,14 +222,14 @@ router.post("/new_pass", (req, res) => {
     bcrypt.genSalt(saltRounds, (err, salt) => {
       if (err) {
         console.error("Error generating salt:", err);
-        req.flash("error", "An error occurred while processing your request.");
+        req.flash("success", "An error occurred while processing your request.");
         return res.redirect("/admin/login");
       }
 
       bcrypt.hash(password, salt, (err, hash) => {
         if (err) {
           console.error("Error hashing password:", err);
-          req.flash("error", "Failed to update password. Try again.");
+          req.flash("success", "Failed to update password. Try again.");
           return res.redirect("/admin/login");
         }
 
@@ -217,7 +241,7 @@ router.post("/new_pass", (req, res) => {
         ).exec((err, updatedUser) => {
           if (err) {
             console.error("Error updating password:", err);
-            req.flash("error", "Failed to update your password.");
+            req.flash("success", "Failed to update your password.");
             return res.redirect("/admin/login");
           }
 
@@ -236,6 +260,8 @@ router.post("/new_pass", (req, res) => {
  * Main Dashboard
  */
 router.get('/dash', async (req, res) => {
+  const successMessage = req.flash('success')[0];
+  const errorMessage = req.flash('error')[0];
   try {
       // Total Enquiries and Recent Enquiries (Limit 2)
       const totalEnquiries = await Enquiry.countDocuments();
@@ -264,7 +290,9 @@ router.get('/dash', async (req, res) => {
           publishedBlogs: publishedBlogs || '-',
           draftBlogs: draftBlogs || '-',
           totalPackages: totalPackages || '-',
-          latestBlogs: latestBlogs || []
+          latestBlogs: latestBlogs || [],
+          successMessage,
+          errorMessage
       });
   } catch (error) {
       console.error('Error loading dashboard data:', error);

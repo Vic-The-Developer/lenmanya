@@ -2,6 +2,7 @@ var LocalStrategy = require('passport-local').Strategy;
 // var GoogleStrategy = require('passport-google-oauth20').Strategy;
 // var User = require('../models/user');
 const User = require("../models/Admin");
+const bcrypt = require('bcrypt');
 // var Login = require('../models/logins');
 
 
@@ -38,6 +39,7 @@ module.exports = function (passport) {
                     console.log(err);
 
                 if (isMatch) {
+                    req.flash('success', "Logged in Successfully!")
                     return done(null, user);
                 } else {
                     req.flash('success', 'Wrong password!');
