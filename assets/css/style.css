@@ -152,13 +152,13 @@ sup {
 }
 
 a {
-  color: #7AB730;
+  color: #d83344;
   text-decoration: none;
   background-color: transparent;
 }
 
 a:hover {
-  color: #527a20;
+  color: #90252f;
   text-decoration: underline;
 }
 
@@ -2365,8 +2365,8 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #fff;
-  background-color: #7AB730;
-  border-color: #7AB730;
+  background-color: #d83344;
+  border-color: #d83344
 }
 
 .btn-primary:hover {
@@ -2660,14 +2660,14 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-primary {
-  color: #7AB730;
-  border-color: #7AB730;
+  color: #d83344;
+  border-color: #d83344;
 }
 
 .btn-outline-primary:hover {
   color: #fff;
-  background-color: #7AB730;
-  border-color: #7AB730;
+  background-color: #d83344;
+  border-color: #d83344;
 }
 
 .btn-outline-primary:focus, .btn-outline-primary.focus {
@@ -3214,7 +3214,7 @@ input[type="button"].btn-block {
 .dropdown-item.active, .dropdown-item:active {
   color: #fff;
   text-decoration: none;
-  background-color: #7AB730;
+  background-color: #d83344;
 }
 
 .dropdown-item.disabled, .dropdown-item:disabled {
@@ -6094,7 +6094,7 @@ a.close.disabled {
 }
 
 .bg-primary {
-  background-color: #7AB730 !important;
+  background-color: #d83344 !important;
 }
 
 a.bg-primary:hover, a.bg-primary:focus,
@@ -9264,7 +9264,7 @@ button.bg-dark:focus {
 }
 
 .text-primary {
-  color: #7AB730 !important;
+  color: #d83344 !important;
 }
 
 a.text-primary:hover, a.text-primary:focus {
@@ -9520,7 +9520,7 @@ h6,
 
 .navbar-light .navbar-nav .nav-link:hover,
 .navbar-light .navbar-nav .nav-link.active {
-  color: #7AB730;
+  color: #d83344;
 }
 
 @media (max-width: 991.98px) {
@@ -9619,14 +9619,14 @@ h6,
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #7AB730;
+  border: 2px solid #d83344;
   background: #FFFFFF;
-  color: #7AB730;
+  color: #d83344;
   transition: .5s;
 }
 
 .service-item:hover i {
-  background: #7AB730;
+  background: #d83344;
   color: #FFFFFF;
 }
 
@@ -9723,7 +9723,7 @@ h6,
 
 .testimonial-carousel .owl-dot.active {
   width: 40px;
-  background: #7AB730;
+  background: #d83344;
 }
 
 .testimonial-carousel .owl-item.center .testimonial-text {
@@ -9748,7 +9748,7 @@ h6,
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background: #7AB730;
+  background: #d83344;
 }
 
 .blog-date::after {
