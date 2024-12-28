@@ -42,10 +42,20 @@
                 transform: scale(1);
             }
         }
+        .email-text {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+        }
 
         .heartbeat-link img {
             animation: heartbeat 2.5s infinite;
             transition: transform 0.3s ease-in-out;
+        }
+        @media only screen and (max-width: 600px) {
+            .contact-form{
+                padding: 0% !important;
+            }
         }
     </style>
 </head>
@@ -191,17 +201,17 @@
                                 <div class="icon mr-3">
                                     <i class="fa fa-envelope text-primary" style="font-size: 24px;"></i>
                                 </div>
-                                <div>
+                                <div style="width: -webkit-fill-available;">
                                     <h6 class="font-weight-bold mb-1">Email Us</h6>
-                                    <p class="mb-0">bookings@lenmanyaadventures.com</p>
+                                    <p class="mb-0 email-text">bookings@lenmanyaadventures.com</p>
                                 </div>
                             </div>
                             <!-- Chat with Expert -->
-                            <div class="d-flex  mt-3 border p-3">
+                            <div class="d-flex mt-3 border p-3">
                                 <div class="icon mr-3">
                                     <a href="#" target="_blank" class="heartbeat-link">
                                         <img src="/img/whatsapp.png" alt="whatsapp" width="47px">
-                                    </a>                                    
+                                    </a>
                                 </div>
                                 <div>
                                     <h6 class="font-weight-bold mb-1">Need Help?</h6>

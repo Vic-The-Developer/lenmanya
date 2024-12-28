@@ -391,7 +391,6 @@ router.get('/contact', (req, res)=>{
     const successMessage = req.flash('success')[0];
     const errorMessage = req.flash('error')[0];
 
-    console.log(errorMessage)
 
     res.render('main/contact', {
         successMessage,
