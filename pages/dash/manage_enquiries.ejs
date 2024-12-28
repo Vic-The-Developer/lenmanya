@@ -227,11 +227,20 @@
 
     <!-- Export Buttons -->
     <div class="text-end mt-3">
-        <button class="btn btn-outline-primary"><i class="fa fa-file-excel"></i> Export to Excel</button>
-        <button class="btn btn-outline-danger"><i class="fa fa-file-pdf"></i> Export to PDF</button>
+        <button class="btn btn-outline-primary excelExport"><i class="fa fa-file-excel"></i> Export to Excel</button>
+        <button class="btn btn-outline-danger pdfExport"><i class="fa fa-file-pdf"></i> Export to PDF</button>
     </div>
 </div>
 
+<script>
+    document.querySelector('.excelExport').addEventListener('click', () => {
+        window.location.href = '/admin/export/excel';
+    });
+
+    document.querySelector('.pdfExport').addEventListener('click', () => {
+        window.location.href = '/admin/export/pdf';
+    });
+</script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {

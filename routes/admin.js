@@ -23,6 +23,8 @@ const { check, body, validationResult } = require("express-validator");
 const flash = require("connect-flash");
 var passport = require('passport');
 const randtoken = require("rand-token");
+const ExcelJS = require('exceljs');
+const PDFDocument = require('pdfkit');
 const bcrypt = require('bcrypt');
 const { title } = require("process");
 router.use(flash());
@@ -255,11 +257,26 @@ router.post("/new_pass", (req, res) => {
 });
 
 
+// Middleware to check if user is authenticated and not revoked
+function isAuthenticated(req, res, next) {
+  if (req.user) {
+      if (req.user.role === "Revoked") {
+        req.flash('success', 'Denied!! You have been revoked!')
+          return res.redirect('/admin/login');
+      }
+      return next();
+  } else {
+    req.flash('success', 'Please login!')
+      res.redirect('/admin/login');
+  }
+}
+
 
 /**
  * Main Dashboard
  */
-router.get('/dash', async (req, res) => {
+router.get('/dash', isAuthenticated, async (req, res) => {
+
   const successMessage = req.flash('success')[0];
   const errorMessage = req.flash('error')[0];
   try {
@@ -303,7 +320,7 @@ router.get('/dash', async (req, res) => {
 /**
  * Manage blogs
  */
-router.get('/packages/:page', async (req, res) => {
+router.get('/packages/:page', isAuthenticated, async (req, res) => {
   try {
       const perPage = 10; // Records per page
       const currentPage = parseInt(req.params.page) || 1;
@@ -351,7 +368,7 @@ router.get('/packages/:page', async (req, res) => {
 /**
  * filter packages
  */
-router.post('/filter_package', async (req, res) => {
+router.post('/filter_package', isAuthenticated, async (req, res) => {
   try {
       const location  = req.body.search; // Extract location input from the form
 
@@ -430,8 +447,8 @@ const upload = multer({ storage: storage });
 
 // POST route to add a new package
 router.post(
-  "/packages_add",
-  upload.array("pImages", 5), // Limit to 5 images
+  "/packages_add",isAuthenticated,
+  upload.array("pImages", 6), // Limit to 6 images
   [
     // Validation rules using express-validator
     body("pTitle").notEmpty().withMessage("Package title is required"),
@@ -499,7 +516,7 @@ router.post(
  * Edit Package
  */
 router.post(
-  "/edit_package",
+  "/edit_package", isAuthenticated,
   [
     // Validation rules
     body("pTitle").notEmpty().withMessage("Title is required"),
@@ -564,7 +581,7 @@ router.post(
 /**
  * Delete package
  */
-router.delete("/delete_package", async (req, res) => {
+router.delete("/delete_package", isAuthenticated, async (req, res) => {
   const id = req.query.id;
 
   try {
@@ -607,7 +624,7 @@ router.delete("/delete_package", async (req, res) => {
 /**
  * Manage blogs
  */
-router.get('/manage-blogs/:page', async (req, res) => {
+router.get('/manage-blogs/:page', isAuthenticated, async (req, res) => {
   try {
     const successMessage = req.flash('success')[0];
     const errorMessage = req.flash('error')[0];
@@ -651,7 +668,7 @@ router.get('/manage-blogs/:page', async (req, res) => {
 /**
  * Create Blog
  */
-router.get('/create-blog', (req, res)=>{
+router.get('/create-blog', isAuthenticated, (req, res)=>{
 
   const successMessage = req.flash('success')[0];
   const errorMessage = req.flash('error')[0];
@@ -668,7 +685,7 @@ router.get('/create-blog', (req, res)=>{
 /**
  * filter blogs
  */
-router.post('/filter_blogs/:page?', async (req, res) => {
+router.post('/filter_blogs/:page?', isAuthenticated, async (req, res) => {
   try {
     const { category, status } = req.body; // Extract category and status from form submission
 
@@ -757,7 +774,7 @@ const upload2 = multer({ storage: storage2 });
 /**
 * Create Blog
 */
-router.post('/create_blog', upload2.single('featuredImage'), async (req, res) => {
+router.post('/create_blog', isAuthenticated, upload2.single('featuredImage'), async (req, res) => {
   try {
       // Extract blog data from the request body
       const { bTitle, category, content, metaTitle, metaDescription, keywords, status } = req.body;
@@ -827,7 +844,7 @@ const storage3 = multer.diskStorage({
 const upload3 = multer({ storage: storage3 });
 
 // Route to upload images from TinyMCE
-router.post('/upload_image', upload3.single('file'), (req, res) => {
+router.post('/upload_image', isAuthenticated, upload3.single('file'), (req, res) => {
     if (!req.file) {
         return res.status(400).json({ error: 'No file uploaded.' });
     }
@@ -898,7 +915,7 @@ router.post('/edit-blog/:id', upload2.single('featuredImage'), async (req, res) 
 /**
  * Delete Blog
  */
-router.delete('/delete_blog', async (req, res) => {
+router.delete('/delete_blog', isAuthenticated, async (req, res) => {
   try {
       const blogId = req.query.id; // Get blog ID from query parameters
 
@@ -947,7 +964,7 @@ router.delete('/delete_blog', async (req, res) => {
 /**
  * Manage Enquiries
  */
-router.get('/manage-Enquiries/:page', async (req, res) => {
+router.get('/manage-Enquiries/:page', isAuthenticated, async (req, res) => {
   try {
       const perPage = 15; // Number of records per page
       const currentPage = parseInt(req.params.page) || 1;
@@ -992,7 +1009,7 @@ router.get('/manage-Enquiries/:page', async (req, res) => {
 /**
  * filter enquiries
  */
-router.post('/filter_enquiries', async (req, res) => {
+router.post('/filter_enquiries', isAuthenticated, async (req, res) => {
   // Flash messages
   const successMessage = req.flash('success')[0];
   const errorMessage = req.flash('error')[0];
@@ -1051,7 +1068,7 @@ router.post('/filter_enquiries', async (req, res) => {
 /**
  * Toggle Resolve Enquiry
  */
-router.post('/resolve_enquiry', (req, res) => {
+router.post('/resolve_enquiry', isAuthenticated, (req, res) => {
   const enquiryId = req.query.id; // Extract ID of the enquiry from URL query options
 
   // Find the enquiry and toggle its status
@@ -1090,12 +1107,85 @@ router.post('/resolve_enquiry', (req, res) => {
 });
 
 
+// Route to export enquiries to Excel
+router.get('/export/excel', isAuthenticated, async (req, res) => {
+  try {
+      const enquiries = await Enquiry.find();
+
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet('Enquiries');
+
+      worksheet.columns = [
+          { header: 'ID', key: '_id', width: 30 },
+          { header: 'First Name', key: 'fname', width: 30 },
+          { header: 'Destination', key: 'destination', width: 30 },
+          { header: 'Date', key: 'date1', width: 30 },
+          { header: 'WhatsApp', key: 'whatsapp', width: 30 },
+          { header: 'Date Submitted', key: 'dateSubmit', width: 30 },
+          { header: 'Status', key: 'status', width: 30 },
+          { header: 'Adults', key: 'adults', width: 10 },
+          { header: 'Children', key: 'children', width: 10 },
+          { header: 'Created At', key: 'createdAt', width: 30 },
+          { header: 'Updated At', key: 'updatedAt', width: 30 }
+      ];
+
+      enquiries.forEach(enquiry => {
+          worksheet.addRow(enquiry.toObject());
+      });
+
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', 'attachment; filename=enquiries.xlsx');
+
+      await workbook.xlsx.write(res);
+      res.end();
+  } catch (error) {
+      console.error(error);
+      res.redirect('/admin/manage-Enquiries/1');
+  }
+});
+
+// Route to export enquiries to PDF
+router.get('/export/pdf', isAuthenticated, async (req, res) => {
+  try {
+      const enquiries = await Enquiry.find();
+
+      const doc = new PDFDocument();
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename=enquiries.pdf');
+
+      doc.pipe(res);
+
+      doc.fontSize(18).text('Enquiries', { align: 'center' });
+      doc.moveDown();
+
+      enquiries.forEach(enquiry => {
+          doc.fontSize(12).text(`ID: ${enquiry._id}`);
+          doc.text(`First Name: ${enquiry.fname}`);
+          doc.text(`Destination: ${enquiry.destination}`);
+          doc.text(`Date: ${enquiry.date1}`);
+          doc.text(`WhatsApp: ${enquiry.whatsapp}`);
+          doc.text(`Date Submitted: ${enquiry.dateSubmit}`);
+          doc.text(`Status: ${enquiry.status}`);
+          doc.text(`Adults: ${enquiry.adults}`);
+          doc.text(`Children: ${enquiry.children}`);
+          doc.text(`Created At: ${enquiry.createdAt}`);
+          doc.text(`Updated At: ${enquiry.updatedAt}`);
+          doc.moveDown();
+      });
+
+      doc.end();
+  } catch (error) {
+      console.error(error);
+      res.redirect('/admin/manage-Enquiries/1');
+  }
+});
+
 
 
 /**
  * Account Page
  */
-router.get('/account', async (req, res) => {
+router.get('/account', isAuthenticated, async (req, res) => {
   try {
     const successMessage = req.flash('success')[0];
     const errorMessage = req.flash('error')[0];
@@ -1123,7 +1213,7 @@ router.get('/account', async (req, res) => {
 
 
 // Create New Admin
-router.post('/new_admin', async (req, res) => {
+router.post('/new_admin', isAuthenticated, async (req, res) => {
   const { displayName, email, password, role = 'Super' } = req.body;
 
   try {
@@ -1152,7 +1242,7 @@ router.post('/new_admin', async (req, res) => {
 
 
 // Delete Admin
-router.delete('/delete_admin', async (req, res) => {
+router.delete('/delete_admin', isAuthenticated, async (req, res) => {
   const adminId = req.query.id;
   try {
       await Admin.findByIdAndDelete(adminId);
@@ -1164,7 +1254,7 @@ router.delete('/delete_admin', async (req, res) => {
 });
 
 // Revoke Access
-router.post('/revoke_access', async (req, res) => {
+router.post('/revoke_access', isAuthenticated, async (req, res) => {
   const adminId = req.query.id;
   try {
       await Admin.findByIdAndUpdate(adminId, { role: "Revoked" });

@@ -94,12 +94,21 @@
                         <td><%= admin.email %></td>
                         <td><%= admin.role || 'Admin' %></td>
                         <td>
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="deleteAdmin('<%= admin._id %>')">
-                                <i class="fa fa-trash"></i> &nbsp; Delete
-                            </button>
-                            <button class="btn btn-warning btn-sm" onclick="revokeAccess('<%= admin._id %>')">
-                                <i class="fa fa-ban"></i> &nbsp; Revoke Access
-                            </button>
+                            <% if(admin.role == 'Super') { %>
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="deleteAdmin('<%= admin._id %>')" disabled>
+                                    <i class="fa fa-trash"></i> &nbsp; Delete
+                                </button>
+                                <button class="btn btn-warning btn-sm" onclick="revokeAccess('<%= admin._id %>')" disabled>
+                                    <i class="fa fa-ban"></i> &nbsp; Revoke Access
+                                </button>
+                            <% } else { %>
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="deleteAdmin('<%= admin._id %>')">
+                                    <i class="fa fa-trash"></i> &nbsp; Delete
+                                </button>
+                                <button class="btn btn-warning btn-sm" onclick="revokeAccess('<%= admin._id %>')">
+                                    <i class="fa fa-ban"></i> &nbsp; Revoke Access
+                                </button>
+                            <% } %>
                         </td>
                     </tr>
                 <% }); %>
@@ -159,6 +168,7 @@
       </div>
     </div>
 </div>
+
 
 
 <script>

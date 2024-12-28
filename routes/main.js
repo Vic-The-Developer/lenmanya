@@ -296,7 +296,7 @@ router.get('/about', (req, res)=>{
 router.get('/package', async (req, res) => {
     try {
         // Set the number of packages per page
-        const perPage = 2;
+        const perPage = 10;
         // Get the current page number from the query parameter or default to page 1
         const page = parseInt(req.query.page) || 1;
 

@@ -42,7 +42,7 @@ const PackageSchema = new mongoose.Schema(
       type: [String], // Array of image file paths
       validate: {
         validator: function (images) {
-          return images.length <= 5; // Ensure no more than 5 images
+          return images.length <= 6; // Ensure no more than 5 images
         },
         message: "A package can have a maximum of 5 images",
       },

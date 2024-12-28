@@ -346,7 +346,7 @@
                     <label for="description" class="form-label">Description</label>
                 </div>
                 <div class="mb-3">
-                    <textarea name="description" class="form-control" id="description" rows="6">
+                    <textarea name="description" class="desc form-control" id="description" rows="6">
                         
                     </textarea>
                 </div>
@@ -491,8 +491,8 @@
 
         const files = event.target.files;
 
-        if (files.length > 5) {
-            alert('You can upload a maximum of 5 images.');
+        if (files.length > 6) {
+            alert('You can upload a maximum of 6 images.');
             event.target.value = ''; // Reset file input
             return;
         }
