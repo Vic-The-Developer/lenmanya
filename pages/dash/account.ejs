@@ -88,29 +88,55 @@
         <tbody>
             <% if (admins && admins.length > 0) { %>
                 <% admins.forEach((admin, index) => { %>
-                    <tr>
-                        <td><%= index + 1 %></td>
-                        <td><%= admin.displayName %></td>
-                        <td><%= admin.email %></td>
-                        <td><%= admin.role || 'Admin' %></td>
-                        <td>
-                            <% if(admin.role == 'Super') { %>
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="deleteAdmin('<%= admin._id %>')" disabled>
-                                    <i class="fa fa-trash"></i> &nbsp; Delete
-                                </button>
-                                <button class="btn btn-warning btn-sm" onclick="revokeAccess('<%= admin._id %>')" disabled>
-                                    <i class="fa fa-ban"></i> &nbsp; Revoke Access
-                                </button>
-                            <% } else { %>
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="deleteAdmin('<%= admin._id %>')">
-                                    <i class="fa fa-trash"></i> &nbsp; Delete
-                                </button>
-                                <button class="btn btn-warning btn-sm" onclick="revokeAccess('<%= admin._id %>')">
-                                    <i class="fa fa-ban"></i> &nbsp; Revoke Access
-                                </button>
-                            <% } %>
-                        </td>
-                    </tr>
+                    <% if(admin.email == 'victormutua71@gmail.com') { %>
+                        <tr>
+                            <td><%= index + 1 %></td>
+                            <td><%= admin.displayName %></td>
+                            <td>-</td>
+                            <td><%= admin.role || 'Admin' %></td>
+                            <td>
+                                <% if(admin.role == 'Super') { %>
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="deleteAdmin('<%= admin._id %>')" disabled>
+                                        <i class="fa fa-trash"></i> &nbsp; Delete
+                                    </button>
+                                    <button class="btn btn-warning btn-sm" onclick="revokeAccess('<%= admin._id %>')" disabled>
+                                        <i class="fa fa-ban"></i> &nbsp; Revoke Access
+                                    </button>
+                                <% } else { %>
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="deleteAdmin('<%= admin._id %>')">
+                                        <i class="fa fa-trash"></i> &nbsp; Delete
+                                    </button>
+                                    <button class="btn btn-warning btn-sm" onclick="revokeAccess('<%= admin._id %>')">
+                                        <i class="fa fa-ban"></i> &nbsp; Revoke Access
+                                    </button>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% } else { %>
+                        <tr>
+                            <td><%= index + 1 %></td>
+                            <td><%= admin.displayName %></td>
+                            <td><%= admin.email %></td>
+                            <td><%= admin.role || 'Admin' %></td>
+                            <td>
+                                <% if(admin.role == 'Super') { %>
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="deleteAdmin('<%= admin._id %>')" disabled>
+                                        <i class="fa fa-trash"></i> &nbsp; Delete
+                                    </button>
+                                    <button class="btn btn-warning btn-sm" onclick="revokeAccess('<%= admin._id %>')" disabled>
+                                        <i class="fa fa-ban"></i> &nbsp; Revoke Access
+                                    </button>
+                                <% } else { %>
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="deleteAdmin('<%= admin._id %>')">
+                                        <i class="fa fa-trash"></i> &nbsp; Delete
+                                    </button>
+                                    <button class="btn btn-warning btn-sm" onclick="revokeAccess('<%= admin._id %>')">
+                                        <i class="fa fa-ban"></i> &nbsp; Revoke Access
+                                    </button>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% } %>
                 <% }); %>
             <% } else { %>
                 <tr>

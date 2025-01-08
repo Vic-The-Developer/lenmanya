@@ -1190,11 +1190,12 @@ router.get('/account', isAuthenticated, async (req, res) => {
     const successMessage = req.flash('success')[0];
     const errorMessage = req.flash('error')[0];
 
-    // Fetch the logged-in admin's details
-    const currentAdmin = await Admin.findById(req.session.adminId); // Assuming sessions are used
 
     // Fetch all admins
     const admins = await Admin.find();
+
+    //fetch user data
+    const currentAdmin = req.user;
 
     res.render('dash/account', {
       title: 'Account | Lenmanya Adventures',
@@ -1214,7 +1215,7 @@ router.get('/account', isAuthenticated, async (req, res) => {
 
 // Create New Admin
 router.post('/new_admin', isAuthenticated, async (req, res) => {
-  const { displayName, email, password, role = 'Super' } = req.body;
+  const { displayName, email, password, role = 'Admin' } = req.body;
 
   try {
       // Check if email exists
@@ -1239,6 +1240,51 @@ router.post('/new_admin', isAuthenticated, async (req, res) => {
       res.redirect('/admin/account');
   }
 });
+
+
+// Edit Admin Profile Route
+router.post('/edit_profile/:email', async (req, res) => {
+  const { displayName, role, email, phone, oldPass, newPass } = req.body;
+  const adminEmail = req.params.email;
+
+  try {
+      // Find the admin by email
+      const admin = await Admin.findOne({ email: adminEmail });
+      if (!admin) {
+          req.flash('error', 'Admin not found.');
+          return res.redirect('/admin/account');
+      }
+
+      // Update profile details
+      admin.displayName = displayName || admin.displayName;
+      admin.role = role || admin.role;
+      admin.email = email || admin.email;
+      admin.phone = phone || admin.phone;
+
+      // Check if the old password is provided and matches the current password
+      if (oldPass && newPass) {
+          const match = await bcrypt.compare(oldPass, admin.password);
+          if (!match) {
+              req.flash('error', 'Incorrect old password.');
+              return res.redirect('/admin/account');
+          }
+          // Hash and update the new password
+          const salt = await bcrypt.genSalt(10);
+          admin.password = await bcrypt.hash(newPass, salt);
+      }
+
+      // Save the updated admin profile
+      await admin.save();
+
+      req.flash('success', 'Profile updated successfully.');
+      res.redirect('/admin/account');
+  } catch (error) {
+      console.error('Error updating admin profile:', error);
+      req.flash('error', 'An error occurred while updating the profile.');
+      res.redirect('/admin/account');
+  }
+});
+
 
 
 // Delete Admin

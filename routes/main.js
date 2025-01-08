@@ -129,7 +129,7 @@ router.post(
             // Set up the email options
             const mailOptions = {
                 from: email, // Sender's email address
-                to: 'victormutua71@gmail.com', // bookings@lenmanyaadventures.com
+                to: 'lenmanyaadventures28@gmail.co,', // bookings@lenmanyaadventures.com
                 subject: `New Enquiry: ${subject}`, // Email subject
                 text: `You have received a new enquiry from:
                 
