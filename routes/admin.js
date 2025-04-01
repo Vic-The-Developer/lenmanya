@@ -122,7 +122,7 @@ router.post("/reset", (req, res) => {
         subject: "Admin Password Reset Request - Lenmanya Adventures",
         html: `
           <p>You requested a password reset.</p>
-          <p>Click this <a href="http://localhost:5000/admin/new_pass?code=${resetCode}&email=${email}">link</a> to reset your password.</p>
+          <p>Click this <a href="https://lenmanyaadventures.com/admin/new_pass?code=${resetCode}&email=${email}">link</a> to reset your password.</p>
           <p>If you did not request this, please ignore this email.</p>
         `,
       };
