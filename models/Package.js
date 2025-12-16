@@ -26,7 +26,7 @@ const PackageSchema = new mongoose.Schema(
     },
     price: {
       type: String,
-      required: true,
+      required: false,
     },
     stat: {
       type: String,

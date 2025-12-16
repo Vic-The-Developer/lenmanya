@@ -527,9 +527,6 @@ router.post(
     body("description")
       .isLength({ min: 10 })
       .withMessage("Description must be at least 10 characters"),
-    body("price")
-      .notEmpty()
-      .withMessage("Price must be included"),
     body("pRating")
       .optional()
       .isFloat({ min: 0, max: 5 })
