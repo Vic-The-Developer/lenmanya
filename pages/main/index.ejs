@@ -79,7 +79,45 @@
             border-radius: 50%;
             padding: 10px;
         }
+        @media (max-width: 768px)  {
+            .paymentNotes {
+                text-align: center;
+            }
+        }
     </style>
+    <style>
+        .logo-img {
+            max-height: 80px;
+            width: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .hover-shadow {
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .hover-shadow:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .logo-img {
+                max-height: 50px;
+            }
+            .row-cols-2 > .col {
+                padding: 0.5rem;
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 992px) {
+            .logo-img {
+                max-height: 55px;
+            }
+        }
+        </style>
     <script>
         function disablePastDates() {
           var today = new Date();
@@ -107,20 +145,17 @@
                 </div>
                 <div class="col-lg-6 text-center text-lg-right">
                     <div class="d-inline-flex align-items-center">
-                        <a class="text-primary px-3" href="">
+                        <a class="text-primary px-3" href="https://www.facebook.com/profile.php?id=61564393334357">
                             <i class="fab fa-facebook-f"></i>
                         </a>
-                        <a class="text-primary px-3" href="">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a class="text-primary px-3" href="">
-                            <i class="fab fa-linkedin-in"></i>
-                        </a>
-                        <a class="text-primary px-3" href="">
+                        <!-- <a class="text-primary px-3" href="https://www.tiktok.com/@lenmanyaadventures">
+                            <i class="fab fa-tiktok"></i>
+                        </a> -->
+                        <a class="text-primary px-3" href="https://www.instagram.com/lenmanya_adventures_ltd/">
                             <i class="fab fa-instagram"></i>
                         </a>
-                        <a class="text-primary pl-3" href="">
-                            <i class="fab fa-youtube"></i>
+                        <a class="text-primary pl-3" href="https://api.whatsapp.com/send?phone=254113846444">
+                            <i class="fab fa-whatsapp"></i>
                         </a>
                     </div>
                 </div>
@@ -412,7 +447,7 @@
                 <!-- Diani Beach Vacation -->
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="destination-item position-relative overflow-hidden mb-2">
-                        <img class="img-fluid" src="/img/tour2.jpg" alt="Diani Beach Vacation">
+                        <img class="img-fluid" src="/img/nomad2.jpg" alt="Diani Beach Vacation">
                         <a class="destination-overlay text-white text-decoration-none" href="#"
                         data-bs-toggle="modal" data-bs-target="#itineraryModal"
                         data-itinerary="diani-beach">
@@ -425,7 +460,7 @@
                 <!-- Watamu Beach Vacation -->
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="destination-item position-relative overflow-hidden mb-2">
-                        <img class="img-fluid" src="/img/nomad2.jpg" alt="Watamu Beach Vacation">
+                        <img class="img-fluid" src="/img/tour2.jpg" alt="Watamu Beach Vacation">
                         <a class="destination-overlay text-white text-decoration-none" href="#"
                         data-bs-toggle="modal" data-bs-target="#itineraryModal"
                         data-itinerary="watamu-beach">
@@ -883,7 +918,7 @@
             <div class="row pb-3">
                 <div class="row align-items-center">
                     <!-- First column - 2/3 width -->
-                    <div class="col-lg-8 col-md-7 mb-4 mb-md-0">
+                    <div class="col-lg-8 col-md-7 mb-4 mb-md-0 paymentNotes">
                         <h5 class="fw-bold mb-3 text-primary">Seamless & Instant Payments</h5>
                         <p class="mb-4">
                             Enjoy hassle-free booking with our secure payment system. We've partnered with Pesapal, 
@@ -892,39 +927,6 @@
                             is protected with enterprise-grade security. Receive instant booking confirmation 
                             and e-tickets directly to your email.
                         </p>
-                        
-                        <div class="row g-3">
-                            <div class="col-auto">
-                                <div class="border rounded p-2 text-center">
-                                    <img src="/img/mpesa.png" alt="MPESA" class="img-fluid" width="70">
-                                    <small class="d-block mt-1">MPESA</small>
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <div class="border rounded p-2 text-center">
-                                    <img src="/img/visa.png" alt="Visa" class="img-fluid" width="60">
-                                    <small class="d-block mt-1">Visa</small>
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <div class="border rounded p-2 text-center">
-                                    <img src="/img/mastercard.png" alt="MasterCard" class="img-fluid" width="60">
-                                    <small class="d-block mt-1">MasterCard</small>
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <div class="border rounded p-2 text-center">
-                                    <img src="/img/airtel.png" alt="Airtel Money" class="img-fluid" width="70">
-                                    <small class="d-block mt-1">Airtel Money</small>
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <div class="border rounded p-2 text-center">
-                                    <img src="/img/american.png" alt="American Express" class="img-fluid" width="70">
-                                    <small class="d-block mt-1">American Express</small>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     
                     <!-- Second column - 1/3 width -->
@@ -961,11 +963,54 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 
-    <!--Payments go here-->
+    <!--logos go here-->
+    <div class="container-fluid py-5">
+        <div class="container pb-3">
+            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-3">
+                <div class="col">
+                    <div class="border rounded p-2 text-center h-100 d-flex align-items-center justify-content-center hover-shadow">
+                        <img src="/img/gvt.png" alt="Government of Kenya" class="img-fluid logo-img">
+                    </div>
+                </div>
+                
+                <div class="col">
+                    <div class="border rounded p-2 text-center h-100 d-flex align-items-center justify-content-center hover-shadow">
+                        <img src="/img/tourism.png" alt="Tourism Kenya" class="img-fluid logo-img">
+                    </div>
+                </div>
+                
+                <div class="col">
+                    <div class="border rounded p-2 text-center h-100 d-flex align-items-center justify-content-center hover-shadow">
+                        <img src="/img/tra.png" alt="Tourism Regulatory Authority" class="img-fluid logo-img">
+                    </div>
+                </div>
+                
+                <div class="col">
+                    <div class="border rounded p-2 text-center h-100 d-flex align-items-center justify-content-center hover-shadow">
+                        <img src="/img/trip.png" alt="Trip Advisor" class="img-fluid logo-img">
+                    </div>
+                </div>
+                
+                <div class="col">
+                    <div class="border rounded p-2 text-center h-100 d-flex align-items-center justify-content-center hover-shadow">
+                        <img src="/img/saf.png" alt="Safari Booking" class="img-fluid logo-img">
+                    </div>
+                </div>
+                
+                <div class="col">
+                    <div class="border rounded p-2 text-center h-100 d-flex align-items-center justify-content-center hover-shadow">
+                        <img src="/img/african.png" alt="African Booking" class="img-fluid logo-img">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Logos go here-->
 
 
     <!-- Footer Start -->
@@ -1050,17 +1095,16 @@
                 content: `
                     <h6>Day Schedule:</h6>
                     <ul class="timeline">
-                        <li><strong>05:30 AM – 06:00 AM:</strong> Pick-Up from Mombasa</li>
-                        <li><strong>06:00 AM – 07:30 AM:</strong> Drive to South Coast</li>
-                        <li><strong>07:30 AM – 08:30 AM:</strong> Arrive at Shimoni + Registration</li>
-                        <li><strong>09:00 AM:</strong> Board the Dhow / Boat</li>
-                        <li><strong>09:00 AM – 10:00 AM:</strong> Dolphin Searching & Sea Cruise</li>
-                        <li><strong>10:00 AM – 12:00 PM:</strong> Snorkeling at Kisite Marine Park</li>
-                        <li><strong>12:30 PM – 01:30 PM:</strong> Lunch on Wasini Island</li>
-                        <li><strong>01:30 PM – 02:30 PM:</strong> Optional Island Walk</li>
-                        <li><strong>03:00 PM:</strong> Depart Back to Shimoni</li>
-                        <li><strong>03:30 PM – 05:30 PM:</strong> Return Drive to Mombasa</li>
-                        <li><strong>Arrival Time Back in Mombasa:</strong> Between 5:00 PM – 6:00 PM</li>
+                        <li>Pick-Up from Mombasa</li>
+                        <li>Drive to South Coast</li>
+                        <li>Arrive at Shimoni and complete registrations</li>
+                        <li>Board the Dhow / Boat and set sail</li>
+                        <li>Dolphin Searching & Sea Cruise</li>
+                        <li>Snorkeling at Kisite Marine Park</li>
+                        <li>Lunch on Wasini Island featuring Swahili seafood cuisine</li>
+                        <li>Optional Island Walk through the village and mangroves</li>
+                        <li>Depart Back to Shimoni</li>
+                        <li>Return Drive to Mombasa</li>
                     </ul>
                     <hr>
                     <div class="row">
@@ -1092,37 +1136,38 @@
                 content: `
                     <h6>Day 1: Arrival - Check in and Nyali Dhow Cruise</h6>
                     <ul>
-                        <li><strong>1430 Hrs:</strong> Arrival at Mombasa SGR Terminus & pick-up by your driver. Drive to Nyali Beach Resort & check-in</li>
-                        <li><strong>1530 Hrs:</strong> Relax, settle in, enjoy the beach/pool. Lunch (own arrangement or at hotel). Free leisure time</li>
-                        <li><strong>1700 Hrs:</strong> Transfer to the dhow cruise departure point</li>
-                        <li><strong>1730–1930 Hrs:</strong> Sunset Dhow Cruise, soft entertainment & coastal views</li>
-                        <li><strong>2000 Hrs:</strong> Return to the hotel for Dinner & overnight</li>
-                        <li><strong>MEALS:</strong> LUNCH & DINNER</li>
+                        <li>Arrival at Mombasa SGR Terminus & pick-up by your driver</li>
+                        <li>Drive to Nyali Beach Resort & check-in</li>
+                        <li>Relax, settle in, enjoy the beach/pool</li>
+                        <li>Lunch (own arrangement or at hotel)</li>
+                        <li>Free leisure time</li>
+                        <li>Transfer to the dhow cruise departure point</li>
+                        <li>Sunset Dhow Cruise with soft entertainment & coastal views</li>
+                        <li>Return to the hotel for Dinner & overnight</li>
                     </ul>
                     
                     <h6>Day 2: Wasini Island & Dolphin Spotting Safari</h6>
                     <ul>
-                        <li><strong>0600 Hrs:</strong> Breakfast at the resort</li>
-                        <li><strong>0700 Hrs:</strong> Pick-up for Wasini Dolphin Safari. Drive to Shimoni</li>
-                        <li><strong>0900–1200 Hrs:</strong> Full-day excursion with Dolphin spotting, Snorkeling at Kisite Marine Park, Marine life viewing</li>
-                        <li><strong>1230-1630 Hrs:</strong> Swahili seafood lunch and a Wasini walk</li>
-                        <li><strong>1700 Hrs:</strong> Drive back to Nyali Drop Off to the Hotel</li>
-                        <li><strong>1730 Hrs:</strong> Leisure time, swimming, or beach sunset stroll. Overnight at Nyali Beach Resort</li>
-                        <li><strong>MEALS:</strong> BREAKFAST, LUNCH & DINNER</li>
+                        <li>Breakfast at the resort</li>
+                        <li>Pick-up for Wasini Dolphin Safari</li>
+                        <li>Drive to Shimoni</li>
+                        <li>Full-day excursion with Dolphin spotting</li>
+                        <li>Snorkeling at Kisite Marine Park</li>
+                        <li>Marine life viewing</li>
+                        <li>Swahili seafood lunch and a Wasini walk</li>
+                        <li>Drive back to Nyali and drop off at the Hotel</li>
+                        <li>Leisure time, swimming, or beach sunset stroll</li>
+                        <li>Overnight at Nyali Beach Resort</li>
                     </ul>
                     
                     <h6>Day 3: Beach Relaxation & Departure</h6>
                     <ul>
-                        <li><strong>0700–0900 Hrs:</strong> Breakfast at the hotel</li>
-                        <li><strong>0900–1130 Hrs:</strong> Beach relaxation / swimming / photography</li>
-                        <li><strong>1130–1200 Hrs:</strong> Final preparations for check-out. Check out from Nyali Beach Resort</li>
-                        <li><strong>1200–1300 Hrs:</strong> Transfer to Mombasa SGR Terminus for departure train</li>
-                        <li><strong>MEALS:</strong> BREAKFAST</li>
+                        <li>Breakfast at the hotel</li>
+                        <li>Beach relaxation / swimming / photography</li>
+                        <li>Final preparations for check-out</li>
+                        <li>Check out from Nyali Beach Resort</li>
+                        <li>Transfer to Mombasa SGR Terminus for departure train</li>
                     </ul>
-                    
-                    <div class="alert alert-info">
-                        <strong>Safari Price:</strong> $890 per person
-                    </div>
                     
                     <div class="row">
                         <div class="col-md-6">
@@ -1255,11 +1300,11 @@
             "nairobi-city": {
                 title: "Nairobi City Tour",
                 content: `
-                    <div class="alert alert-warning">
-                        <strong>Note:</strong> Detailed itinerary for Nairobi City Tour will be provided upon booking. The tour typically includes visits to:
+                    <div class="alert alert-info">
+                        <strong>Note:</strong> Detailed itinerary for Nairobi City Tour will be provided upon booking.
                     </div>
                     
-                    <h6>Possible Tour Highlights:</h6>
+                    <h6>Tour Highlights:</h6>
                     <ul>
                         <li>Nairobi National Park - The only wildlife park within a capital city</li>
                         <li>Giraffe Centre - Feed and interact with Rothschild giraffes</li>
@@ -1268,14 +1313,6 @@
                         <li>Kazuri Beads Factory - Handcrafted ceramic bead jewelry</li>
                         <li>City Market - Local crafts and souvenirs</li>
                         <li>Uhuru Park and Parliament Buildings - Political and historical landmarks</li>
-                    </ul>
-                    
-                    <h6>Tour Details:</h6>
-                    <ul>
-                        <li><strong>Duration:</strong> Full day (approximately 8-10 hours)</li>
-                        <li><strong>Start Time:</strong> 8:00 AM from your hotel</li>
-                        <li><strong>End Time:</strong> 5:00 PM - 6:00 PM</li>
-                        <li><strong>Departure Point:</strong> Your hotel in Nairobi</li>
                     </ul>
                     
                     <div class="row">
@@ -1305,14 +1342,14 @@
                 title: "Lake Nakuru National Park Safari",
                 content: `
                     <div class="alert alert-info">
-                        <strong>Note:</strong> Typical 2-3 day itinerary for Lake Nakuru National Park. Exact schedule may vary based on accommodation and specific package.
+                        <strong>Note:</strong> Typical itinerary for Lake Nakuru National Park. Exact schedule may vary based on accommodation and specific package.
                     </div>
                     
-                    <h6>Sample Itinerary (2 Days/1 Night):</h6>
+                    <h6>Sample Itinerary:</h6>
                     
                     <h6>Day 1: Nairobi – Lake Nakuru National Park</h6>
                     <ul>
-                        <li>Depart Nairobi in the morning and drive to Lake Nakuru (approx. 3-4 hours)</li>
+                        <li>Depart Nairobi and drive to Lake Nakuru</li>
                         <li>Arrive at the park and begin game viewing en route to your lodge/camp</li>
                         <li>Check in and enjoy lunch at your accommodation</li>
                         <li>Afternoon game drive in Lake Nakuru National Park, famous for:</li>
@@ -1328,7 +1365,7 @@
                     
                     <h6>Day 2: Lake Nakuru – Nairobi</h6>
                     <ul>
-                        <li>Early morning game drive for wildlife viewing at sunrise</li>
+                        <li>Early morning game drive for wildlife viewing</li>
                         <li>Return to your lodge/camp for breakfast</li>
                         <li>Optional visit to Baboon Cliff for panoramic views of the lake</li>
                         <li>Check out and depart for Nairobi with lunch en route</li>
@@ -1365,8 +1402,8 @@
                 content: `
                     <h6>Day 1: Nairobi – Amboseli National Park</h6>
                     <ul>
-                        <li>Your safari begins with a morning departure from Nairobi</li>
-                        <li>Drive through the scenic countryside to Amboseli National Park (4-5 hours journey)</li>
+                        <li>Your safari begins with departure from Nairobi</li>
+                        <li>Drive through the scenic countryside to Amboseli National Park</li>
                         <li>Upon arrival, check in at your lodge or camp and enjoy lunch</li>
                         <li>Afternoon game drive across the park, famous for:</li>
                         <ul>
@@ -1381,14 +1418,14 @@
                         <li>Early morning game drive to spot wildlife at their most active</li>
                         <li>Best chance of seeing Mount Kilimanjaro's snow-capped peak</li>
                         <li>After breakfast, mid-morning at leisure</li>
-                        <li><strong>Optional:</strong> Cultural visit to a Masai village ($20 per person)</li>
+                        <li>Optional cultural visit to a Masai village</li>
                         <li>Afternoon game drive through varied landscapes:</li>
                         <ul>
                             <li>Open plains, marshlands, and acacia woodlands</li>
                             <li>Opportunity to see lions, cheetahs, giraffes, zebras, buffalo, and more elephants</li>
                         </ul>
                         <li>Dinner and overnight at your lodge or camp</li>
-                        <li><strong>Optional:</strong> Hot air balloon safari (additional cost)</li>
+                        <li>Optional hot air balloon safari</li>
                     </ul>
                     
                     <h6>Day 3: Amboseli – Nairobi</h6>
@@ -1396,7 +1433,7 @@
                         <li>After breakfast, check out and depart Amboseli</li>
                         <li>Enjoy a relaxed drive back to Nairobi</li>
                         <li>Lunch provided en route</li>
-                        <li>Arrive in the afternoon and drop-off at your hotel or airport</li>
+                        <li>Arrive and drop-off at your hotel or airport</li>
                     </ul>
                     
                     <div class="row">
@@ -1414,7 +1451,7 @@
                         <div class="col-md-6">
                             <h6>Exclusions:</h6>
                             <ul>
-                                <li>Optional Masai village visit ($20 per person)</li>
+                                <li>Optional Masai village visit</li>
                                 <li>Optional balloon safari</li>
                                 <li>Drinks</li>
                                 <li>Tips</li>
@@ -1501,7 +1538,7 @@
                     <ul>
                         <li>Morning departure from Nairobi</li>
                         <li>Drive north through fertile highlands, crossing the equator</li>
-                        <li>Descend into rugged landscapes of Samburu National Reserve (6-7 hours journey)</li>
+                        <li>Descend into rugged landscapes of Samburu National Reserve</li>
                         <li>Arrive in time for lunch at your lodge or camp</li>
                         <li>Afternoon first game drive in Samburu, known for:</li>
                         <ul>
@@ -1538,7 +1575,7 @@
                     <ul>
                         <li>After breakfast, check out</li>
                         <li>Enjoy relaxed drive back to Nairobi with lunch en route</li>
-                        <li>Arrive in afternoon and drop-off at your hotel or airport</li>
+                        <li>Arrive and drop-off at your hotel or airport</li>
                     </ul>
                     
                     <div class="row">
@@ -1574,7 +1611,7 @@
                     <ul>
                         <li>Depart Nairobi in the morning</li>
                         <li>Drive north through beautiful central highlands towards Nanyuki</li>
-                        <li>Clear views of Mount Kenya along the way (approx. 4 hours journey)</li>
+                        <li>Clear views of Mount Kenya along the way</li>
                         <li>Arrive at Ol Pejeta Conservancy in time for lunch at your lodge or camp</li>
                         <li>Afternoon head out for first game drive</li>
                         <li>Ol Pejeta is famous for:</li>
@@ -1609,8 +1646,7 @@
                         <li>After breakfast, check out</li>
                         <li>Enjoy final short game drive as you exit the conservancy</li>
                         <li>Drive back to Nairobi with lunch en route</li>
-                        <li>Arrive in afternoon</li>
-                        <li>Drop-off at your hotel or airport</li>
+                        <li>Arrive and drop-off at your hotel or airport</li>
                     </ul>
                     
                     <div class="row">
