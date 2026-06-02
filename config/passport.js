@@ -14,8 +14,8 @@ const { v4: uuidv4 } = require('uuid');
 //     password: '/victor.mwendwa.18/',
 //     database: 'tms'
 // })
-const clientID = "250874539293-oqrkfee88vi9o0hfd95eiput6veuoonp.apps.googleusercontent.com";
-const clientSecret = "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";
+const clientID = ""; //enter Google Client ID
+const clientSecret = ""; //Enter Google client Secret
 
 module.exports = function (passport) {
 

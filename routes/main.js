@@ -121,8 +121,8 @@ router.post(
             const transporter = nodemailer.createTransport({
                 service: 'gmail', // Example: use 'gmail' or your preferred email provider
                 auth: {
-                    user: 'webmailservices001@gmail.com', // Replace with your email
-                    pass: 'jiavpmqyfoauqbvw'  // Replace with your app-specific password
+                    user: '', // Replace with your email
+                    pass: ''  // Replace with your app-specific password
                 }
             });
 

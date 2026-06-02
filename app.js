@@ -42,12 +42,7 @@ db.once('open', function () {
  * Session management
  */
 const session = require('express-session');
-// const MongoDBStore = require('connect-mongodb-session')(session);
-// const store = new MongoDBStore({
-//    uri: 'mongodb://Admin:VictorMwendwa@victech-media-shard-00-00.lhlgr.mongodb.net:27017,victech-media-shard-00-01.lhlgr.mongodb.net:27017,victech-media-shard-00-02.lhlgr.mongodb.net:27017/keja-connect?ssl=true&replicaSet=atlas-ksor6c-shard-0&authSource=admin&retryWrites=true&w=majority',
-//    collection: 'sessions',
-//    expires: 1000 * 60 * 60 * 4
-// });
+
 
 app.use(session({
     secret: 'your-secret-key',

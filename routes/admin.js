@@ -91,8 +91,8 @@ router.get('/reset', (req, res)=>{
 })
 
 router.post("/reset", (req, res) => {
-  const emailSender = "webmailservices001@gmail.com"; // Your email
-  const emailPass = "jiavpmqyfoauqbvw"; // App-specific password or email password
+  const emailSender = ""; // Your email
+  const emailPass = ""; // App-specific password or email password
   var { email } = req.body;
 
   // Validate email
